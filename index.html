@@ -339,7 +339,10 @@ header{background:var(--navy);color:#fff;padding:0 28px;height:56px;display:flex
         <div class="field">
           <label>Sobrecarga (kg/m²) <span class="opt">opcional</span></label>
           <input type="number" id="eq-sc" placeholder="Ex.: 300" min="50" max="2000" step="10">
-          <small>≤300 res. · 301–500 comercial · >500 industrial</small>
+          <small>≤300 res. · 301–500 comercial · >500 industrial
+            <button type="button" class="info-btn" onclick="toggleInfo('info-sc-eq')" aria-label="O que é sobrecarga?">i</button>
+          </small>
+          <div id="info-sc-eq" class="info-pop" hidden>Sobrecarga é a carga de uso da laje (pessoas, móveis, equipamentos — sem contar o peso próprio da estrutura), definida pela NBR 6120 conforme a ocupação. As 3 faixas aqui são uma simplificação prática: residencial tende a ficar até 300 kg/m², uso comercial entre 301–500, industrial acima disso. Esse valor também define o divisor usado no cálculo de h_mín. Se seu projeto já tem a sobrecarga de norma definida, use-a diretamente aqui.</div>
         </div>
         <div class="field">
           <label>Filtro</label>
@@ -386,7 +389,11 @@ header{background:var(--navy);color:#fff;padding:0 28px;height:56px;display:flex
           <input type="number" id="hm-vao" placeholder="Ex.: 7.0" step="0.1" min="1" max="30"></div>
         <div class="field"><label>Sobrecarga (kg/m²)</label>
           <input type="number" id="hm-sc" placeholder="Ex.: 300" min="50" max="2000" step="10">
-          <small>≤300 res. · 301–500 comercial · >500 industrial</small></div>
+          <small>≤300 res. · 301–500 comercial · >500 industrial
+            <button type="button" class="info-btn" onclick="toggleInfo('info-sc-hm')" aria-label="O que é sobrecarga?">i</button>
+          </small>
+          <div id="info-sc-hm" class="info-pop" hidden>Sobrecarga é a carga de uso da laje (pessoas, móveis, equipamentos — sem contar o peso próprio da estrutura), definida pela NBR 6120 conforme a ocupação. As 3 faixas aqui são uma simplificação prática: residencial tende a ficar até 300 kg/m², uso comercial entre 301–500, industrial acima disso. Esse valor também define o divisor usado no cálculo de h_mín. Se seu projeto já tem a sobrecarga de norma definida, use-a diretamente aqui.</div>
+        </div>
         <div class="field"><label>Direção</label>
           <select id="hm-dir">
             <option value="ambas">Bidirecional + Unidirecional</option>
