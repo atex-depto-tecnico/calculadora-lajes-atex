@@ -70,7 +70,8 @@ header{background:var(--navy);color:#fff;padding:0 28px;height:56px;display:flex
 .info-btn:hover{background:var(--accent-text);}
 .info-pop{margin-top:8px;font-size:11.5px;color:var(--muted);background:#fff;border:1px solid var(--border);border-radius:6px;padding:9px 11px;line-height:1.55;}
 .type-group{margin-bottom:22px;}
-.type-group-label{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:0 0 10px;}
+.type-group-label{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:0 0 10px;display:flex;align-items:center;gap:7px;}
+.type-group-label::before{content:'';display:inline-block;width:9px;height:9px;border-radius:2px;background:currentColor;}
 .type-group-label.bid{color:var(--accent);}
 .type-group-label.uni{color:var(--green);}
 .toggle-group{display:flex;gap:0;margin-bottom:16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;}
@@ -180,6 +181,17 @@ header{background:var(--navy);color:#fff;padding:0 28px;height:56px;display:flex
 .rc-head{padding:16px 20px;border-bottom:1px solid var(--border);}
 .rc-rank{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:8px;}
 .result-card.best .rc-head{background:linear-gradient(135deg,var(--accent-bg) 0%,#fff 100%);}
+.rc-head-top{display:flex;align-items:flex-start;gap:14px;}
+.rc-head-text{flex:1;min-width:0;}
+.rc-drawing-thumb{width:96px;height:64px;object-fit:contain;background:#fff;border:1px solid var(--border);border-radius:8px;padding:4px;cursor:zoom-in;flex-shrink:0;transition:border-color .15s;}
+.rc-drawing-thumb:hover{border-color:var(--accent);}
+.desenho-modal{position:fixed;inset:0;background:rgba(15,23,42,.8);display:none;align-items:center;justify-content:center;z-index:1000;padding:24px;}
+.desenho-modal.open{display:flex;}
+.desenho-modal-inner{background:#fff;border-radius:12px;padding:16px;max-width:95vw;max-height:90vh;display:flex;flex-direction:column;gap:10px;}
+.desenho-modal-inner img{max-width:90vw;max-height:78vh;object-fit:contain;}
+.desenho-modal-head{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.desenho-modal-head strong{font-size:15px;color:var(--text);}
+.desenho-modal-close{background:var(--navy);color:#fff;border:none;border-radius:6px;padding:6px 12px;font-size:13px;cursor:pointer;}
 .sb-val{font-size:28px;font-weight:800;line-height:1;}
 .sb-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-top:8px;}
 .sb-context{font-size:10px;color:var(--muted-light);margin-top:3px;}
@@ -294,7 +306,7 @@ header{background:var(--navy);color:#fff;padding:0 28px;height:56px;display:flex
           </div>
           <div class="field-hint">Maciça: módulo estrutural de referência = 60 cm. Seção sólida.
             <button type="button" class="info-btn" onclick="toggleInfo('info-mod60')" aria-label="Por que 60 cm?">i</button>
-            <div id="info-mod60" class="info-pop" hidden>60 cm é o espaçamento de nervura mais usual do mercado (base das famílias Atex 6XX) e fica dentro do limite de 65 cm da NBR 6118, que dispensa a verificação da flexão da mesa. É só uma referência de contexto — não altera o cálculo da sua laje maciça, que já é avaliado por m² de área.</div>
+            <div id="info-mod60" class="info-pop" hidden>60 cm é um espaçamento de nervura usual no mercado e fica dentro do limite de 65 cm da NBR 6118, que dispensa a verificação da flexão da mesa. É só uma referência de contexto — não altera o cálculo da sua laje maciça, que já é avaliado por m² de área.</div>
           </div>
         </div>
 
@@ -415,6 +427,16 @@ header{background:var(--navy);color:#fff;padding:0 28px;height:56px;display:flex
 </div>
 
 </div><!-- /main -->
+
+<div class="desenho-modal" id="desenho-modal" onclick="if(event.target===this)fecharDesenho()">
+  <div class="desenho-modal-inner">
+    <div class="desenho-modal-head">
+      <strong id="desenho-modal-title">Desenho técnico</strong>
+      <button class="desenho-modal-close" onclick="fecharDesenho()">Fechar ✕</button>
+    </div>
+    <img id="desenho-modal-img" src="" alt="Desenho técnico ampliado">
+  </div>
+</div>
 
 <script>
 // ═══════════════════════════════════════════════════════════════════
@@ -936,10 +958,21 @@ function toggleInfo(id) {
 // ═══ UTILS ═══════════════════════════════════════════════════════════
 const nomeProduto = e => `Atex ${e.f}x${Math.round(e.D * 10)}`;
 const nomeResumo  = e => `capa ${e.ds} cm`;
+const famImgFile  = f => f.replace(/ /g, '_');
 const badgeFonte  = f => f === 'oficial'
   ? '<span class="badge-of">of</span>'
   : '<span class="badge-est">~est</span>';
 const fmtPct = v => (v >= 0 ? '↓ ' : '↑ ') + Math.abs(v).toFixed(1) + '%';
+
+// ═══ DESENHO TÉCNICO — modal com o desenho oficial da família ════════
+function abrirDesenho(famImg, nome) {
+  document.getElementById('desenho-modal-title').textContent = nome + ' — desenho técnico oficial';
+  document.getElementById('desenho-modal-img').src = `desenhos/${famImg}.png`;
+  document.getElementById('desenho-modal').classList.add('open');
+}
+function fecharDesenho() {
+  document.getElementById('desenho-modal').classList.remove('open');
+}
 
 function getCapaAlvo() {
   const id = tabAtiva === 'eq' ? 'cap-alvo-eq' : 'cap-alvo-hm';
@@ -1090,14 +1123,14 @@ function renderTop2(topsB, topsU, hmin_B, hmin_U, filtro, heq_cli, mode) {
   if (filtro !== 'U' && topsB.length) {
     any = true;
     html += `<div class="type-group">
-      <div class="type-group-label bid">🔷 Bidirecional — ${topsB.length > 1 ? topsB.length + ' melhores opções' : 'melhor opção'}</div>
+      <div class="type-group-label bid">Bidirecional — ${topsB.length > 1 ? topsB.length + ' melhores opções' : 'melhor opção'}</div>
       <div class="top2-grid">${topsB.map((e, i) => renderResultCard(e, i + 1, hmin_B, heq_cli)).join('')}</div>
     </div>`;
   }
   if (filtro !== 'B' && topsU.length) {
     any = true;
     html += `<div class="type-group">
-      <div class="type-group-label uni">🔶 Unidirecional — ${topsU.length > 1 ? topsU.length + ' melhores opções' : 'melhor opção'}</div>
+      <div class="type-group-label uni">Unidirecional — ${topsU.length > 1 ? topsU.length + ' melhores opções' : 'melhor opção'}</div>
       <div class="top2-grid">${topsU.map((e, i) => renderResultCard(e, i + 1, hmin_U, heq_cli)).join('')}</div>
     </div>`;
   }
@@ -1128,14 +1161,22 @@ function renderResultCard(e, rank, hmin, heq_cli, label) {
   const headLabel = label || `Opção ${rank} — ${tipo}`;
   const cardClass = label ? ' selected' : (rank === 1 ? ' best' : '');
 
+  const famImg  = famImgFile(e.f);
+  const nomeEsc = nomeProduto(e).replace(/'/g, "\\'");
+
   return `<div class="result-card${cardClass}">
     <div class="rc-head">
-      <div class="rc-rank ${cls}">${headLabel}</div>
-      <div class="rc-model-name">${nomeProduto(e)} ${badgeFonte(e.heq_fonte)}</div>
-      <div class="rc-type-row">
-        <span class="rc-type-badge ${cls}">${tipo}</span>
-        <span class="rc-dims">Capa ${e.ds} cm · Altura total ${e.D} cm</span>
-        ${hmBadge}
+      <div class="rc-head-top">
+        <div class="rc-head-text">
+          <div class="rc-rank ${cls}">${headLabel}</div>
+          <div class="rc-model-name">${nomeProduto(e)} ${badgeFonte(e.heq_fonte)}</div>
+          <div class="rc-type-row">
+            <span class="rc-type-badge ${cls}">${tipo}</span>
+            <span class="rc-dims">Capa ${e.ds} cm · Altura total ${e.D} cm</span>
+            ${hmBadge}
+          </div>
+        </div>
+        <img class="rc-drawing-thumb" src="desenhos/${famImg}.png" alt="Desenho técnico ${nomeProduto(e)}" loading="lazy" onclick="abrirDesenho('${famImg}','${nomeEsc}')">
       </div>
     </div>
     <div class="rc-metrics">
@@ -1199,7 +1240,7 @@ function selecionarModelo(idx, mode) {
   const area = document.getElementById('modelo-sel-' + mode);
   if (!e || !lastState || !area) return;
   const hmin = e.t === 'U' ? lastState.hmin_U : lastState.hmin_B;
-  const label = `👆 Modelo selecionado — ${e.t === 'U' ? 'Unidirecional' : 'Bidirecional'}`;
+  const label = `Modelo selecionado — ${e.t === 'U' ? 'Unidirecional' : 'Bidirecional'}`;
   area.innerHTML = renderResultCard(e, 0, hmin, lastState.heq_cli, label);
   area.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
@@ -1305,14 +1346,22 @@ function renderCompCard(e, state, hmin) {
 
   const id = `cc-${e.f}-${e.d1}-${e.ds}`.replace(/\./g,'_');
 
+  const famImg  = famImgFile(e.f);
+  const nomeEsc = nomeProduto(e).replace(/'/g, "\\'");
+
   return `<div class="comp-card">
     <div class="cc-top">
-      <div class="cc-label ${cls}">${tipo}</div>
-      <div class="cc-name">${nomeProduto(e)} ${badgeFonte(e.heq_fonte)}</div>
-      <div class="cc-tagrow">
-        <span class="cc-tag ${cls}">${tipo}</span>
-        <span class="cc-dims-text">Capa ${e.ds} cm · Total ${e.D} cm · d1+ds = ${e.d1}+${e.ds}</span>
-        ${hmBadge}
+      <div class="rc-head-top">
+        <div class="rc-head-text">
+          <div class="cc-label ${cls}">${tipo}</div>
+          <div class="cc-name">${nomeProduto(e)} ${badgeFonte(e.heq_fonte)}</div>
+          <div class="cc-tagrow">
+            <span class="cc-tag ${cls}">${tipo}</span>
+            <span class="cc-dims-text">Capa ${e.ds} cm · Total ${e.D} cm · d1+ds = ${e.d1}+${e.ds}</span>
+            ${hmBadge}
+          </div>
+        </div>
+        <img class="rc-drawing-thumb" src="desenhos/${famImg}.png" alt="Desenho técnico ${nomeProduto(e)}" loading="lazy" onclick="abrirDesenho('${famImg}','${nomeEsc}')">
       </div>
     </div>
     <div class="savings-heq-label">Comparação para mesma rigidez estrutural (heq = ${heqM.toFixed(1)} cm)</div>
@@ -1328,7 +1377,7 @@ function renderCompCard(e, state, hmin) {
         <div class="sb-context">vs sólida equiv.</div>
       </div>
       <div class="sb-item">
-        <div class="sb-val ${redAco!==null&&redAco>=0?'blue':'neutral'}">${redAco!==null?fmtPct(redAco):'—'}</div>
+        <div class="sb-val ${redAco!==null&&redAco>=0?'green':'neutral'}">${redAco!==null?fmtPct(redAco):'—'}</div>
         <div class="sb-lbl">Aço (estim.)</div>
         <div class="sb-context">vs sólida equiv.</div>
       </div>
