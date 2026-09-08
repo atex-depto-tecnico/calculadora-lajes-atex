@@ -1249,7 +1249,7 @@ function renderResultCard(e, rank, hmin, heq_cli, label) {
   const cardId = `card-${id}`;
   const headLabel = label || `Opção ${rank} — ${tipo}`;
   const cardClass = label ? ' selected' : (rank === 1 ? ' best' : '');
-  const iniciaRecolhido = !label && rank > 1;
+  const iniciaRecolhido = !label;
 
   const famImg  = famImgFile(e.f);
   const nomeEsc = nomeProduto(e).replace(/'/g, "\\'");
