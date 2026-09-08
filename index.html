@@ -182,6 +182,9 @@ header{background:var(--navy);color:#fff;padding:0 28px;height:56px;display:flex
 .rc-rank{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:8px;}
 .result-card.best .rc-head{background:linear-gradient(135deg,var(--accent-bg) 0%,#fff 100%);}
 .rc-head-top{display:flex;align-items:flex-start;gap:14px;}
+.rc-collapse-btn{background:none;border:1px solid var(--border);border-radius:6px;color:var(--muted);font-size:11px;font-weight:600;padding:4px 9px;cursor:pointer;display:inline-flex;align-items:center;gap:4px;margin-top:8px;}
+.rc-collapse-btn:hover{border-color:var(--accent);color:var(--accent-text);}
+.result-card.collapsed .rc-body{display:none;}
 .rc-head-text{flex:1;min-width:0;}
 .rc-drawing-thumb{width:96px;height:64px;object-fit:contain;background:#fff;border:1px solid var(--border);border-radius:8px;padding:4px;cursor:zoom-in;flex-shrink:0;transition:border-color .15s;}
 .rc-drawing-thumb:hover{border-color:var(--accent);}
@@ -952,6 +955,58 @@ function interpolateCatalogCap(capAlvo) {
   return result;
 }
 
+// ═══ MELHOR CAPA POR GRUPO (família+d1), dentro de 5–20cm ════════════
+// Em vez de só olhar as capas já tabeladas (5/7,5/10), busca a MENOR capa
+// dentro do intervalo real de produção que já atenda a rigidez pedida E o
+// h_mín — evita descartar um d1 que resolveria perfeitamente com um pouco
+// mais de capa, e só recorrer a outra família/d1 quando isso é insuficiente.
+function candidatoComDs(entries, ds) {
+  const primeiro = entries[0], ultimo = entries[entries.length - 1];
+  let lo, hi;
+  if (ds <= primeiro.ds) { lo = primeiro; hi = primeiro; }
+  else if (ds >= ultimo.ds) { lo = entries.length > 1 ? entries[entries.length - 2] : ultimo; hi = ultimo; }
+  else {
+    lo = entries[0]; hi = ultimo;
+    for (let i = 0; i < entries.length - 1; i++) {
+      if (ds >= entries[i].ds && ds <= entries[i + 1].ds) { lo = entries[i]; hi = entries[i + 1]; break; }
+    }
+  }
+  if (lo.ds === hi.ds) return { ...lo };
+  const ratio = (ds - lo.ds) / (hi.ds - lo.ds);
+  const lerp  = (a, b) => +(a + (b - a) * ratio).toFixed(4);
+  return { ...lo, ds: +ds.toFixed(1), D: +(lo.d1 + ds).toFixed(1),
+    vc: lerp(lo.vc, hi.vc), pp: lerp(lo.pp, hi.pp),
+    inercia: Math.round(lerp(lo.inercia, hi.inercia)), heq: lerp(lo.heq, hi.heq),
+    heq_fonte: 'interpolado', heq_of: null, I_of: null };
+}
+
+function melhorCapaParaGrupo(entries, heqAlvo, hmin, dsMax) {
+  const d1 = entries[0].d1;
+  const dsMinCat = entries[0].ds;
+  const dsParaHmin = hmin ? Math.max(dsMinCat, +(hmin - d1).toFixed(1)) : dsMinCat;
+  for (let ds = Math.max(dsMinCat, dsParaHmin); ds <= dsMax; ds = +(ds + 0.5).toFixed(1)) {
+    const cand = candidatoComDs(entries, ds);
+    if (cand.heq >= heqAlvo && (!hmin || cand.D >= hmin)) return cand;
+  }
+  return null;
+}
+
+function poolMelhorCapa(tipo, cat, heqAlvo, hmin, dsMax) {
+  const grupos = {};
+  for (const e of cat) {
+    if (e.t !== tipo) continue;
+    const k = e.f + '_' + e.d1;
+    (grupos[k] = grupos[k] || []).push(e);
+  }
+  const out = [];
+  for (const entries of Object.values(grupos)) {
+    entries.sort((a, b) => a.ds - b.ds);
+    const cand = melhorCapaParaGrupo(entries, heqAlvo, hmin, dsMax);
+    if (cand) out.push(cand);
+  }
+  return out;
+}
+
 // ═══ ESTADO ══════════════════════════════════════════════════════════
 let tipoSecao = 'macica';
 let tabAtiva  = 'eq';
@@ -1040,16 +1095,31 @@ function calcEq() {
   const vao    = parseFloat(document.getElementById('eq-vao').value) || null;
   const sc     = parseFloat(document.getElementById('eq-sc').value)  || null;
   const filtro = document.getElementById('eq-filtro').value;
-  const cat    = getCapaAlvo() ? interpolateCatalogCap(getCapaAlvo()) : CATALOG;
-
-  const bidir  = filtro === 'U' ? [] : cat.filter(e => e.t==='B' && e.heq >= heq_cli).sort(RANK);
-  const unidir = filtro === 'B' ? [] : cat.filter(e => e.t==='U' && e.heq >= heq_cli).sort(RANK);
+  const capaManual = getCapaAlvo();
+  const cat    = capaManual ? interpolateCatalogCap(capaManual) : CATALOG;
 
   let hmin_bi=null, hmin_uni=null, div_bi=null, div_uni=null;
   if (vao && sc) {
     div_bi  = getDivisor('B', sc); div_uni = getDivisor('U', sc);
     hmin_bi  = +(vao*100/div_bi).toFixed(1);
     hmin_uni = +(vao*100/div_uni).toFixed(1);
+  }
+
+  // opções que atendem h_mín vêm primeiro (quando h_mín é conhecido) — nunca
+  // sugerir como "melhor" uma fôrma abaixo do h_mín se existir uma que atenda
+  const rankComHmin = hmin => (a, b) => {
+    if (hmin) { const aOk = a.D >= hmin, bOk = b.D >= hmin; if (aOk !== bOk) return aOk ? -1 : 1; }
+    return RANK(a, b);
+  };
+
+  let bidir, unidir;
+  if (capaManual) {
+    bidir  = filtro === 'U' ? [] : cat.filter(e => e.t==='B' && e.heq >= heq_cli).sort(rankComHmin(hmin_bi));
+    unidir = filtro === 'B' ? [] : cat.filter(e => e.t==='U' && e.heq >= heq_cli).sort(rankComHmin(hmin_uni));
+  } else {
+    // sem capa fixada pelo usuário: busca a melhor capa (5–20cm) por família+d1
+    bidir  = filtro === 'U' ? [] : poolMelhorCapa('B', cat, heq_cli, hmin_bi, 20).sort(rankComHmin(hmin_bi));
+    unidir = filtro === 'B' ? [] : poolMelhorCapa('U', cat, heq_cli, hmin_uni, 20).sort(rankComHmin(hmin_uni));
   }
 
   lastState = { source:'eq', sourceLabel:'Equivalência de Inércia',
@@ -1101,9 +1171,17 @@ function calcHmin() {
   document.getElementById('hm-out-vao').textContent  = vao + ' m';
   document.getElementById('hm-out-sc').textContent   = sc  + ' kg/m²';
 
-  const cat    = getCapaAlvo() ? interpolateCatalogCap(getCapaAlvo()) : CATALOG;
-  const bidir  = dir==='U' ? [] : cat.filter(e=>e.t==='B'&&e.D>=hmin_bi ).sort(RANK);
-  const unidir = dir==='B' ? [] : cat.filter(e=>e.t==='U'&&e.D>=hmin_uni).sort(RANK);
+  const capaManual = getCapaAlvo();
+  const cat    = capaManual ? interpolateCatalogCap(capaManual) : CATALOG;
+  let bidir, unidir;
+  if (capaManual) {
+    bidir  = dir==='U' ? [] : cat.filter(e=>e.t==='B'&&e.D>=hmin_bi ).sort(RANK);
+    unidir = dir==='B' ? [] : cat.filter(e=>e.t==='U'&&e.D>=hmin_uni).sort(RANK);
+  } else {
+    // sem capa fixada pelo usuário: busca a melhor capa (5–20cm) por família+d1
+    bidir  = dir==='U' ? [] : poolMelhorCapa('B', cat, 0, hmin_bi,  20).sort(RANK);
+    unidir = dir==='B' ? [] : poolMelhorCapa('U', cat, 0, hmin_uni, 20).sort(RANK);
+  }
 
   lastState = { source:'hmin', sourceLabel:'Sugestão por h_mín',
     topU: unidir[0]||null, topB: bidir[0]||null,
@@ -1168,13 +1246,15 @@ function renderResultCard(e, rank, hmin, heq_cli, label) {
   const margem = heq_cli ? ((e.heq/heq_cli - 1)*100).toFixed(0) : null;
 
   const id = `det-${e.f}-${e.d1}-${e.ds}-${rank}-${label?'sel':'top'}`.replace(/\./g,'_');
+  const cardId = `card-${id}`;
   const headLabel = label || `Opção ${rank} — ${tipo}`;
   const cardClass = label ? ' selected' : (rank === 1 ? ' best' : '');
+  const iniciaRecolhido = !label && rank > 1;
 
   const famImg  = famImgFile(e.f);
   const nomeEsc = nomeProduto(e).replace(/'/g, "\\'");
 
-  return `<div class="result-card${cardClass}">
+  return `<div class="result-card${cardClass}${iniciaRecolhido?' collapsed':''}" id="${cardId}">
     <div class="rc-head">
       <div class="rc-head-top">
         <div class="rc-head-text">
@@ -1185,10 +1265,14 @@ function renderResultCard(e, rank, hmin, heq_cli, label) {
             <span class="rc-dims">Capa ${e.ds} cm · Altura total ${e.D} cm</span>
             ${hmBadge}
           </div>
+          <button class="rc-collapse-btn" onclick="toggleCard('${cardId}')">
+            <span id="${cardId}-chev">${iniciaRecolhido ? '▸' : '▾'}</span> ${iniciaRecolhido ? 'Ver detalhes' : 'Recolher'}
+          </button>
         </div>
         <img class="rc-drawing-thumb" src="desenhos/${famImg}.png" alt="Desenho técnico ${nomeProduto(e)}" loading="lazy" onclick="abrirDesenho('${famImg}','${nomeEsc}')">
       </div>
     </div>
+    <div class="rc-body">
     <div class="rc-metrics">
       <div class="rc-metric">
         <div class="rmv">${e.D} cm</div>
@@ -1234,7 +1318,19 @@ function renderResultCard(e, rank, hmin, heq_cli, label) {
         <div class="dg-item"><div class="dv">${e.pp.toFixed(2)} kN/m²</div><div class="dl">Peso próprio</div></div>
       </div>
     </div>
+    </div>
   </div>`;
+}
+
+function toggleCard(cardId) {
+  const card = document.getElementById(cardId);
+  const chev = document.getElementById(cardId + '-chev');
+  if (!card) return;
+  const recolhido = card.classList.toggle('collapsed');
+  if (chev) {
+    chev.textContent = recolhido ? '▸' : '▾';
+    chev.nextSibling.textContent = recolhido ? ' Ver detalhes' : ' Recolher';
+  }
 }
 
 function toggleDetails(id) {
@@ -1302,15 +1398,21 @@ function renderComparativo() {
   }
   const { topU, topB, heq_cli, h_cli_real, sc, vao, hmin_B, hmin_U, sourceLabel, source, tipoSecao } = lastState;
 
-  let meta = '';
-  if (source === 'eq') meta += `<div class="comp-meta-item">Tipo <strong>Laje ${tipoSecao === 'macica' ? 'maciça' : 'nervurada'} — h = ${h_cli_real.toFixed(1)} cm</strong></div>`;
+  if (source !== 'eq') {
+    area.innerHTML = `<div class="placeholder">
+      <div class="ph-icon">📊</div>
+      <p>Comparativo não se aplica à "Sugestão por h_mín".</p>
+      <small>Essa aba não parte de uma laje real — o comparativo só faz sentido saindo de uma laje que você já tem (maciça, ou mais raramente EPS/treliçada), na aba "Equivalência de Inércia".</small>
+    </div>`;
+    return;
+  }
+
+  let meta = `<div class="comp-meta-item">Tipo <strong>Laje ${tipoSecao === 'macica' ? 'maciça' : 'nervurada'} — h = ${h_cli_real.toFixed(1)} cm</strong></div>`;
   if (vao)     meta += `<div class="comp-meta-item">Vão <strong>${vao} m</strong></div>`;
   if (sc)      meta += `<div class="comp-meta-item">Sobrecarga <strong>${sc} kg/m²</strong></div>`;
   if (heq_cli) meta += `<div class="comp-meta-item">heq equivalente <strong>${heq_cli.toFixed(2)} cm</strong></div>`;
 
-  const explicacao = source === 'eq'
-    ? 'Cada modelo é comparado a uma laje maciça hipotética com a MESMA rigidez estrutural (heq) da sua laje real — não é uma comparação direta com a espessura que você digitou.'
-    : 'Sem laje de referência informada nesta aba — a comparação usa a altura mínima (h_mín) calculada a partir do vão e da sobrecarga.';
+  const explicacao = 'As porcentagens do topo comparam a fôrma Atex escolhida com uma laje maciça de rigidez IGUAL À DELA (heq) — não com os ' + h_cli_real.toFixed(1) + ' cm que você informou, porque a fôrma precisa ATENDER (nunca ficar abaixo da) rigidez pedida, às vezes com uma margem a mais. A comparação direta com a sua laje real está na barra "Laje cliente", logo abaixo de cada opção.';
 
   let html = `<div class="comp-header">
     <h2>Comparativo de Eficiência</h2>
