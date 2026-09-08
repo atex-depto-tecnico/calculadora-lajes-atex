@@ -143,7 +143,9 @@ header{background:var(--navy);color:#fff;padding:0 28px;height:56px;display:flex
 .hmin-badge.fail{background:var(--orange-bg);color:var(--orange);}
 
 /* ── TABLE SECTION (LISTA COMPLETA) ── */
-.section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin:20px 0 10px;}
+.section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin:0;}
+.section-label-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:20px 0 10px;flex-wrap:wrap;}
+.models-list.collapsed{display:none;}
 .models-list{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);}
 .models-list-head{display:grid;grid-template-columns:1fr 60px 70px 70px 100px;gap:0;padding:9px 16px;background:#F8FAFC;border-bottom:1px solid var(--border);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);}
 .models-list-row{display:grid;grid-template-columns:1fr 60px 70px 70px 100px;gap:0;padding:11px 16px;border-bottom:1px solid var(--border);font-size:13px;align-items:center;transition:background .1s;}
@@ -284,7 +286,6 @@ header{background:var(--navy);color:#fff;padding:0 28px;height:56px;display:flex
 <div class="tabs-bar">
   <button class="tab-btn active" id="tab-eq"   onclick="setTab('eq')">Equivalência de Inércia</button>
   <button class="tab-btn"        id="tab-hmin" onclick="setTab('hmin')">Sugestão por h_mín</button>
-  <button class="tab-btn"        id="tab-comp" onclick="setTab('comp')">Comparativo</button>
 </div>
 
 <div class="main">
@@ -423,18 +424,6 @@ header{background:var(--navy);color:#fff;padding:0 28px;height:56px;display:flex
           <small>Listará todas as fôrmas com D ≥ h_mín calculada.</small>
         </div>
       </div>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ TELA 3 — COMPARATIVO ═══ -->
-<div class="screen" id="screen-comp">
-  <div class="page-print-bar"><button class="btn-print-page" onclick="imprimirPagina('comp')">🖨 Imprimir esta página</button></div>
-  <div id="comp-area">
-    <div class="placeholder">
-      <div class="ph-icon">📊</div>
-      <p>Calcule primeiro em uma das outras abas.</p>
-      <small>Use "Equivalência de Inércia" ou "Sugestão por h_mín" e volte aqui.</small>
     </div>
   </div>
 </div>
@@ -1015,6 +1004,14 @@ let MODELOS   = { eq: [], hmin: [] };
 
 const RANK = (a, b) => a.vc - b.vc || b.inercia - a.inercia || a.pp - b.pp;
 
+// Evita que o scroll do mouse mude o valor de um campo numérico com foco
+// (comportamento padrão do Chrome) — tira o foco assim que o usuário rola.
+document.addEventListener('wheel', () => {
+  if (document.activeElement && document.activeElement.type === 'number') {
+    document.activeElement.blur();
+  }
+}, { passive: true });
+
 function toggleInfo(id) {
   const el = document.getElementById(id);
   if (el) el.hidden = !el.hidden;
@@ -1049,11 +1046,10 @@ function getCapaAlvo() {
 // ═══ NAVEGAÇÃO ═══════════════════════════════════════════════════════
 function setTab(tab) {
   tabAtiva = tab;
-  ['eq','hmin','comp'].forEach(t => {
+  ['eq','hmin'].forEach(t => {
     document.getElementById('tab-'+t).classList.toggle('active', t === tab);
     document.getElementById('screen-'+t).classList.toggle('active', t === tab);
   });
-  if (tab === 'comp') renderComparativo();
 }
 
 // ═══ IMPRESSÃO — 1 botão por página, imprime só a aba ativa ══════════
@@ -1140,8 +1136,7 @@ function calcEq() {
   if (filtro !== 'B' && unidir.length > 1) html += renderLista(unidir, 'Unidirecional — lista completa', heq_cli, hmin_uni, 'eq');
   html += `<div class="nota-rodape">heq = ∛(I×12/b_med) &nbsp;·&nbsp; h_mín = L×100/divisor &nbsp;·&nbsp;
     <span class="badge-est">~est</span> = geométrico &nbsp;·&nbsp;
-    <span class="badge-of">of</span> = oficial Atex &nbsp;·&nbsp;
-    <a href="#" onclick="setTab('comp');return false">Ver comparativo detalhado →</a></div>`;
+    <span class="badge-of">of</span> = oficial Atex</div>`;
   document.getElementById('eq-results-area').innerHTML = html;
 }
 
@@ -1192,8 +1187,7 @@ function calcHmin() {
   let html = renderTop2(bidir.slice(0,2), unidir.slice(0,2), hmin_bi, hmin_uni, dir, null, 'hmin');
   if (dir !== 'U' && bidir.length  > 1) html += renderLista(bidir,  'Bidirecional — lista completa',  null, hmin_bi,  'hmin');
   if (dir !== 'B' && unidir.length > 1) html += renderLista(unidir, 'Unidirecional — lista completa', null, hmin_uni, 'hmin');
-  html += `<div class="nota-rodape">h_mín = L×100/divisor &nbsp;·&nbsp; Fôrmas com D ≥ h_mín &nbsp;·&nbsp;
-    <a href="#" onclick="setTab('comp');return false">Ver comparativo detalhado →</a></div>`;
+  html += `<div class="nota-rodape">h_mín = L×100/divisor &nbsp;·&nbsp; Fôrmas com D ≥ h_mín</div>`;
   document.getElementById('hm-results-area').innerHTML = html;
 }
 
@@ -1236,6 +1230,39 @@ function renderResultCard(e, rank, hmin, heq_cli, label) {
   const pp_solid    = heqM * 0.25;
   const redConc     = ((vol_solid - e.vc) / vol_solid * 100);
   const redPeso     = ((pp_solid  - e.pp) / pp_solid  * 100);
+  const sc_kN       = (lastState?.sc || 300) / 100;
+  const d_solid     = heqM - 2.5;
+  const d_nerv      = e.D  - 2.5;
+  let   redAco      = null;
+  if (d_solid > 0 && d_nerv > 0) redAco = (1 - ((e.pp + sc_kN) / (pp_solid + sc_kN)) * (d_solid / d_nerv)) * 100;
+
+  // comparação com a laje real do cliente — só existe vindo da aba Equivalência
+  const temLajeCliente = lastState?.source === 'eq';
+  let volCompHtml = '';
+  if (temLajeCliente) {
+    const { vc_cli, h_cli_real, tipoSecao: tS } = lastState;
+    const volCli  = vc_cli ?? (h_cli_real / 100);
+    const maxVolC = Math.max(volCli, vol_solid, e.vc, 0.001);
+    const barWc   = v => Math.round(v / maxVolC * 100);
+    volCompHtml = `<div class="cc-compare">
+      <div class="cc-compare-title">Volume de concreto — comparativo</div>
+      <div class="compare-row">
+        <div class="cr-label">Laje cliente (${tS==='macica'?'maciça':'nerv.'} ${h_cli_real.toFixed(0)} cm)</div>
+        <div class="cr-bar-wrap"><div class="cr-bar ref" style="width:${barWc(volCli)}%"></div></div>
+        <div class="cr-val">${volCli.toFixed(3)} m³</div>
+      </div>
+      <div class="compare-row">
+        <div class="cr-label">Sólida equiv. (heq ${heqM.toFixed(1)} cm)</div>
+        <div class="cr-bar-wrap"><div class="cr-bar ref" style="width:${barWc(vol_solid)}%"></div></div>
+        <div class="cr-val">${vol_solid.toFixed(3)} m³</div>
+      </div>
+      <div class="compare-row">
+        <div class="cr-label"><strong>${nomeProduto(e)}</strong></div>
+        <div class="cr-bar-wrap"><div class="cr-bar nerv" style="width:${barWc(e.vc)}%"></div></div>
+        <div class="cr-val" style="color:var(--green);font-weight:800">${e.vc.toFixed(3)} m³</div>
+      </div>
+    </div>`;
+  }
 
   const hmBadge = hmin
     ? (e.D >= hmin
@@ -1301,8 +1328,13 @@ function renderResultCard(e, rank, hmin, heq_cli, label) {
         <div class="sv">${fmtPct(redPeso)}</div>
         <div class="sl">Peso próprio</div>
       </div>
+      <div class="rc-saving-item${redAco!==null&&redAco<0?' neutral':''}">
+        <div class="sv">${redAco!==null?fmtPct(redAco):'—'}</div>
+        <div class="sl">Aço (estim.)</div>
+      </div>
       ${margem !== null ? `<div class="rc-saving-item"><div class="sv">+${margem}%</div><div class="sl">Margem heq</div></div>` : ''}
     </div>
+    ${volCompHtml}
     <button class="rc-details-toggle" onclick="toggleDetails('${id}')">
       <span id="${id}-arrow">▸</span> Ver propriedades geométricas
     </button>
@@ -1320,6 +1352,16 @@ function renderResultCard(e, rank, hmin, heq_cli, label) {
     </div>
     </div>
   </div>`;
+}
+
+function toggleLista(id) {
+  const el = document.getElementById(id);
+  const chev = document.getElementById(id + '-chev');
+  if (!el) return;
+  const recolhido = el.classList.toggle('collapsed');
+  if (chev) chev.textContent = recolhido ? '▸' : '▾';
+  const btn = chev ? chev.parentElement : null;
+  if (btn) btn.lastChild.textContent = recolhido ? ' Ver lista completa' : ' Recolher lista';
 }
 
 function toggleCard(cardId) {
@@ -1377,8 +1419,14 @@ function renderLista(lista, titulo, heq_cli, hmin, mode) {
       first = false;
     }
   }
-  return `<div class="section-label">${titulo}</div>
-  <div class="models-list">
+  const listaId = `lista-${mode}-${titulo.includes('Bidirecional') ? 'bi' : 'uni'}`;
+  return `<div class="section-label-row">
+    <div class="section-label">${titulo}</div>
+    <button class="rc-collapse-btn" onclick="toggleLista('${listaId}')">
+      <span id="${listaId}-chev">▸</span> Ver lista completa
+    </button>
+  </div>
+  <div class="models-list collapsed" id="${listaId}">
     <div class="models-list-head">
       <div>Modelo</div><div style="text-align:center">D (cm)</div>
       <div style="text-align:center">Vol.c m³/m²</div>
@@ -1389,164 +1437,6 @@ function renderLista(lista, titulo, heq_cli, hmin, mode) {
   </div>`;
 }
 
-// ═══ ABA COMPARATIVO ═════════════════════════════════════════════════
-function renderComparativo() {
-  const area = document.getElementById('comp-area');
-  if (!lastState || (!lastState.topU && !lastState.topB)) {
-    area.innerHTML = '<div class="placeholder"><div class="ph-icon">📊</div><p>Calcule primeiro em uma das outras abas.</p></div>';
-    return;
-  }
-  const { topU, topB, heq_cli, h_cli_real, sc, vao, hmin_B, hmin_U, sourceLabel, source, tipoSecao } = lastState;
-
-  if (source !== 'eq') {
-    area.innerHTML = `<div class="placeholder">
-      <div class="ph-icon">📊</div>
-      <p>Comparativo não se aplica à "Sugestão por h_mín".</p>
-      <small>Essa aba não parte de uma laje real — o comparativo só faz sentido saindo de uma laje que você já tem (maciça, ou mais raramente EPS/treliçada), na aba "Equivalência de Inércia".</small>
-    </div>`;
-    return;
-  }
-
-  let meta = `<div class="comp-meta-item">Tipo <strong>Laje ${tipoSecao === 'macica' ? 'maciça' : 'nervurada'} — h = ${h_cli_real.toFixed(1)} cm</strong></div>`;
-  if (vao)     meta += `<div class="comp-meta-item">Vão <strong>${vao} m</strong></div>`;
-  if (sc)      meta += `<div class="comp-meta-item">Sobrecarga <strong>${sc} kg/m²</strong></div>`;
-  if (heq_cli) meta += `<div class="comp-meta-item">heq equivalente <strong>${heq_cli.toFixed(2)} cm</strong></div>`;
-
-  const explicacao = 'As porcentagens do topo comparam a fôrma Atex escolhida com uma laje maciça de rigidez IGUAL À DELA (heq) — não com os ' + h_cli_real.toFixed(1) + ' cm que você informou, porque a fôrma precisa ATENDER (nunca ficar abaixo da) rigidez pedida, às vezes com uma margem a mais. A comparação direta com a sua laje real está na barra "Laje cliente", logo abaixo de cada opção.';
-
-  let html = `<div class="comp-header">
-    <h2>Comparativo de Eficiência</h2>
-    <p>${sourceLabel}</p>
-    <div class="comp-meta">${meta}</div>
-    <div class="comp-explica">${explicacao}</div>
-  </div>
-  <div class="comp-cards">`;
-  if (topB) html += renderCompCard(topB, lastState, hmin_B);
-  if (topU) html += renderCompCard(topU, lastState, hmin_U);
-  html += `</div>
-  <div class="nota-rodape" style="margin-top:16px">
-    Redução calculada vs sólida equivalente com mesma rigidez (heq). Aço = estimativa por momento com cargas de serviço.
-    <span class="badge-est">~est</span> = heq geométrico &nbsp;·&nbsp; <span class="badge-of">of</span> = valor oficial Atex.
-  </div>`;
-  area.innerHTML = html;
-}
-
-function renderCompCard(e, state, hmin) {
-  const { heq_cli, h_cli_real, sc, tipoSecao: tS } = state;
-  const isUni = e.t === 'U';
-  const cls   = isUni ? 'uni' : 'bid';
-  const tipo  = isUni ? 'Unidirecional' : 'Bidirecional';
-
-  const heqM       = e.heq;
-  const vol_solid  = heqM / 100;
-  const pp_solid   = heqM * 0.25;
-  const vol_cli    = state.vc_cli ?? h_cli_real / 100;
-  const pp_cli     = vol_cli * 25;
-  const redConc    = (vol_solid - e.vc) / vol_solid * 100;
-  const redPeso    = (pp_solid  - e.pp) / pp_solid  * 100;
-  const sc_kN      = (sc || 300) / 100;
-  const d_solid    = heqM - 2.5;
-  const d_nerv     = e.D  - 2.5;
-  let   redAco     = null;
-  if (d_solid > 0 && d_nerv > 0)
-    redAco = (1 - ((e.pp + sc_kN) / (pp_solid + sc_kN)) * (d_solid / d_nerv)) * 100;
-
-  const hmBadge = hmin
-    ? (e.D >= hmin
-      ? `<span class="hmin-badge ok">✓ h_mín ${hmin} cm</span>`
-      : `<span class="hmin-badge fail">⚠ ${e.D} cm < h_mín ${hmin} cm</span>`)
-    : '';
-
-  const temLajeCliente = state.source === 'eq';
-
-  // barras de comparação
-  const maxVol = Math.max(temLajeCliente ? vol_cli : 0, vol_solid, e.vc, 0.001);
-  const maxPp  = Math.max(temLajeCliente ? pp_cli : 0,  pp_solid,  e.pp, 0.001);
-  const barW   = (v, mx) => Math.round(v / mx * 100);
-
-  const id = `cc-${e.f}-${e.d1}-${e.ds}`.replace(/\./g,'_');
-
-  const famImg  = famImgFile(e.f);
-  const nomeEsc = nomeProduto(e).replace(/'/g, "\\'");
-
-  return `<div class="comp-card">
-    <div class="cc-top">
-      <div class="rc-head-top">
-        <div class="rc-head-text">
-          <div class="cc-label ${cls}">${tipo}</div>
-          <div class="cc-name">${nomeProduto(e)} ${badgeFonte(e.heq_fonte)}</div>
-          <div class="cc-tagrow">
-            <span class="cc-tag ${cls}">${tipo}</span>
-            <span class="cc-dims-text">Capa ${e.ds} cm · Total ${e.D} cm · d1+ds = ${e.d1}+${e.ds}</span>
-            ${hmBadge}
-          </div>
-        </div>
-        <img class="rc-drawing-thumb" src="desenhos/${famImg}.png" alt="Desenho técnico ${nomeProduto(e)}" loading="lazy" onclick="abrirDesenho('${famImg}','${nomeEsc}')">
-      </div>
-    </div>
-    <div class="savings-heq-label">Comparação para mesma rigidez estrutural (heq = ${heqM.toFixed(1)} cm)</div>
-    <div class="savings-banner">
-      <div class="sb-item">
-        <div class="sb-val ${redConc>=0?'green':'neutral'}">${fmtPct(redConc)}</div>
-        <div class="sb-lbl">Concreto</div>
-        <div class="sb-context">vs sólida equiv.</div>
-      </div>
-      <div class="sb-item">
-        <div class="sb-val ${redPeso>=0?'green':'neutral'}">${fmtPct(redPeso)}</div>
-        <div class="sb-lbl">Peso próprio</div>
-        <div class="sb-context">vs sólida equiv.</div>
-      </div>
-      <div class="sb-item">
-        <div class="sb-val ${redAco!==null&&redAco>=0?'green':'neutral'}">${redAco!==null?fmtPct(redAco):'—'}</div>
-        <div class="sb-lbl">Aço (estim.)</div>
-        <div class="sb-context">vs sólida equiv.</div>
-      </div>
-    </div>
-    <div class="cc-compare">
-      <div class="cc-compare-title">Volume de concreto — comparativo</div>
-      ${temLajeCliente ? `<div class="compare-row">
-        <div class="cr-label">Laje cliente (${tS==='macica'?'maciça':'nerv.'} ${h_cli_real.toFixed(0)} cm)</div>
-        <div class="cr-bar-wrap"><div class="cr-bar ref" style="width:${barW(vol_cli,maxVol)}%"></div></div>
-        <div class="cr-val">${vol_cli.toFixed(3)} m³</div>
-      </div>` : ''}
-      <div class="compare-row">
-        <div class="cr-label">Sólida equiv. (heq ${heqM.toFixed(1)} cm)</div>
-        <div class="cr-bar-wrap"><div class="cr-bar ref" style="width:${barW(vol_solid,maxVol)}%"></div></div>
-        <div class="cr-val">${vol_solid.toFixed(3)} m³</div>
-      </div>
-      <div class="compare-row">
-        <div class="cr-label"><strong>${nomeProduto(e)}</strong></div>
-        <div class="cr-bar-wrap"><div class="cr-bar nerv" style="width:${barW(e.vc,maxVol)}%"></div></div>
-        <div class="cr-val" style="color:var(--green);font-weight:800">${e.vc.toFixed(3)} m³</div>
-      </div>
-    </div>
-    <button class="cc-details-toggle" onclick="toggleCompDetails('${id}')">
-      <span id="${id}-arrow">▸</span> Ver propriedades geométricas completas
-    </button>
-    <div class="cc-details-body" id="${id}">
-      <div class="geo-grid">
-        <div class="geo-item"><div class="gv">${e.bi} cm</div><div class="gl">bi — larg. inf.</div></div>
-        <div class="geo-item"><div class="gv">${e.bs} cm</div><div class="gl">bs — larg. sup.</div></div>
-        <div class="geo-item"><div class="gv">${e.d1} cm</div><div class="gl">d1 — inerte</div></div>
-        <div class="geo-item"><div class="gv">${e.ds} cm</div><div class="gl">ds — capa</div></div>
-        <div class="geo-item"><div class="gv">${heqM.toFixed(2)} cm</div><div class="gl">heq</div></div>
-        <div class="geo-item"><div class="gv">${e.inercia.toLocaleString('pt-BR')} cm⁴</div><div class="gl">Inércia</div></div>
-        ${e.A_of?`<div class="geo-item"><div class="gv">${e.A_of} cm²</div><div class="gl">Área (of.)</div></div>`:''}
-        <div class="geo-item"><div class="gv">${e.pp.toFixed(2)} kN/m²</div><div class="gl">Peso próprio</div></div>
-        <div class="geo-item"><div class="gv">${e.vc.toFixed(3)} m³/m²</div><div class="gl">Vol. concreto</div></div>
-        <div class="geo-item"><div class="gv">${(vol_solid-e.vc).toFixed(3)} m³</div><div class="gl">Economia conc.</div></div>
-        <div class="geo-item"><div class="gv">${e.D} cm</div><div class="gl">Altura total</div></div>
-      </div>
-    </div>
-  </div>`;
-}
-
-function toggleCompDetails(id) {
-  const body  = document.getElementById(id);
-  const arrow = document.getElementById(id + '-arrow');
-  const open  = body.classList.toggle('open');
-  if (arrow) arrow.textContent = open ? '▾' : '▸';
-}
 
 // ═══ PWA — registro do service worker (rascunho) ═════════════════════
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
