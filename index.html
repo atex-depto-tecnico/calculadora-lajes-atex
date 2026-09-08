@@ -203,6 +203,7 @@ header{background:var(--navy);color:#fff;padding:0 28px;height:56px;display:flex
 .comp-header h2{font-size:20px;font-weight:800;color:var(--text);}
 .comp-header p{font-size:13px;color:var(--muted);margin-top:4px;}
 .comp-meta{display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;}
+.comp-explica{font-size:12.5px;color:var(--muted);margin-top:10px;line-height:1.55;max-width:680px;background:var(--accent-bg);border-left:3px solid var(--accent);padding:8px 12px;border-radius:0 6px 6px 0;}
 .comp-meta-item{font-size:12px;color:var(--muted);}
 .comp-meta-item strong{color:var(--text);font-weight:700;}
 .comp-cards{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
@@ -257,11 +258,13 @@ header{background:var(--navy);color:#fff;padding:0 28px;height:56px;display:flex
 
 /* ── PRINT ── */
 @media print{
+  @page{ size: landscape; margin: 12mm; }
   body{background:#fff;}
   header,.tabs-bar{background:var(--navy)!important;print-color-adjust:exact;}
-  .btn-calc,.btn-print,.btn-print-page,.tabs-bar,.rc-details-toggle,.cc-details-toggle{display:none!important;}
+  .btn-calc,.btn-print,.btn-print-page,.tabs-bar,.rc-details-toggle,.cc-details-toggle,.info-btn,.info-pop{display:none!important;}
   .rc-details-body,.cc-details-body{display:block!important;}
-  .grid,.top2-grid,.comp-cards{grid-template-columns:1fr 1fr;}
+  .grid{grid-template-columns:1fr;}
+  .top2-grid,.comp-cards{grid-template-columns:1fr 1fr;}
 }
 </style>
 </head>
@@ -301,7 +304,7 @@ header{background:var(--navy);color:#fff;padding:0 28px;height:56px;display:flex
         <div id="sec-macica" class="fields-macica">
           <div class="field">
             <label>Espessura h (cm)</label>
-            <input type="number" id="mac-h" placeholder="Ex.: 12" min="5" max="50" step="0.5" oninput="calcEq()">
+            <input type="number" id="mac-h" placeholder="Ex.: 12" min="5" max="50" step="0.5">
             <small>Laje sólida sem vazios</small>
           </div>
           <div class="field-hint">Maciça: módulo estrutural de referência = 60 cm. Seção sólida.
@@ -314,33 +317,33 @@ header{background:var(--navy);color:#fff;padding:0 28px;height:56px;display:flex
           <div class="field-hint">Dimensões da seção transversal do cliente.</div>
           <div class="field-row">
             <div class="field"><label>d1 — alt. inerte (cm)</label>
-              <input type="number" id="nerv-d1" placeholder="Ex.: 20" step="0.5" oninput="calcEq()"></div>
+              <input type="number" id="nerv-d1" placeholder="Ex.: 20" step="0.5"></div>
             <div class="field"><label>ds — capa (cm)</label>
-              <input type="number" id="nerv-ds" placeholder="Ex.: 5" step="0.5" oninput="calcEq()"></div>
+              <input type="number" id="nerv-ds" placeholder="Ex.: 5" step="0.5"></div>
           </div>
           <div class="field-row">
             <div class="field"><label>bi — larg. inf (cm)</label>
-              <input type="number" id="nerv-bi" placeholder="Ex.: 9" step="0.5" oninput="calcEq()"></div>
+              <input type="number" id="nerv-bi" placeholder="Ex.: 9" step="0.5"></div>
             <div class="field"><label>bs — larg. sup (cm)</label>
-              <input type="number" id="nerv-bs" placeholder="Ex.: 12" step="0.5" oninput="calcEq()"></div>
+              <input type="number" id="nerv-bs" placeholder="Ex.: 12" step="0.5"></div>
           </div>
           <div class="field"><label>Espaçamento entre eixos (cm)</label>
-            <input type="number" id="nerv-esp" placeholder="Ex.: 60" step="1" oninput="calcEq()"></div>
+            <input type="number" id="nerv-esp" placeholder="Ex.: 60" step="1"></div>
         </div>
 
         <div class="divider"></div>
         <div class="field">
           <label>Vão L (m) <span class="opt">opcional</span></label>
-          <input type="number" id="eq-vao" placeholder="Ex.: 6.5" step="0.1" min="1" max="30" oninput="calcEq()">
+          <input type="number" id="eq-vao" placeholder="Ex.: 6.5" step="0.1" min="1" max="30">
         </div>
         <div class="field">
           <label>Sobrecarga (kg/m²) <span class="opt">opcional</span></label>
-          <input type="number" id="eq-sc" placeholder="Ex.: 300" min="50" max="2000" step="10" oninput="calcEq()">
+          <input type="number" id="eq-sc" placeholder="Ex.: 300" min="50" max="2000" step="10">
           <small>≤300 res. · 301–500 comercial · >500 industrial</small>
         </div>
         <div class="field">
           <label>Filtro</label>
-          <select id="eq-filtro" onchange="calcEq()">
+          <select id="eq-filtro">
             <option value="ambas">Bidirecional + Unidirecional</option>
             <option value="B">Somente Bidirecional</option>
             <option value="U">Somente Unidirecional</option>
@@ -348,7 +351,7 @@ header{background:var(--navy);color:#fff;padding:0 28px;height:56px;display:flex
         </div>
         <div class="field">
           <label>Capa desejada (cm) <span class="opt">opcional · 4–20 cm</span></label>
-          <input type="number" id="cap-alvo-eq" placeholder="vazio = catálogo (5/7,5/10)" min="4" max="20" step="0.5" oninput="calcEq()">
+          <input type="number" id="cap-alvo-eq" placeholder="vazio = catálogo (5/7,5/10)" min="4" max="20" step="0.5">
         </div>
         <button class="btn-calc" onclick="calcEq()">Calcular</button>
       </div>
@@ -380,19 +383,19 @@ header{background:var(--navy);color:#fff;padding:0 28px;height:56px;display:flex
       <div class="card-body">
         <div class="field-hint">Informe o vão e a sobrecarga para encontrar as fôrmas que atendem a altura mínima.</div>
         <div class="field"><label>Vão L (m)</label>
-          <input type="number" id="hm-vao" placeholder="Ex.: 7.0" step="0.1" min="1" max="30" oninput="calcHmin()"></div>
+          <input type="number" id="hm-vao" placeholder="Ex.: 7.0" step="0.1" min="1" max="30"></div>
         <div class="field"><label>Sobrecarga (kg/m²)</label>
-          <input type="number" id="hm-sc" placeholder="Ex.: 300" min="50" max="2000" step="10" oninput="calcHmin()">
+          <input type="number" id="hm-sc" placeholder="Ex.: 300" min="50" max="2000" step="10">
           <small>≤300 res. · 301–500 comercial · >500 industrial</small></div>
         <div class="field"><label>Direção</label>
-          <select id="hm-dir" onchange="calcHmin()">
+          <select id="hm-dir">
             <option value="ambas">Bidirecional + Unidirecional</option>
             <option value="B">Somente Bidirecional</option>
             <option value="U">Somente Unidirecional</option>
           </select></div>
         <div class="field">
           <label>Capa desejada (cm) <span class="opt">opcional · 4–20 cm</span></label>
-          <input type="number" id="cap-alvo-hm" placeholder="vazio = catálogo (5/7,5/10)" min="4" max="20" step="0.5" oninput="calcHmin()"></div>
+          <input type="number" id="cap-alvo-hm" placeholder="vazio = catálogo (5/7,5/10)" min="4" max="20" step="0.5"></div>
         <button class="btn-calc" onclick="calcHmin()">Calcular</button>
       </div>
     </div>
@@ -1003,7 +1006,7 @@ function setTipo(tipo) {
   document.getElementById('btn-nervurada').classList.toggle('active', tipo === 'nervurada');
   document.getElementById('sec-macica').classList.toggle('hide', tipo !== 'macica');
   document.getElementById('sec-nervurada').classList.toggle('show', tipo === 'nervurada');
-  calcEq();
+  renderEqPlaceholder();
 }
 
 // ═══ TELA 1 — EQUIVALÊNCIA ═══════════════════════════════════════════
@@ -1290,17 +1293,23 @@ function renderComparativo() {
     area.innerHTML = '<div class="placeholder"><div class="ph-icon">📊</div><p>Calcule primeiro em uma das outras abas.</p></div>';
     return;
   }
-  const { topU, topB, heq_cli, h_cli_real, sc, vao, hmin_B, hmin_U, sourceLabel } = lastState;
+  const { topU, topB, heq_cli, h_cli_real, sc, vao, hmin_B, hmin_U, sourceLabel, source, tipoSecao } = lastState;
 
   let meta = '';
+  if (source === 'eq') meta += `<div class="comp-meta-item">Tipo <strong>Laje ${tipoSecao === 'macica' ? 'maciça' : 'nervurada'} — h = ${h_cli_real.toFixed(1)} cm</strong></div>`;
   if (vao)     meta += `<div class="comp-meta-item">Vão <strong>${vao} m</strong></div>`;
   if (sc)      meta += `<div class="comp-meta-item">Sobrecarga <strong>${sc} kg/m²</strong></div>`;
-  if (heq_cli) meta += `<div class="comp-meta-item">heq cliente <strong>${heq_cli.toFixed(2)} cm</strong></div>`;
+  if (heq_cli) meta += `<div class="comp-meta-item">heq equivalente <strong>${heq_cli.toFixed(2)} cm</strong></div>`;
+
+  const explicacao = source === 'eq'
+    ? 'Cada modelo é comparado a uma laje maciça hipotética com a MESMA rigidez estrutural (heq) da sua laje real — não é uma comparação direta com a espessura que você digitou.'
+    : 'Sem laje de referência informada nesta aba — a comparação usa a altura mínima (h_mín) calculada a partir do vão e da sobrecarga.';
 
   let html = `<div class="comp-header">
     <h2>Comparativo de Eficiência</h2>
     <p>${sourceLabel}</p>
     <div class="comp-meta">${meta}</div>
+    <div class="comp-explica">${explicacao}</div>
   </div>
   <div class="comp-cards">`;
   if (topB) html += renderCompCard(topB, lastState, hmin_B);
@@ -1339,9 +1348,11 @@ function renderCompCard(e, state, hmin) {
       : `<span class="hmin-badge fail">⚠ ${e.D} cm < h_mín ${hmin} cm</span>`)
     : '';
 
+  const temLajeCliente = state.source === 'eq';
+
   // barras de comparação
-  const maxVol = Math.max(vol_cli, vol_solid, e.vc, 0.001);
-  const maxPp  = Math.max(pp_cli,  pp_solid,  e.pp, 0.001);
+  const maxVol = Math.max(temLajeCliente ? vol_cli : 0, vol_solid, e.vc, 0.001);
+  const maxPp  = Math.max(temLajeCliente ? pp_cli : 0,  pp_solid,  e.pp, 0.001);
   const barW   = (v, mx) => Math.round(v / mx * 100);
 
   const id = `cc-${e.f}-${e.d1}-${e.ds}`.replace(/\./g,'_');
@@ -1384,11 +1395,11 @@ function renderCompCard(e, state, hmin) {
     </div>
     <div class="cc-compare">
       <div class="cc-compare-title">Volume de concreto — comparativo</div>
-      <div class="compare-row">
+      ${temLajeCliente ? `<div class="compare-row">
         <div class="cr-label">Laje cliente (${tS==='macica'?'maciça':'nerv.'} ${h_cli_real.toFixed(0)} cm)</div>
         <div class="cr-bar-wrap"><div class="cr-bar ref" style="width:${barW(vol_cli,maxVol)}%"></div></div>
         <div class="cr-val">${vol_cli.toFixed(3)} m³</div>
-      </div>
+      </div>` : ''}
       <div class="compare-row">
         <div class="cr-label">Sólida equiv. (heq ${heqM.toFixed(1)} cm)</div>
         <div class="cr-bar-wrap"><div class="cr-bar ref" style="width:${barW(vol_solid,maxVol)}%"></div></div>
