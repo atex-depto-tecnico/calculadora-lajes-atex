@@ -13,6 +13,15 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Lajes Atex">
 
+<script>
+// aplica o tema salvo o mais cedo possível, antes da tela desenhar (evita flash)
+try {
+  if (localStorage.getItem('atex-lajes-tema') === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  }
+} catch (e) {}
+</script>
+
 <style>
 :root {
   --bg:#F1F5F9; --surface:#FFFFFF; --border:#E2E8F0;
@@ -24,20 +33,35 @@
   --shadow:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.05);
   --shadow-md:0 4px 16px rgba(0,0,0,.09);
   --radius:12px; --radius-sm:8px;
+  --bg-alt:#F8FAFC; --bar-track:#CBD5E1; --logo-tinta:#231f20;
 }
 *{box-sizing:border-box;margin:0;padding:0;}
+[data-theme="dark"] {
+  --bg:#0B1220; --surface:#151E2E; --border:#283449;
+  --text:#E8ECF2; --muted:#98A6BC; --muted-light:#6C7A93;
+  --navy:#1A2436; --navy2:#0F1729;
+  --accent:#E8862E; --accent-bg:#3A2A16; --accent-border:#5C4020; --accent-text:#F5B876;
+  --green:#4ADE80; --green-bg:#123420; --green-border:#1F5C36;
+  --orange:#FB923C; --orange-bg:#3D2413; --orange-border:#5C3A1E;
+  --bg-alt:#1B2436; --bar-track:#3A475E;
+  --logo-tinta:#E8E9EA;
+  --shadow:0 1px 3px rgba(0,0,0,.35),0 1px 2px rgba(0,0,0,.3);
+  --shadow-md:0 4px 16px rgba(0,0,0,.4);
+}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',Arial,sans-serif;background:var(--bg);color:var(--text);font-size:14px;-webkit-font-smoothing:antialiased;}
 
 /* ── HEADER ── */
-header{background:var(--navy);color:#fff;padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;}
-.hd-brand{display:flex;align-items:center;gap:14px;}
-.hd-logo{font-size:15px;font-weight:800;letter-spacing:2px;color:#fff;}
-.hd-sep{width:1px;height:20px;background:rgba(255,255,255,.2);}
-.hd-sub{font-size:12px;color:#94A3B8;font-weight:500;}
+header{background:var(--navy);color:#fff;padding:8px 20px;min-height:56px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;}
+.hd-left{display:flex;align-items:center;}
+.hd-left svg{height:26px;width:auto;display:block;}
+.hd-title{font-size:14px;font-weight:700;letter-spacing:.2px;color:#fff;text-align:center;}
+.hd-right{display:flex;justify-content:flex-end;align-items:center;gap:8px;}
+.theme-toggle{background:transparent;border:1px solid rgba(255,255,255,.25);border-radius:8px;width:32px;height:32px;font-size:15px;cursor:pointer;color:#fff;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;}
+.theme-toggle:hover{border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.08);}
 .btn-print{padding:7px 14px;background:transparent;border:1px solid rgba(255,255,255,.2);border-radius:6px;font-size:12px;color:#94A3B8;cursor:pointer;transition:all .15s;}
 .btn-print:hover{border-color:rgba(255,255,255,.5);color:#fff;}
 .page-print-bar{display:flex;justify-content:flex-end;margin-bottom:10px;}
-.btn-print-page{padding:6px 12px;background:#fff;border:1px solid var(--border);border-radius:6px;font-size:12px;color:var(--muted);cursor:pointer;transition:all .15s;}
+.btn-print-page{padding:6px 12px;background:var(--surface);border:1px solid var(--border);border-radius:6px;font-size:12px;color:var(--muted);cursor:pointer;transition:all .15s;}
 .btn-print-page:hover{border-color:var(--accent);color:var(--accent-text);}
 
 /* ── TABS ── */
@@ -62,20 +86,20 @@ header{background:var(--navy);color:#fff;padding:0 28px;height:56px;display:flex
 .field{margin-bottom:14px;}
 .field label{display:block;font-size:11.5px;font-weight:800;color:var(--text);text-transform:uppercase;letter-spacing:.5px;margin-bottom:5px;}
 .field label .opt{display:inline-block;font-weight:600;font-size:10px;letter-spacing:0;text-transform:none;color:var(--muted-light);margin-left:5px;}
-.field input,.field select{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:14px;color:var(--text);background:#fff;transition:border-color .15s;-webkit-appearance:none;}
+.field input,.field select{width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-size:14px;color:var(--text);background:var(--surface);transition:border-color .15s;-webkit-appearance:none;}
 .field input:focus,.field select:focus{outline:none;border-color:var(--accent);}
 .field input::placeholder{color:var(--muted-light);font-style:italic;}
 .field small{font-size:11px;color:var(--muted-light);margin-top:3px;display:block;}
 .info-btn{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--accent);color:#fff;font-size:10px;font-style:italic;font-weight:700;border:none;cursor:pointer;vertical-align:middle;margin-left:4px;padding:0;line-height:1;}
 .info-btn:hover{background:var(--accent-text);}
-.info-pop{margin-top:8px;font-size:11.5px;color:var(--muted);background:#fff;border:1px solid var(--border);border-radius:6px;padding:9px 11px;line-height:1.55;}
+.info-pop{margin-top:8px;font-size:11.5px;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:9px 11px;line-height:1.55;}
 .type-group{margin-bottom:22px;}
 .type-group-label{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:0 0 10px;display:flex;align-items:center;gap:7px;}
 .type-group-label::before{content:'';display:inline-block;width:9px;height:9px;border-radius:2px;background:currentColor;}
 .type-group-label.bid{color:var(--accent);}
 .type-group-label.uni{color:var(--green);}
 .toggle-group{display:flex;gap:0;margin-bottom:16px;border:1.5px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;}
-.toggle-group button{flex:1;padding:9px 0;border:none;background:#fff;cursor:pointer;font-size:13px;font-weight:600;color:var(--muted);transition:all .15s;}
+.toggle-group button{flex:1;padding:9px 0;border:none;background:var(--surface);cursor:pointer;font-size:13px;font-weight:600;color:var(--muted);transition:all .15s;}
 .toggle-group button.active{background:var(--navy);color:#fff;}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .field-hint{background:var(--accent-bg);border-left:3px solid var(--accent);padding:9px 12px;border-radius:0 6px 6px 0;font-size:12px;color:var(--accent-text);margin-bottom:14px;line-height:1.5;}
@@ -105,7 +129,7 @@ header{background:var(--navy);color:#fff;padding:0 28px;height:56px;display:flex
 .result-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow-md);overflow:hidden;}
 .result-card.best{border-color:var(--accent);}
 .result-card.selected{border-color:var(--muted-light);}
-.result-card.selected .rc-head{background:#F8FAFC;}
+.result-card.selected .rc-head{background:var(--bg-alt);}
 .result-card.selected .rc-rank{color:var(--muted);}
 .rc-head{padding:14px 18px;border-bottom:1px solid var(--border);}
 .rc-rank{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
@@ -123,15 +147,15 @@ header{background:var(--navy);color:#fff;padding:0 28px;height:56px;display:flex
 .rc-metric .rmv{font-size:18px;font-weight:800;color:var(--text);}
 .rc-metric .rml{font-size:11px;color:var(--muted);margin-top:3px;}
 .rc-metric.green .rmv{color:var(--green);}
-.rc-savings{display:flex;gap:0;background:#F8FAFC;}
+.rc-savings{display:flex;gap:0;background:var(--bg-alt);}
 .rc-saving-item{flex:1;padding:12px 14px;text-align:center;border-right:1px solid var(--border);}
 .rc-saving-item:last-child{border-right:none;}
 .rc-saving-item .sv{font-size:16px;font-weight:800;color:var(--green);}
 .rc-saving-item .sl{font-size:10px;color:var(--muted);margin-top:2px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;}
 .rc-saving-item.neutral .sv{color:var(--orange);}
-.rc-details-toggle{padding:10px 18px;background:#F8FAFC;border-top:1px solid var(--border);font-size:12px;color:var(--accent);font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .15s;border:none;width:100%;text-align:left;}
-.rc-details-toggle:hover{background:#F1F5F9;}
-.rc-details-body{display:none;padding:14px 18px;border-top:1px solid var(--border);background:#FAFBFC;}
+.rc-details-toggle{padding:10px 18px;background:var(--bg-alt);border-top:1px solid var(--border);font-size:12px;color:var(--accent);font-weight:600;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .15s;border:none;width:100%;text-align:left;}
+.rc-details-toggle:hover{background:var(--bg-alt);}
+.rc-details-body{display:none;padding:14px 18px;border-top:1px solid var(--border);background:var(--bg-alt);}
 .rc-details-body.open{display:block;}
 .details-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
 @media(max-width:500px){.details-grid{grid-template-columns:repeat(2,1fr);}}
@@ -147,10 +171,10 @@ header{background:var(--navy);color:#fff;padding:0 28px;height:56px;display:flex
 .section-label-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:20px 0 10px;flex-wrap:wrap;}
 .models-list.collapsed{display:none;}
 .models-list{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);}
-.models-list-head{display:grid;grid-template-columns:1fr 60px 70px 70px 100px;gap:0;padding:9px 16px;background:#F8FAFC;border-bottom:1px solid var(--border);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);}
+.models-list-head{display:grid;grid-template-columns:1fr 60px 70px 70px 100px;gap:0;padding:9px 16px;background:var(--bg-alt);border-bottom:1px solid var(--border);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);}
 .models-list-row{display:grid;grid-template-columns:1fr 60px 70px 70px 100px;gap:0;padding:11px 16px;border-bottom:1px solid var(--border);font-size:13px;align-items:center;transition:background .1s;}
 .models-list-row:last-child{border-bottom:none;}
-.models-list-row:hover{background:#F8FAFC;}
+.models-list-row:hover{background:var(--bg-alt);}
 .models-list-row.best-row{background:var(--accent-bg);}
 .models-list-row{cursor:pointer;}
 .mlr-name{font-weight:700;color:var(--text);}
@@ -161,7 +185,7 @@ header{background:var(--navy);color:#fff;padding:0 28px;height:56px;display:flex
 .mlr-badge{display:inline-flex;align-items:center;padding:3px 7px;border-radius:99px;font-size:11px;font-weight:600;}
 .mlr-badge.ok{background:var(--green-bg);color:var(--green);}
 .mlr-badge.warn{background:var(--orange-bg);color:var(--orange);}
-.fam-row{grid-column:1/-1;padding:7px 16px;background:#F1F5F9;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.4px;}
+.fam-row{grid-column:1/-1;padding:7px 16px;background:var(--bg-alt);font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.4px;}
 @media(max-width:640px){
   .models-list-head,.models-list-row{grid-template-columns:1fr 60px 80px;}
   .models-list-head>*:nth-child(n+4),.models-list-row>*:nth-child(n+4){display:none;}
@@ -174,7 +198,7 @@ header{background:var(--navy);color:#fff;padding:0 28px;height:56px;display:flex
 .badge-est{display:inline-block;padding:1px 5px;border-radius:4px;font-size:9px;font-weight:700;background:#EDE9FE;color:#5B21B6;}
 
 /* ── SAVINGS HEQ LABEL ── */
-.savings-heq-label{padding:6px 18px;background:#F8FAFC;border-bottom:1px solid var(--border);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted-light);}
+.savings-heq-label{padding:6px 18px;background:var(--bg-alt);border-bottom:1px solid var(--border);font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted-light);}
 .rc-savings-title{padding:6px 18px 0;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--muted-light);background:var(--surface);}
 .metric-chip .mc-val{font-size:24px;font-weight:800;color:var(--text);line-height:1;}
 @media(min-width:900px){.metric-chip .mc-val{font-size:28px;}}
@@ -182,7 +206,7 @@ header{background:var(--navy);color:#fff;padding:0 28px;height:56px;display:flex
 .rc-model-name{font-size:22px;font-weight:800;color:var(--text);letter-spacing:-.5px;line-height:1.1;}
 .rc-head{padding:16px 20px;border-bottom:1px solid var(--border);}
 .rc-rank{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:8px;}
-.result-card.best .rc-head{background:linear-gradient(135deg,var(--accent-bg) 0%,#fff 100%);}
+.result-card.best .rc-head{background:linear-gradient(135deg,var(--accent-bg) 0%,var(--surface) 100%);}
 .rc-head-top{display:flex;align-items:flex-start;gap:14px;}
 .rc-collapse-btn{background:none;border:1px solid var(--border);border-radius:6px;color:var(--muted);font-size:11px;font-weight:600;padding:4px 9px;cursor:pointer;display:inline-flex;align-items:center;gap:4px;margin-top:8px;}
 .rc-collapse-btn:hover{border-color:var(--accent);color:var(--accent-text);}
@@ -201,7 +225,7 @@ header{background:var(--navy);color:#fff;padding:0 28px;height:56px;display:flex
 .sb-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin-top:8px;}
 .sb-context{font-size:10px;color:var(--muted-light);margin-top:3px;}
 .cc-name{font-size:26px;font-weight:800;color:var(--text);letter-spacing:-.5px;margin-bottom:6px;line-height:1.1;}
-.fam-row{grid-column:1/-1;padding:7px 16px;background:#F1F5F9;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.4px;}
+.fam-row{grid-column:1/-1;padding:7px 16px;background:var(--bg-alt);font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.4px;}
 
 /* ── COMPARATIVO ── */
 .comp-header{margin-bottom:20px;}
@@ -237,14 +261,14 @@ header{background:var(--navy);color:#fff;padding:0 28px;height:56px;display:flex
 .compare-row{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
 .compare-row:last-child{margin-bottom:0;}
 .cr-label{font-size:12px;color:var(--muted);width:130px;flex-shrink:0;}
-.cr-bar-wrap{flex:1;background:#F1F5F9;border-radius:99px;height:6px;overflow:hidden;}
+.cr-bar-wrap{flex:1;background:var(--bg-alt);border-radius:99px;height:6px;overflow:hidden;}
 .cr-bar{height:100%;border-radius:99px;transition:width .4s;}
-.cr-bar.ref{background:#CBD5E1;}
+.cr-bar.ref{background:var(--bar-track);}
 .cr-bar.nerv{background:var(--accent);}
 .cr-val{font-size:12px;font-weight:700;color:var(--text);width:60px;text-align:right;flex-shrink:0;}
-.cc-details{background:#F8FAFC;}
+.cc-details{background:var(--bg-alt);}
 .cc-details-toggle{width:100%;padding:12px 20px;background:transparent;border:none;border-top:1px solid var(--border);font-size:12px;color:var(--accent);font-weight:600;cursor:pointer;text-align:left;display:flex;align-items:center;gap:6px;}
-.cc-details-toggle:hover{background:#F1F5F9;}
+.cc-details-toggle:hover{background:var(--bg-alt);}
 .cc-details-body{display:none;padding:14px 20px;border-top:1px solid var(--border);}
 .cc-details-body.open{display:block;}
 .geo-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
@@ -255,31 +279,61 @@ header{background:var(--navy);color:#fff;padding:0 28px;height:56px;display:flex
 
 /* ── RESPONSIVE ── */
 @media(max-width:500px){
-  header{padding:0 16px;}
+  header{padding:8px 12px;}
+  .hd-left svg{height:20px;}
+  .hd-title{font-size:11px;}
+  .theme-toggle{width:28px;height:28px;font-size:13px;}
   .tabs-bar{padding:0 12px;}
   .tab-btn{padding:12px 12px;font-size:12px;}
   .main{padding:16px 12px;}
 }
 
+/* ── RODAPÉ DE IMPRESSÃO (logo + nome discretos, só aparece no papel) ── */
+.print-footer{display:none;}
+
 /* ── PRINT ── */
 @media print{
-  @page{ size: landscape; margin: 12mm; }
-  body{background:#fff;}
+  @page{ size: landscape; margin: 12mm 12mm 16mm; }
+  body{background:#fff;padding-bottom:10mm;}
   header,.tabs-bar{background:var(--navy)!important;print-color-adjust:exact;}
-  .btn-calc,.btn-print,.btn-print-page,.tabs-bar,.rc-details-toggle,.cc-details-toggle,.info-btn,.info-pop{display:none!important;}
+  .btn-calc,.btn-print,.btn-print-page,.tabs-bar,.rc-details-toggle,.cc-details-toggle,.info-btn,.info-pop,.theme-toggle{display:none!important;}
   .rc-details-body,.cc-details-body{display:block!important;}
   .grid{grid-template-columns:1fr;}
   .top2-grid,.comp-cards{grid-template-columns:1fr 1fr;}
+  .print-footer{
+    display:flex!important;align-items:center;justify-content:center;gap:8px;
+    position:fixed;bottom:4mm;left:0;right:0;
+    font-size:9px;color:#94A3B8;opacity:.75;
+  }
+  .print-footer svg{height:13px;width:auto;}
 }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="hd-brand">
-    <div class="hd-logo">ATEX BRASIL</div>
-    <div class="hd-sep"></div>
-    <div class="hd-sub">Calculadora de Lajes Nervuradas</div>
+  <div class="hd-left">
+    <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1029.2 395.2" role="img" aria-label="Atex Brasil">
+      <path fill="#F1F5F9" d="M534.5,290.9c0,7.5-.7,12.9-2.2,16.3-2.4,5.8-7.3,10.5-14.7,14.4-6.6,3.6-13.3,5.4-20.1,5.4-17.5,0-26.2-6.8-26.2-20.5s1.8-9.4,5.4-12.2c3.6-2.8,9.9-5,18.9-6.7l20.8-3.8c8.7-1.7,14.3-2.8,16.6-3.2.4-.2.8-.3,1.3-.3.2,1.1.3,2.5.3,4.2v6.4ZM537,354.9h42.9c-3-5.5-4.8-10.4-5.4-14.7-1.1-6.2-1.6-15.5-1.6-27.8v-53.4c0-17.7-.9-29.9-2.6-36.5-5.5-21.5-25.6-32.3-60.1-32.3s-35.1,3.2-47.8,9.6c-12.7,6.4-20.8,15.5-24.5,27.2-1.7,5.3-2.8,12-3.2,20.1h39c.8-7.7,2.8-12.9,5.8-15.7,6.6-6.4,16.2-9.6,28.8-9.6s26.5,7.7,26.5,23-1.6,3.8-4.8,4.5l-16,3.2-19.8,3.2c-21.8,3.4-37.1,7.8-46.1,13.1-13.2,7.7-19.8,20.5-19.8,38.4s5.5,28.3,16.6,37.4c11.1,9.2,26.1,13.8,45.1,13.8s34-5.8,46.4-17.3l.6,13.8Z"/>
+      <path fill="#F1F5F9" d="M605.7,332.1c.8,5.1,2.6,9.4,5.1,12.8,5.5,7.1,14.8,11,27.8,11.9,3.6.2,8.3.3,14.1.3s6.4-.1,14.1-.3l11.5-.3v-33.9h-2.6c-16.4,0-25.7-.9-28-2.7-2.2-1.8-3.4-6.3-3.4-13.6v-79.3h34.2v-32h-34.2v-48.9h-40v48.9h-22.7v32h22.7v68.6c0,19.2.4,31.4,1.3,36.5"/>
+      <path fill="#F1F5F9" d="M725,251.9c4.3-19.2,15.8-28.8,34.5-28.8s30.7,9.7,33.9,29.1h-68.4v-.3ZM763,358.4c39.9,0,63.4-18.3,70.7-55l-40.9-1.6c-2.6,6.4-5,10.8-7.4,13.1-5.5,5.5-13.5,8.3-24,8.3-23.7,0-36.5-13.4-38.4-40.3h112.6c.2-1.9.3-4.2.3-6.7,0-26.9-6.8-48-20.5-63.3-13.6-15.3-32.3-23-56-23s-42.2,7.6-56.3,22.9c-14.1,15.2-21.1,35.6-21.1,60.9s7.3,46.7,21.9,61.9c14.6,15.3,34.3,22.9,59,22.9"/>
+      <polygon fill="#F1F5F9" points="935.3 194.9 908.4 238.4 881.8 194.9 835.1 194.9 885.7 271.1 830 354.9 877 354.9 908.4 304 939.4 354.9 986.4 354.9 930.8 271.1 981.6 194.9 935.3 194.9"/>
+      <g>
+        <path fill="#f48120" d="M129.8,90.4c0,10.1,8.2,18.4,18.4,18.4h107.2c10.1,0,18.4-8.2,18.4-18.4v-53.6h-143.9v53.6Z"/>
+        <path fill="#f48120" d="M42.7,108.7h53.6c10.1,0,18.4-8.2,18.4-18.4v-53.6H42.7v72Z"/>
+        <path fill="#f48120" d="M288.8,90.4c0,10.1,8.2,18.4,18.4,18.4h53.6V36.8h-72v53.6Z"/>
+        <path fill="#f48120" d="M255.3,123.8h-107.2c-10.1,0-18.4,8.2-18.4,18.4v107.2c0,10.1,8.2,18.4,18.4,18.4h107.2c10.1,0,18.4-8.2,18.4-18.4v-107.2c0-10.1-8.2-18.4-18.4-18.4"/>
+        <path fill="#f48120" d="M96.3,123.8h-53.6v143.9h53.6c10.1,0,18.4-8.2,18.4-18.4v-107.2c0-10.1-8.2-18.4-18.4-18.4"/>
+        <path fill="#f48120" d="M288.8,142.2v107.2c0,10.1,8.2,18.4,18.4,18.4h53.6V123.8h-53.6c-10.1,0-18.4,8.2-18.4,18.4"/>
+        <path fill="#f48120" d="M255.3,282.9h-107.2c-10.1,0-18.4,8.2-18.4,18.4v53.6h143.9v-53.6c0-10.1-8.2-18.4-18.4-18.4"/>
+        <path fill="#f48120" d="M96.3,282.9h-53.6v72h72v-53.6c0-10.1-8.2-18.4-18.4-18.4"/>
+        <path fill="#f48120" d="M288.8,301.3v53.6h72v-72h-53.6c-10.1,0-18.4,8.2-18.4,18.4"/>
+      </g>
+    </svg>
+  </div>
+  <div class="hd-title">Calculadora de Lajes Nervuradas</div>
+  <div class="hd-right">
+    <button class="theme-toggle" id="theme-btn" onclick="toggleTema()" aria-label="Alternar tema claro/escuro" title="Alternar tema claro/escuro">🌙</button>
   </div>
 </header>
 
@@ -313,7 +367,7 @@ header{background:var(--navy);color:#fff;padding:0 28px;height:56px;display:flex
           </div>
           <div class="field-hint">Maciça: módulo estrutural de referência = 60 cm. Seção sólida.
             <button type="button" class="info-btn" onclick="toggleInfo('info-mod60')" aria-label="Por que 60 cm?">i</button>
-            <div id="info-mod60" class="info-pop" hidden>60 cm é um espaçamento de nervura usual no mercado e fica dentro do limite de 65 cm da NBR 6118, que dispensa a verificação da flexão da mesa. É só uma referência de contexto — não altera o cálculo da sua laje maciça, que já é avaliado por m² de área.</div>
+            <div id="info-mod60" class="info-pop" hidden>60 cm é o espaçamento de nervura mais comum do catálogo Atex (a numeração das famílias 6XX indica isso: Atex 610 ≈ 61cm entre eixos, Atex 650 ≈ 65cm, e assim por diante) e fica dentro do limite de 65 cm da NBR 6118, que dispensa a verificação da flexão da mesa. É só uma referência de contexto — não altera o cálculo da sua laje maciça, que já é avaliado por m² de área.</div>
           </div>
         </div>
 
@@ -439,6 +493,27 @@ header{background:var(--navy);color:#fff;padding:0 28px;height:56px;display:flex
     <img id="desenho-modal-img" src="" alt="Desenho técnico ampliado">
   </div>
 </div>
+
+<footer class="print-footer">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1029.2 395.2" aria-hidden="true">
+    <path fill="#231f20" d="M534.5,290.9c0,7.5-.7,12.9-2.2,16.3-2.4,5.8-7.3,10.5-14.7,14.4-6.6,3.6-13.3,5.4-20.1,5.4-17.5,0-26.2-6.8-26.2-20.5s1.8-9.4,5.4-12.2c3.6-2.8,9.9-5,18.9-6.7l20.8-3.8c8.7-1.7,14.3-2.8,16.6-3.2.4-.2.8-.3,1.3-.3.2,1.1.3,2.5.3,4.2v6.4ZM537,354.9h42.9c-3-5.5-4.8-10.4-5.4-14.7-1.1-6.2-1.6-15.5-1.6-27.8v-53.4c0-17.7-.9-29.9-2.6-36.5-5.5-21.5-25.6-32.3-60.1-32.3s-35.1,3.2-47.8,9.6c-12.7,6.4-20.8,15.5-24.5,27.2-1.7,5.3-2.8,12-3.2,20.1h39c.8-7.7,2.8-12.9,5.8-15.7,6.6-6.4,16.2-9.6,28.8-9.6s26.5,7.7,26.5,23-1.6,3.8-4.8,4.5l-16,3.2-19.8,3.2c-21.8,3.4-37.1,7.8-46.1,13.1-13.2,7.7-19.8,20.5-19.8,38.4s5.5,28.3,16.6,37.4c11.1,9.2,26.1,13.8,45.1,13.8s34-5.8,46.4-17.3l.6,13.8Z"/>
+    <path fill="#231f20" d="M605.7,332.1c.8,5.1,2.6,9.4,5.1,12.8,5.5,7.1,14.8,11,27.8,11.9,3.6.2,8.3.3,14.1.3s6.4-.1,14.1-.3l11.5-.3v-33.9h-2.6c-16.4,0-25.7-.9-28-2.7-2.2-1.8-3.4-6.3-3.4-13.6v-79.3h34.2v-32h-34.2v-48.9h-40v48.9h-22.7v32h22.7v68.6c0,19.2.4,31.4,1.3,36.5"/>
+    <path fill="#231f20" d="M725,251.9c4.3-19.2,15.8-28.8,34.5-28.8s30.7,9.7,33.9,29.1h-68.4v-.3ZM763,358.4c39.9,0,63.4-18.3,70.7-55l-40.9-1.6c-2.6,6.4-5,10.8-7.4,13.1-5.5,5.5-13.5,8.3-24,8.3-23.7,0-36.5-13.4-38.4-40.3h112.6c.2-1.9.3-4.2.3-6.7,0-26.9-6.8-48-20.5-63.3-13.6-15.3-32.3-23-56-23s-42.2,7.6-56.3,22.9c-14.1,15.2-21.1,35.6-21.1,60.9s7.3,46.7,21.9,61.9c14.6,15.3,34.3,22.9,59,22.9"/>
+    <polygon fill="#231f20" points="935.3 194.9 908.4 238.4 881.8 194.9 835.1 194.9 885.7 271.1 830 354.9 877 354.9 908.4 304 939.4 354.9 986.4 354.9 930.8 271.1 981.6 194.9 935.3 194.9"/>
+    <g>
+      <path fill="#f48120" d="M129.8,90.4c0,10.1,8.2,18.4,18.4,18.4h107.2c10.1,0,18.4-8.2,18.4-18.4v-53.6h-143.9v53.6Z"/>
+      <path fill="#f48120" d="M42.7,108.7h53.6c10.1,0,18.4-8.2,18.4-18.4v-53.6H42.7v72Z"/>
+      <path fill="#f48120" d="M288.8,90.4c0,10.1,8.2,18.4,18.4,18.4h53.6V36.8h-72v53.6Z"/>
+      <path fill="#f48120" d="M255.3,123.8h-107.2c-10.1,0-18.4,8.2-18.4,18.4v107.2c0,10.1,8.2,18.4,18.4,18.4h107.2c10.1,0,18.4-8.2,18.4-18.4v-107.2c0-10.1-8.2-18.4-18.4-18.4"/>
+      <path fill="#f48120" d="M96.3,123.8h-53.6v143.9h53.6c10.1,0,18.4-8.2,18.4-18.4v-107.2c0-10.1-8.2-18.4-18.4-18.4"/>
+      <path fill="#f48120" d="M288.8,142.2v107.2c0,10.1,8.2,18.4,18.4,18.4h53.6V123.8h-53.6c-10.1,0-18.4,8.2-18.4,18.4"/>
+      <path fill="#f48120" d="M255.3,282.9h-107.2c-10.1,0-18.4,8.2-18.4,18.4v53.6h143.9v-53.6c0-10.1-8.2-18.4-18.4-18.4"/>
+      <path fill="#f48120" d="M96.3,282.9h-53.6v72h72v-53.6c0-10.1-8.2-18.4-18.4-18.4"/>
+      <path fill="#f48120" d="M288.8,301.3v53.6h72v-72h-53.6c-10.1,0-18.4,8.2-18.4,18.4"/>
+    </g>
+  </svg>
+  <span>Atex Brasil — Calculadora de Lajes Nervuradas</span>
+</footer>
 
 <script>
 // ═══════════════════════════════════════════════════════════════════
@@ -882,11 +957,16 @@ const CATALOG_RAW = [
 function calcHeqGeom(bi, bs, d1, ds, esp) {
   const bm = (bi + bs) / 2;
   const Ar = bm * d1, As = esp * ds, At = Ar + As;
-  if (At === 0 || bm === 0) return null;
+  if (At === 0 || bm === 0 || !esp) return null;
   const ycg = (Ar*(d1/2) + As*(d1 + ds/2)) / At;
   const Ir = bm*Math.pow(d1,3)/12 + Ar*Math.pow(ycg - d1/2, 2);
   const Is = esp*Math.pow(ds,3)/12 + As*Math.pow(d1 + ds/2 - ycg, 2);
-  return Math.cbrt((Ir + Is)*12/bm);
+  // heq é a altura equivalente por METRO DE LAJE — a inércia da nervura
+  // precisa ser dividida pelo espaçamento entre eixos (o módulo repetido),
+  // não pela largura da própria nervura (bm). Validado contra dado oficial
+  // Atex 610U 30+10: fórmula antiga dava ~49.6cm, oficial é 27.3cm, a
+  // corrigida (÷esp) dá ~29cm — bate dentro da margem de arredondamento.
+  return Math.cbrt((Ir + Is)*12/esp);
 }
 
 function calcInerciaGeom(bi, bs, d1, ds, esp) {
@@ -1016,6 +1096,20 @@ function toggleInfo(id) {
   const el = document.getElementById(id);
   if (el) el.hidden = !el.hidden;
 }
+
+// ═══ TEMA CLARO/ESCURO — persistido no navegador ═════════════════════
+function aplicarTema(tema) {
+  document.documentElement.setAttribute('data-theme', tema);
+  const btn = document.getElementById('theme-btn');
+  if (btn) btn.textContent = tema === 'dark' ? '☀️' : '🌙';
+  try { localStorage.setItem('atex-lajes-tema', tema); } catch (e) {}
+}
+function toggleTema() {
+  const atual = document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+  aplicarTema(atual === 'dark' ? 'light' : 'dark');
+}
+// sincroniza o ícone do botão com o tema já aplicado (definido no <head>)
+aplicarTema(document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
 
 // ═══ UTILS ═══════════════════════════════════════════════════════════
 const nomeProduto = e => `Atex ${e.f}x${Math.round(e.D * 10)}`;
