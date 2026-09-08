@@ -1,4 +1,4 @@
-const CACHE = 'atex-lajes-v1';
+const CACHE = 'atex-lajes-v2';
 const ASSETS = ['./', './index.html', './manifest.json'];
 
 self.addEventListener('install', (e) => {
@@ -13,17 +13,16 @@ self.addEventListener('activate', (e) => {
   self.clients.claim();
 });
 
+// Network-first: sempre busca a versão mais nova quando online;
+// só usa o cache local se a rede falhar (uso offline).
 self.addEventListener('fetch', (e) => {
   e.respondWith(
-    caches.match(e.request).then((cached) => {
-      const network = fetch(e.request)
-        .then((res) => {
-          const copy = res.clone();
-          caches.open(CACHE).then((c) => c.put(e.request, copy));
-          return res;
-        })
-        .catch(() => cached);
-      return cached || network;
-    })
+    fetch(e.request)
+      .then((res) => {
+        const copy = res.clone();
+        caches.open(CACHE).then((c) => c.put(e.request, copy));
+        return res;
+      })
+      .catch(() => caches.match(e.request))
   );
 });
