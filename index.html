@@ -333,6 +333,7 @@ header{background:var(--navy);color:#fff;padding:8px 20px;min-height:56px;displa
   </div>
   <div class="hd-title">Calculadora de Lajes Nervuradas</div>
   <div class="hd-right">
+    <a class="theme-toggle" href="Catalogo_2026_Atex.pdf" download aria-label="Baixar catálogo completo em PDF" title="Baixar catálogo completo (PDF)">📄</a>
     <button class="theme-toggle" id="theme-btn" onclick="toggleTema()" aria-label="Alternar tema claro/escuro" title="Alternar tema claro/escuro">🌙</button>
   </div>
 </header>
@@ -559,9 +560,13 @@ const CATALOG_RAW = [
   {f:"650",t:"B",bi:7,bs:9.2,d1:18,ds:5,D:23,A:471,rs:5.9,ri:17.06,pp:2.3,vc:0.092,heq_of:14.6,I_of:16974,A_of:471},
   {f:"650",t:"B",bi:7,bs:9.2,d1:18,ds:7.5,D:25.5,A:633,rs:6.6,ri:18.91,pp:2.925,vc:0.117,heq_of:16.3,I_of:23295,A_of:633},
   {f:"650",t:"B",bi:7,bs:9.2,d1:18,ds:10,D:28,A:796,rs:7.5,ri:20.51,pp:3.55,vc:0.142,heq_of:18,I_of:31332,A_of:796},
-  {f:"650",t:"B",bi:7,bs:9.8,d1:21,ds:5,D:26,A:501,rs:6.9,ri:19.13,pp:2.525,vc:0.101,heq_of:16.6,I_of:24728,A_of:501},
-  {f:"650",t:"B",bi:7,bs:9.8,d1:21,ds:7.5,D:28.5,A:664,rs:7.4,ri:21.12,pp:3.15,vc:0.126,heq_of:18.3,I_of:32901,A_of:664},
-  {f:"650",t:"B",bi:7,bs:9.8,d1:21,ds:10,D:31,A:826,rs:8.2,ri:22.82,pp:3.775,vc:0.151,heq_of:19.9,I_of:42711,A_of:826},
+  {f:"650",t:"B",bi:7,bs:9.8,d1:21,ds:5,D:26,A:501,rs:6.9,ri:19.13,pp:2.525,vc:0.101,heq_of:16.6,I_of:24728,A_of:501,variante:"nervura 7cm"},
+  {f:"650",t:"B",bi:7,bs:9.8,d1:21,ds:7.5,D:28.5,A:664,rs:7.4,ri:21.12,pp:3.15,vc:0.126,heq_of:18.3,I_of:32901,A_of:664,variante:"nervura 7cm"},
+  {f:"650",t:"B",bi:7,bs:9.8,d1:21,ds:10,D:31,A:826,rs:8.2,ri:22.82,pp:3.775,vc:0.151,heq_of:19.9,I_of:42711,A_of:826,variante:"nervura 7cm"},
+  // ── Atex 650 (nervura 5cm) — variante confirmada por Ana em 09/09/2026 (Catálogo 2026 PDF, pág.15) — mesmo molde 21cm, nervura mais estreita
+  {f:"650",t:"B",bi:5,bs:9,d1:21,ds:5,D:26,A:472,rs:6.2,ri:19.8,pp:2.32,vc:0.093,heq_of:15.6,I_of:20508,A_of:472,variante:"nervura 5cm"},
+  {f:"650",t:"B",bi:5,bs:9,d1:21,ds:7.5,D:28.5,A:635,rs:6.8,ri:21.7,pp:2.94,vc:0.118,heq_of:17.2,I_of:27369,A_of:635,variante:"nervura 5cm"},
+  {f:"650",t:"B",bi:5,bs:9,d1:21,ds:10,D:31,A:797,rs:7.7,ri:23.3,pp:3.57,vc:0.143,heq_of:18.8,I_of:35878,A_of:797,variante:"nervura 5cm"},
   {f:"650",t:"B",bi:7,bs:11.6,d1:26,ds:5,D:31,A:567,rs:8.7,ri:22.34,pp:2.975,vc:0.119,heq_of:19.9,I_of:42880,A_of:567},
   {f:"650",t:"B",bi:7,bs:11.6,d1:26,ds:7.5,D:33.5,A:729,rs:9,ri:24.55,pp:3.6,vc:0.144,heq_of:21.7,I_of:55354,A_of:729},
   {f:"650",t:"B",bi:7,bs:11.6,d1:26,ds:10,D:36,A:892,rs:9.6,ri:26.41,pp:4.225,vc:0.169,heq_of:23.4,I_of:69257,A_of:892},
@@ -996,7 +1001,7 @@ const CATALOG = CATALOG_RAW.map(e => {
 function interpolateCatalogCap(capAlvo) {
   const groups = {};
   for (const e of CATALOG) {
-    const k = e.f + '_' + e.d1;
+    const k = e.f + '_' + e.d1 + '_' + (e.variante || '');
     if (!groups[k]) groups[k] = [];
     groups[k].push(e);
   }
@@ -1064,7 +1069,7 @@ function poolMelhorCapa(tipo, cat, heqAlvo, hmin, dsMax) {
   const grupos = {};
   for (const e of cat) {
     if (e.t !== tipo) continue;
-    const k = e.f + '_' + e.d1;
+    const k = e.f + '_' + e.d1 + '_' + (e.variante || '');
     (grupos[k] = grupos[k] || []).push(e);
   }
   const out = [];
@@ -1112,7 +1117,7 @@ function toggleTema() {
 aplicarTema(document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
 
 // ═══ UTILS ═══════════════════════════════════════════════════════════
-const nomeProduto = e => `Atex ${e.f}x${Math.round(e.D * 10)}`;
+const nomeProduto = e => `Atex ${e.f}${e.variante ? ' ' + e.variante : ''}x${Math.round(e.d1 * 10)}`;
 const nomeResumo  = e => `capa ${e.ds} cm`;
 const famImgFile  = f => f.replace(/ /g, '_');
 const badgeFonte  = f => f === 'oficial'
