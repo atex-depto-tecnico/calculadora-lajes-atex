@@ -81,6 +81,9 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
 .hd-right{display:flex;flex-direction:row;justify-content:flex-end;align-items:center;gap:8px;}
 .hd-action-btn{flex:0 0 auto;background:transparent;border:1px solid rgba(255,255,255,.25);border-radius:6px;padding:5px 11px;font-size:11px;font-weight:600;cursor:pointer;color:#fff;text-align:center;text-decoration:none;white-space:nowrap;transition:all .15s;}
 .hd-action-btn:hover{border-color:var(--accent);background:rgba(255,255,255,.08);color:var(--accent);}
+.lang-switch{display:flex;gap:4px;flex:0 0 auto;}
+.lang-btn{opacity:.6;}
+.lang-btn.active{opacity:1;border-color:var(--accent);color:var(--accent);background:rgba(255,255,255,.08);}
 .btn-print{padding:7px 14px;background:transparent;border:1px solid rgba(255,255,255,.2);border-radius:6px;font-size:12px;color:#9C9C9C;cursor:pointer;transition:all .15s;}
 .btn-print:hover{border-color:rgba(255,255,255,.5);color:#fff;}
 .page-print-bar{display:flex;justify-content:flex-end;margin-bottom:10px;}
@@ -353,8 +356,8 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
 <div id="install-banner" class="install-banner" hidden>
   <span id="install-banner-text"></span>
   <div class="install-banner-actions">
-    <button id="install-banner-btn" class="install-banner-install" onclick="instalarPWA()" hidden>Adicionar à Tela Inicial</button>
-    <button class="install-banner-close" onclick="fecharBannerInstall()" aria-label="Fechar">✕</button>
+    <button id="install-banner-btn" class="install-banner-install" onclick="instalarPWA()" data-i18n="install_btn" hidden>Adicionar à Tela Inicial</button>
+    <button class="install-banner-close" onclick="fecharBannerInstall()" data-i18n-aria="install_close_aria" aria-label="Fechar">✕</button>
   </div>
 </div>
 
@@ -378,18 +381,23 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
       </g>
     </svg>
   </div>
-  <div class="hd-title">Calculadora Atex
-    <button type="button" class="hd-info-btn" onclick="toggleInfoModal(true)" aria-label="Informações da ferramenta" title="Informações da ferramenta">i</button>
+  <div class="hd-title"><span data-i18n="hd_title">Calculadora Atex</span>
+    <button type="button" class="hd-info-btn" onclick="toggleInfoModal(true)" data-i18n-aria="hd_info_aria" data-i18n-title="hd_info_aria" aria-label="Informações da ferramenta" title="Informações da ferramenta">i</button>
   </div>
   <div class="hd-right">
-    <a class="hd-action-btn" href="Catalogo_Atex.pdf" download aria-label="Baixar catálogo completo em PDF">Baixar Catálogo Atex</a>
-    <button class="hd-action-btn" id="theme-btn" onclick="toggleTema()" aria-label="Alternar tema claro/escuro">Alterar tema</button>
+    <a class="hd-action-btn" href="Catalogo_Atex.pdf" download data-i18n="hd_download" data-i18n-aria="hd_download_aria" aria-label="Baixar catálogo completo em PDF">Baixar Catálogo Atex</a>
+    <div class="lang-switch" role="group" data-i18n-aria="hd_lang_aria" aria-label="Alterar idioma">
+      <button type="button" class="hd-action-btn lang-btn active" data-lang="pt" onclick="setLang('pt')">PT</button>
+      <button type="button" class="hd-action-btn lang-btn" data-lang="es" onclick="setLang('es')">ES</button>
+      <button type="button" class="hd-action-btn lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+    </div>
+    <button class="hd-action-btn" id="theme-btn" onclick="toggleTema()" data-i18n="hd_theme" data-i18n-aria="hd_theme_aria" aria-label="Alternar tema claro/escuro">Alterar tema</button>
   </div>
 </header>
 
 <div class="tabs-bar">
-  <button class="tab-btn active" id="tab-eq"   onclick="setTab('eq')">Equivalência de Inércia</button>
-  <button class="tab-btn"        id="tab-hmin" onclick="setTab('hmin')">Sugestão por h_mín</button>
+  <button class="tab-btn active" id="tab-eq"   onclick="setTab('eq')" data-i18n="tab_eq">Equivalência de Inércia</button>
+  <button class="tab-btn"        id="tab-hmin" onclick="setTab('hmin')" data-i18n="tab_hmin">Sugestão por h_mín</button>
 </div>
 
 <div class="main">
@@ -398,24 +406,24 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
 <div class="screen active" id="screen-eq">
   <div class="grid">
     <div class="card">
-      <div class="card-head">Seção do Cliente</div>
+      <div class="card-head" data-i18n="card_client_section">Seção do Cliente</div>
       <div class="card-body">
         <div class="acc-group">
         <button type="button" class="acc-head" onclick="toggleAcc('acc-dados-eq')">
-          <span>Dados da Laje</span>
+          <span data-i18n="acc_dados_laje">Dados da Laje</span>
           <span id="acc-dados-eq-chev" class="acc-chev">▾</span>
         </button>
         <div id="acc-dados-eq" class="acc-body">
         <div class="field">
-          <label>Tipo de seção</label>
+          <label data-i18n="lbl_tipo_secao">Tipo de seção</label>
           <div class="toggle-group">
-            <button id="btn-macica" class="active" onclick="setTipo('macica')">Maciça</button>
-            <button id="btn-nervurada" onclick="setTipo('nervurada')">Nervurada</button>
+            <button id="btn-macica" class="active" onclick="setTipo('macica')" data-i18n="btn_macica">Maciça</button>
+            <button id="btn-nervurada" onclick="setTipo('nervurada')" data-i18n="btn_nervurada">Nervurada</button>
           </div>
         </div>
 
         <div id="sec-macica" class="fields-macica">
-          <svg class="sec-diagram" viewBox="0 0 360 100" role="img" aria-label="Seção maciça — laje sólida de altura/espessura">
+          <svg class="sec-diagram" viewBox="0 0 360 100" role="img" data-i18n-aria="svg_macica_aria" aria-label="Seção maciça — laje sólida de altura/espessura">
             <rect x="20" y="30" width="230" height="40" fill="var(--muted-light)" stroke="var(--text)" stroke-width="1.5"/>
             <line x1="276" y1="30" x2="276" y2="70" stroke="var(--accent)" stroke-width="1.2"/>
             <line x1="271" y1="30" x2="281" y2="30" stroke="var(--accent)" stroke-width="1.2"/>
@@ -423,18 +431,18 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
             <text x="290" y="54" font-size="14" font-weight="700" fill="var(--accent)">h</text>
           </svg>
           <div class="field">
-            <label>Altura/Espessura h (cm)</label>
-            <input type="number" id="mac-h" placeholder="Ex.: 12" min="5" max="50" step="0.5">
-            <small>Laje sólida sem vazios</small>
+            <label data-i18n="lbl_altura_espessura">Altura/Espessura h (cm)</label>
+            <input type="number" id="mac-h" placeholder="Ex.: 12" data-i18n-placeholder="ph_ex12" min="5" max="50" step="0.5">
+            <small data-i18n="small_laje_solida">Laje sólida sem vazios</small>
           </div>
-          <div class="field-hint">Maciça: módulo estrutural de referência = 60 cm. Seção sólida.
-            <button type="button" class="info-btn" onclick="toggleInfo('info-mod60')" aria-label="Por que 60 cm?">i</button>
-            <div id="info-mod60" class="info-pop" hidden>60 cm é o espaçamento de nervura mais comum do catálogo Atex (a numeração das famílias 6XX indica isso: Atex 610 ≈ 61cm entre eixos, Atex 650 ≈ 65cm, e assim por diante) e fica dentro do limite de 65 cm da NBR 6118, que dispensa a verificação da flexão da mesa. É só uma referência de contexto — não altera o cálculo da sua laje maciça, que já é avaliado por m² de área.</div>
+          <div class="field-hint"><span data-i18n="hint_macica">Maciça: módulo estrutural de referência = 60 cm. Seção sólida.</span>
+            <button type="button" class="info-btn" onclick="toggleInfo('info-mod60')" data-i18n-aria="info_mod60_aria" aria-label="Por que 60 cm?">i</button>
+            <div id="info-mod60" class="info-pop" data-i18n="info_mod60_text" hidden>60 cm é o espaçamento de nervura mais comum do catálogo Atex (a numeração das famílias 6XX indica isso: Atex 610 ≈ 61cm entre eixos, Atex 650 ≈ 65cm, e assim por diante) e fica dentro do limite de 65 cm da NBR 6118, que dispensa a verificação da flexão da mesa. É só uma referência de contexto — não altera o cálculo da sua laje maciça, que já é avaliado por m² de área.</div>
           </div>
         </div>
 
         <div id="sec-nervurada" class="fields-nervurada">
-          <svg class="sec-diagram" viewBox="0 0 430 235" role="img" aria-label="Seção nervurada — capa (ds), altura do inerte (d1), largura superior (bs), largura inferior (bi) e eixo (espaçamento entre eixos)">
+          <svg class="sec-diagram" viewBox="0 0 430 235" role="img" data-i18n-aria="svg_nervurada_aria" aria-label="Seção nervurada — capa (ds), altura do inerte (d1), largura superior (bs), largura inferior (bi) e eixo (espaçamento entre eixos)">
             <line x1="75" y1="30" x2="145" y2="30" stroke="var(--accent)" stroke-width="1"/>
             <line x1="75" y1="26" x2="75" y2="34" stroke="var(--accent)" stroke-width="1"/>
             <line x1="145" y1="26" x2="145" y2="34" stroke="var(--accent)" stroke-width="1"/>
@@ -472,26 +480,26 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
             <line x1="127" y1="186" x2="127" y2="194" stroke="var(--accent)" stroke-width="1"/>
             <text x="110" y="204" font-size="13" font-weight="700" fill="var(--accent)" text-anchor="middle">bi</text>
           </svg>
-          <div class="field-hint">Dimensões da seção transversal do cliente.</div>
+          <div class="field-hint" data-i18n="hint_nervurada">Dimensões da seção transversal do cliente.</div>
           <div class="field-row">
-            <div class="field"><label>d1 — alt. inerte (cm)</label>
-              <input type="number" id="nerv-d1" placeholder="Ex.: 20" step="0.5" onfocus="highlightDim('d1',true)" onblur="highlightDim('d1',false)"></div>
-            <div class="field"><label>ds — capa (cm)</label>
-              <input type="number" id="nerv-ds" placeholder="Ex.: 5" step="0.5" onfocus="highlightDim('ds',true)" onblur="highlightDim('ds',false)"></div>
+            <div class="field"><label data-i18n="lbl_d1">d1 — alt. inerte (cm)</label>
+              <input type="number" id="nerv-d1" placeholder="Ex.: 20" data-i18n-placeholder="ph_ex20" step="0.5" onfocus="highlightDim('d1',true)" onblur="highlightDim('d1',false)"></div>
+            <div class="field"><label data-i18n="lbl_ds">ds — capa (cm)</label>
+              <input type="number" id="nerv-ds" placeholder="Ex.: 5" data-i18n-placeholder="ph_ex5" step="0.5" onfocus="highlightDim('ds',true)" onblur="highlightDim('ds',false)"></div>
           </div>
           <div class="field-row">
-            <div class="field"><label>bi — larg. inf (cm)</label>
-              <input type="number" id="nerv-bi" placeholder="Ex.: 9" step="0.5" onfocus="highlightDim('bi',true)" onblur="highlightDim('bi',false)"></div>
-            <div class="field"><label>bs — larg. sup (cm)</label>
-              <input type="number" id="nerv-bs" placeholder="Ex.: 12" step="0.5" onfocus="highlightDim('bs',true)" onblur="highlightDim('bs',false)"></div>
+            <div class="field"><label data-i18n="lbl_bi">bi — larg. inf (cm)</label>
+              <input type="number" id="nerv-bi" placeholder="Ex.: 9" data-i18n-placeholder="ph_ex9" step="0.5" onfocus="highlightDim('bi',true)" onblur="highlightDim('bi',false)"></div>
+            <div class="field"><label data-i18n="lbl_bs">bs — larg. sup (cm)</label>
+              <input type="number" id="nerv-bs" placeholder="Ex.: 12" data-i18n-placeholder="ph_ex12" step="0.5" onfocus="highlightDim('bs',true)" onblur="highlightDim('bs',false)"></div>
           </div>
-          <div class="field"><label>Espaçamento entre eixos (cm)</label>
-            <input type="number" id="nerv-esp" placeholder="Ex.: 60" step="1" onfocus="highlightDim('eixo',true)" onblur="highlightDim('eixo',false)"></div>
+          <div class="field"><label data-i18n="lbl_espacamento">Espaçamento entre eixos (cm)</label>
+            <input type="number" id="nerv-esp" placeholder="Ex.: 60" data-i18n-placeholder="ph_ex60" step="1" onfocus="highlightDim('eixo',true)" onblur="highlightDim('eixo',false)"></div>
         </div>
         </div>
         </div>
 
-        <div class="acc-group">
+        <div class="acc-group" data-fire-only>
         <button type="button" class="acc-head" onclick="toggleAcc('acc-fire-eq')">
           <span>Verificação de Incêndio<span class="acc-sub">NBR 14432 (TRRF) + NBR 15200:2024 (dimensões mínimas)</span></span>
           <span id="acc-fire-eq-chev" class="acc-chev">▾</span>
@@ -526,56 +534,56 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
 
         <div class="acc-group">
         <button type="button" class="acc-head" onclick="toggleAcc('acc-opt-eq')">
-          <span>Parâmetros Opcionais<span class="acc-sub">Vão, sobrecarga, filtro, capa desejada</span></span>
+          <span><span data-i18n="acc_opt_title">Parâmetros Opcionais</span><span class="acc-sub" data-i18n="acc_opt_sub_eq">Vão, sobrecarga, filtro, capa desejada</span></span>
           <span id="acc-opt-eq-chev" class="acc-chev">▸</span>
         </button>
         <div id="acc-opt-eq" class="acc-body" hidden>
         <div class="field">
-          <label>Vão L (m) <span class="opt">opcional</span></label>
-          <input type="number" id="eq-vao" placeholder="Ex.: 6.5" step="0.1" min="1" max="30">
+          <label><span data-i18n="lbl_vao">Vão L (m)</span> <span class="opt" data-i18n="txt_opcional">opcional</span></label>
+          <input type="number" id="eq-vao" placeholder="Ex.: 6.5" data-i18n-placeholder="ph_ex65" step="0.1" min="1" max="30">
         </div>
         <div class="field">
-          <label>Sobrecarga (kg/m²) <span class="opt">opcional</span></label>
-          <input type="number" id="eq-sc" placeholder="Ex.: 300" min="50" max="2000" step="10">
-          <small>≤300 res. · 301–500 comercial · >500 industrial
-            <button type="button" class="info-btn" onclick="toggleInfo('info-sc-eq')" aria-label="O que é sobrecarga?">i</button>
+          <label><span data-i18n="lbl_sobrecarga">Sobrecarga (kg/m²)</span> <span class="opt" data-i18n="txt_opcional">opcional</span></label>
+          <input type="number" id="eq-sc" placeholder="Ex.: 300" data-i18n-placeholder="ph_ex300" min="50" max="2000" step="10">
+          <small><span data-i18n="small_sobrecarga_faixas">≤300 res. · 301–500 comercial · >500 industrial</span>
+            <button type="button" class="info-btn" onclick="toggleInfo('info-sc-eq')" data-i18n-aria="info_sc_aria" aria-label="O que é sobrecarga?">i</button>
           </small>
-          <div id="info-sc-eq" class="info-pop" hidden>Sobrecarga é a carga de uso da laje (pessoas, móveis, equipamentos — sem contar o peso próprio da estrutura), definida pela NBR 6120 conforme a ocupação. As 3 faixas aqui são uma simplificação prática: residencial tende a ficar até 300 kg/m², uso comercial entre 301–500, industrial acima disso. Esse valor também define o divisor usado no cálculo de h_mín. Se seu projeto já tem a sobrecarga de norma definida, use-a diretamente aqui.</div>
+          <div id="info-sc-eq" class="info-pop" data-i18n="info_sc_text" hidden>Sobrecarga é a carga de uso da laje (pessoas, móveis, equipamentos — sem contar o peso próprio da estrutura), definida pela NBR 6120 conforme a ocupação. As 3 faixas aqui são uma simplificação prática: residencial tende a ficar até 300 kg/m², uso comercial entre 301–500, industrial acima disso. Esse valor também define o divisor usado no cálculo de h_mín. Se seu projeto já tem a sobrecarga de norma definida, use-a diretamente aqui.</div>
         </div>
         <div class="field">
-          <label>Filtro</label>
+          <label data-i18n="lbl_filtro">Filtro</label>
           <select id="eq-filtro">
-            <option value="ambas">Bidirecional + Unidirecional</option>
-            <option value="B">Somente Bidirecional</option>
-            <option value="U">Somente Unidirecional</option>
+            <option value="ambas" data-i18n="opt_ambas">Bidirecional + Unidirecional</option>
+            <option value="B" data-i18n="opt_somente_bi">Somente Bidirecional</option>
+            <option value="U" data-i18n="opt_somente_uni">Somente Unidirecional</option>
           </select>
         </div>
         <div class="field">
-          <label>Capa desejada (cm) <span class="opt">opcional · 4–20 cm</span></label>
-          <input type="number" id="cap-alvo-eq" placeholder="vazio = catálogo (5/7,5/10)" min="4" max="20" step="0.5">
+          <label><span data-i18n="lbl_capa_desejada">Capa desejada (cm)</span> <span class="opt" data-i18n="txt_capa_opt_range">opcional · 4–20 cm</span></label>
+          <input type="number" id="cap-alvo-eq" placeholder="vazio = catálogo (5/7,5/10)" data-i18n-placeholder="ph_capa_vazio" min="4" max="20" step="0.5">
         </div>
         </div>
         </div>
-        <button class="btn-calc" onclick="calcEq()">Calcular</button>
+        <button class="btn-calc" onclick="calcEq()" data-i18n="btn_calcular">Calcular</button>
       </div>
     </div>
 
     <div>
       <div id="eq-metrics-row" class="metrics-row" style="display:none">
-        <div class="metric-chip"><div class="mc-val" id="eq-out-heq">—</div><div class="mc-lbl">heq cliente</div><div class="mc-sub">altura equivalente maciça</div></div>
-        <div class="metric-chip"><div class="mc-val" id="eq-out-hbi">—</div><div class="mc-lbl">h_mín bidirecional</div><div class="mc-sub" id="eq-div-bi">—</div></div>
-        <div class="metric-chip"><div class="mc-val" id="eq-out-huni">—</div><div class="mc-lbl">h_mín unidirecional</div><div class="mc-sub" id="eq-div-uni">—</div></div>
+        <div class="metric-chip"><div class="mc-val" id="eq-out-heq">—</div><div class="mc-lbl" data-i18n="mc_heq_cliente">heq cliente</div><div class="mc-sub" data-i18n="mc_heq_sub">altura equivalente maciça</div></div>
+        <div class="metric-chip"><div class="mc-val" id="eq-out-hbi">—</div><div class="mc-lbl" data-i18n="mc_hmin_bi">h_mín bidirecional</div><div class="mc-sub" id="eq-div-bi">—</div></div>
+        <div class="metric-chip"><div class="mc-val" id="eq-out-huni">—</div><div class="mc-lbl" data-i18n="mc_hmin_uni">h_mín unidirecional</div><div class="mc-sub" id="eq-div-uni">—</div></div>
       </div>
       <div id="eq-results-area">
         <div class="placeholder">
           <div class="ph-icon">🏗</div>
-          <p>Preencha os dados da laje para ver as sugestões.</p>
-          <small>Melhor bidirecional e unidirecional aparecem simultaneamente.</small>
+          <p data-i18n="ph_eq_msg">Preencha os dados da laje para ver as sugestões.</p>
+          <small data-i18n="ph_eq_small">Melhor bidirecional e unidirecional aparecem simultaneamente.</small>
         </div>
       </div>
       <div id="resumo-bar" class="resumo-bar" hidden>
-        <div class="resumo-bar-text"><b id="resumo-count">0</b> fôrma(s) marcada(s) pro resumo</div>
-        <button class="btn-resumo-print" onclick="imprimirResumo()">🖨 Imprimir Resumo</button>
+        <div class="resumo-bar-text"><b id="resumo-count">0</b> <span data-i18n="resumo_bar_suffix">fôrma(s) marcada(s) pro resumo</span></div>
+        <button class="btn-resumo-print" onclick="imprimirResumo()" data-i18n="btn_resumo_print">🖨 Imprimir Resumo</button>
       </div>
     </div>
   </div>
@@ -583,31 +591,31 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
 
 <!-- ═══ TELA 2 — ALTURA MÍNIMA ═══ -->
 <div class="screen" id="screen-hmin">
-  <div class="page-print-bar"><button class="btn-print-page" onclick="imprimirPagina('hmin')">🖨 Imprimir esta página</button></div>
+  <div class="page-print-bar"><button class="btn-print-page" onclick="imprimirPagina('hmin')" data-i18n="btn_print_page">🖨 Imprimir esta página</button></div>
   <div class="grid">
     <div class="card">
-      <div class="card-head">Dados de Entrada</div>
+      <div class="card-head" data-i18n="card_dados_entrada">Dados de Entrada</div>
       <div class="card-body">
         <div class="acc-group">
         <button type="button" class="acc-head" onclick="toggleAcc('acc-dados-hm')">
-          <span>Dados de Entrada</span>
+          <span data-i18n="card_dados_entrada">Dados de Entrada</span>
           <span id="acc-dados-hm-chev" class="acc-chev">▾</span>
         </button>
         <div id="acc-dados-hm" class="acc-body">
-        <div class="field-hint">Informe o vão e a sobrecarga para encontrar as fôrmas que atendem a altura mínima.</div>
-        <div class="field"><label>Vão L (m)</label>
-          <input type="number" id="hm-vao" placeholder="Ex.: 7.0" step="0.1" min="1" max="30"></div>
-        <div class="field"><label>Sobrecarga (kg/m²)</label>
-          <input type="number" id="hm-sc" placeholder="Ex.: 300" min="50" max="2000" step="10">
-          <small>≤300 res. · 301–500 comercial · >500 industrial
-            <button type="button" class="info-btn" onclick="toggleInfo('info-sc-hm')" aria-label="O que é sobrecarga?">i</button>
+        <div class="field-hint" data-i18n="hint_hm_dados">Informe o vão e a sobrecarga para encontrar as fôrmas que atendem a altura mínima.</div>
+        <div class="field"><label data-i18n="lbl_vao">Vão L (m)</label>
+          <input type="number" id="hm-vao" placeholder="Ex.: 7.0" data-i18n-placeholder="ph_ex70" step="0.1" min="1" max="30"></div>
+        <div class="field"><label data-i18n="lbl_sobrecarga">Sobrecarga (kg/m²)</label>
+          <input type="number" id="hm-sc" placeholder="Ex.: 300" data-i18n-placeholder="ph_ex300" min="50" max="2000" step="10">
+          <small><span data-i18n="small_sobrecarga_faixas">≤300 res. · 301–500 comercial · >500 industrial</span>
+            <button type="button" class="info-btn" onclick="toggleInfo('info-sc-hm')" data-i18n-aria="info_sc_aria" aria-label="O que é sobrecarga?">i</button>
           </small>
-          <div id="info-sc-hm" class="info-pop" hidden>Sobrecarga é a carga de uso da laje (pessoas, móveis, equipamentos — sem contar o peso próprio da estrutura), definida pela NBR 6120 conforme a ocupação. As 3 faixas aqui são uma simplificação prática: residencial tende a ficar até 300 kg/m², uso comercial entre 301–500, industrial acima disso. Esse valor também define o divisor usado no cálculo de h_mín. Se seu projeto já tem a sobrecarga de norma definida, use-a diretamente aqui.</div>
+          <div id="info-sc-hm" class="info-pop" data-i18n="info_sc_text" hidden>Sobrecarga é a carga de uso da laje (pessoas, móveis, equipamentos — sem contar o peso próprio da estrutura), definida pela NBR 6120 conforme a ocupação. As 3 faixas aqui são uma simplificação prática: residencial tende a ficar até 300 kg/m², uso comercial entre 301–500, industrial acima disso. Esse valor também define o divisor usado no cálculo de h_mín. Se seu projeto já tem a sobrecarga de norma definida, use-a diretamente aqui.</div>
         </div>
         </div>
         </div>
 
-        <div class="acc-group">
+        <div class="acc-group" data-fire-only>
         <button type="button" class="acc-head" onclick="toggleAcc('acc-fire-hm')">
           <span>Verificação de Incêndio<span class="acc-sub">NBR 14432 (TRRF) + NBR 15200:2024 (dimensões mínimas)</span></span>
           <span id="acc-fire-hm-chev" class="acc-chev">▾</span>
@@ -642,36 +650,36 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
 
         <div class="acc-group">
         <button type="button" class="acc-head" onclick="toggleAcc('acc-opt-hm')">
-          <span>Parâmetros Opcionais<span class="acc-sub">Direção, capa desejada</span></span>
+          <span><span data-i18n="acc_opt_title">Parâmetros Opcionais</span><span class="acc-sub" data-i18n="acc_opt_sub_hm">Direção, capa desejada</span></span>
           <span id="acc-opt-hm-chev" class="acc-chev">▸</span>
         </button>
         <div id="acc-opt-hm" class="acc-body" hidden>
-        <div class="field"><label>Direção</label>
+        <div class="field"><label data-i18n="lbl_direcao">Direção</label>
           <select id="hm-dir">
-            <option value="ambas">Bidirecional + Unidirecional</option>
-            <option value="B">Somente Bidirecional</option>
-            <option value="U">Somente Unidirecional</option>
+            <option value="ambas" data-i18n="opt_ambas">Bidirecional + Unidirecional</option>
+            <option value="B" data-i18n="opt_somente_bi">Somente Bidirecional</option>
+            <option value="U" data-i18n="opt_somente_uni">Somente Unidirecional</option>
           </select></div>
         <div class="field">
-          <label>Capa desejada (cm) <span class="opt">opcional · 4–20 cm</span></label>
-          <input type="number" id="cap-alvo-hm" placeholder="vazio = catálogo (5/7,5/10)" min="4" max="20" step="0.5"></div>
+          <label><span data-i18n="lbl_capa_desejada">Capa desejada (cm)</span> <span class="opt" data-i18n="txt_capa_opt_range">opcional · 4–20 cm</span></label>
+          <input type="number" id="cap-alvo-hm" placeholder="vazio = catálogo (5/7,5/10)" data-i18n-placeholder="ph_capa_vazio" min="4" max="20" step="0.5"></div>
         </div>
         </div>
-        <button class="btn-calc" onclick="calcHmin()">Calcular</button>
+        <button class="btn-calc" onclick="calcHmin()" data-i18n="btn_calcular">Calcular</button>
       </div>
     </div>
 
     <div>
       <div id="hm-metrics-row" class="metrics-row" style="display:none">
-        <div class="metric-chip"><div class="mc-val" id="hm-out-hbi">—</div><div class="mc-lbl">h_mín bidirecional</div><div class="mc-sub" id="hm-div-bi">—</div></div>
-        <div class="metric-chip"><div class="mc-val" id="hm-out-huni">—</div><div class="mc-lbl">h_mín unidirecional</div><div class="mc-sub" id="hm-div-uni">—</div></div>
-        <div class="metric-chip"><div class="mc-val" id="hm-out-vao">—</div><div class="mc-lbl">Vão / Sobrecarga</div><div class="mc-sub" id="hm-out-sc">—</div></div>
+        <div class="metric-chip"><div class="mc-val" id="hm-out-hbi">—</div><div class="mc-lbl" data-i18n="mc_hmin_bi">h_mín bidirecional</div><div class="mc-sub" id="hm-div-bi">—</div></div>
+        <div class="metric-chip"><div class="mc-val" id="hm-out-huni">—</div><div class="mc-lbl" data-i18n="mc_hmin_uni">h_mín unidirecional</div><div class="mc-sub" id="hm-div-uni">—</div></div>
+        <div class="metric-chip"><div class="mc-val" id="hm-out-vao">—</div><div class="mc-lbl" data-i18n="mc_vao_sobrecarga">Vão / Sobrecarga</div><div class="mc-sub" id="hm-out-sc">—</div></div>
       </div>
       <div id="hm-results-area">
         <div class="placeholder">
           <div class="ph-icon">📏</div>
-          <p>Informe o vão e a sobrecarga para ver as fôrmas sugeridas.</p>
-          <small>Listará todas as fôrmas com D ≥ h_mín calculada.</small>
+          <p data-i18n="ph_hm_msg">Informe o vão e a sobrecarga para ver as fôrmas sugeridas.</p>
+          <small data-i18n="ph_hm_small">Listará todas as fôrmas com D ≥ h_mín calculada.</small>
         </div>
       </div>
     </div>
@@ -685,24 +693,24 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
 <div class="info-modal" id="info-modal" onclick="if(event.target===this)toggleInfoModal(false)">
   <div class="info-modal-inner">
     <div class="info-modal-head">
-      <strong>Informações da Ferramenta</strong>
-      <button class="info-modal-close" onclick="toggleInfoModal(false)">Fechar ✕</button>
+      <strong data-i18n="modal_title">Informações da Ferramenta</strong>
+      <button class="info-modal-close" onclick="toggleInfoModal(false)" data-i18n="modal_close">Fechar ✕</button>
     </div>
     <div class="info-modal-body">
       <div class="info-modal-section">
-        <div class="info-modal-label">Princípio de Cálculo</div>
-        <p>A ferramenta determina a equivalência de rigidez (altura equivalente, h<sub>eq</sub>) entre uma laje maciça de referência e as fôrmas nervuradas do catálogo Atex, identificando os modelos que atendem à mesma capacidade resistente com redução no consumo de concreto e aço. Complementarmente, calcula a altura mínima por flexão (h<sub>mín</sub>) a partir do vão e da sobrecarga de projeto.</p>
+        <div class="info-modal-label" data-i18n="modal_label_principio">Princípio de Cálculo</div>
+        <p data-i18n-html="modal_principio_text">A ferramenta determina a equivalência de rigidez (altura equivalente, h<sub>eq</sub>) entre uma laje maciça de referência e as fôrmas nervuradas do catálogo Atex, identificando os modelos que atendem à mesma capacidade resistente com redução no consumo de concreto e aço. Complementarmente, calcula a altura mínima por flexão (h<sub>mín</sub>) a partir do vão e da sobrecarga de projeto.</p>
       </div>
       <div class="info-modal-section">
-        <div class="info-modal-label">Base Normativa</div>
+        <div class="info-modal-label" data-i18n="modal_label_base_normativa">Base Normativa</div>
         <ul>
-          <li><strong>NBR 6118</strong> — Projeto de estruturas de concreto (módulo de 60 cm, dispensa da verificação de flexão da mesa)</li>
-          <li><strong>NBR 14432</strong> — Tempo Requerido de Resistência ao Fogo (TRRF), por grupo de ocupação e altura da edificação</li>
-          <li><strong>NBR 15200:2024</strong> — Dimensões mínimas de compartimentação em situação de incêndio</li>
+          <li data-i18n-html="modal_nbr6118"><strong>NBR 6118</strong> — Projeto de estruturas de concreto (módulo de 60 cm, dispensa da verificação de flexão da mesa)</li>
+          <li data-fire-only><strong>NBR 14432</strong> — Tempo Requerido de Resistência ao Fogo (TRRF), por grupo de ocupação e altura da edificação</li>
+          <li data-fire-only><strong>NBR 15200:2024</strong> — Dimensões mínimas de compartimentação em situação de incêndio</li>
         </ul>
       </div>
       <div class="info-modal-section">
-        <div class="info-modal-label">Responsável Técnico</div>
+        <div class="info-modal-label" data-i18n="modal_label_responsavel">Responsável Técnico</div>
         <p>Ana Talita — <a href="mailto:ana.pereira@atex.com.br">ana.pereira@atex.com.br</a></p>
       </div>
     </div>
@@ -727,10 +735,510 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
       <path fill="#f48120" d="M288.8,301.3v53.6h72v-72h-53.6c-10.1,0-18.4,8.2-18.4,18.4"/>
     </g>
   </svg>
-  <span>Atex Brasil — Calculadora de Lajes Nervuradas · desenvolvido por Ana Talita</span>
+  <span data-i18n="footer_text">Atex Brasil — Calculadora de Lajes Nervuradas · desenvolvido por Ana Talita</span>
 </footer>
 
 <script>
+// ═══════════════════════════════════════════════════════════════════
+//  I18N — PT / ES / EN
+//  A Verificação de Incêndio (NBR 14432 + NBR 15200:2024) é exclusiva
+//  do português: normas brasileiras não valem em outros países, então
+//  essa seção fica oculta e o cálculo não depende dela fora do PT.
+// ═══════════════════════════════════════════════════════════════════
+const I18N = {
+  pt: {
+    doc_title: `Atex Brasil — Calculadora de Lajes Nervuradas`,
+    hd_title: `Calculadora Atex`,
+    hd_info_aria: `Informações da ferramenta`,
+    hd_download: `Baixar Catálogo Atex`,
+    hd_download_aria: `Baixar catálogo completo em PDF`,
+    hd_theme: `Alterar tema`,
+    hd_theme_aria: `Alternar tema claro/escuro`,
+    hd_lang_aria: `Alterar idioma`,
+    install_close_aria: `Fechar`,
+    install_btn: `Adicionar à Tela Inicial`,
+    install_native_text: `Adicione a Calculadora Atex à tela inicial pra acesso rápido, como um app.`,
+    install_ios_text: `Toque em Compartilhar e depois em "Adicionar à Tela de Início".`,
+    tab_eq: `Equivalência de Inércia`,
+    tab_hmin: `Sugestão por h_mín`,
+    card_client_section: `Seção do Cliente`,
+    acc_dados_laje: `Dados da Laje`,
+    card_dados_entrada: `Dados de Entrada`,
+    lbl_tipo_secao: `Tipo de seção`,
+    btn_macica: `Maciça`,
+    btn_nervurada: `Nervurada`,
+    svg_macica_aria: `Seção maciça — laje sólida de altura/espessura`,
+    lbl_altura_espessura: `Altura/Espessura h (cm)`,
+    ph_ex12: `Ex.: 12`,
+    small_laje_solida: `Laje sólida sem vazios`,
+    hint_macica: `Maciça: módulo estrutural de referência = 60 cm. Seção sólida.`,
+    info_mod60_aria: `Por que 60 cm?`,
+    info_mod60_text: `60 cm é o espaçamento de nervura mais comum do catálogo Atex (a numeração das famílias 6XX indica isso: Atex 610 ≈ 61cm entre eixos, Atex 650 ≈ 65cm, e assim por diante) e fica dentro do limite de 65 cm da NBR 6118, que dispensa a verificação da flexão da mesa. É só uma referência de contexto — não altera o cálculo da sua laje maciça, que já é avaliado por m² de área.`,
+    hint_nervurada: `Dimensões da seção transversal do cliente.`,
+    svg_nervurada_aria: `Seção nervurada — capa (ds), altura do inerte (d1), largura superior (bs), largura inferior (bi) e eixo (espaçamento entre eixos)`,
+    lbl_d1: `d1 — alt. inerte (cm)`,
+    ph_ex20: `Ex.: 20`,
+    lbl_ds: `ds — capa (cm)`,
+    ph_ex5: `Ex.: 5`,
+    lbl_bi: `bi — larg. inf (cm)`,
+    ph_ex9: `Ex.: 9`,
+    lbl_bs: `bs — larg. sup (cm)`,
+    lbl_espacamento: `Espaçamento entre eixos (cm)`,
+    ph_ex60: `Ex.: 60`,
+    acc_opt_title: `Parâmetros Opcionais`,
+    acc_opt_sub_eq: `Vão, sobrecarga, filtro, capa desejada`,
+    lbl_vao: `Vão L (m)`,
+    txt_opcional: `opcional`,
+    ph_ex65: `Ex.: 6.5`,
+    lbl_sobrecarga: `Sobrecarga (kg/m²)`,
+    ph_ex300: `Ex.: 300`,
+    small_sobrecarga_faixas: `≤300 res. · 301–500 comercial · >500 industrial`,
+    info_sc_aria: `O que é sobrecarga?`,
+    info_sc_text: `Sobrecarga é a carga de uso da laje (pessoas, móveis, equipamentos — sem contar o peso próprio da estrutura), definida pela NBR 6120 conforme a ocupação. As 3 faixas aqui são uma simplificação prática: residencial tende a ficar até 300 kg/m², uso comercial entre 301–500, industrial acima disso. Esse valor também define o divisor usado no cálculo de h_mín. Se seu projeto já tem a sobrecarga de norma definida, use-a diretamente aqui.`,
+    lbl_filtro: `Filtro`,
+    opt_ambas: `Bidirecional + Unidirecional`,
+    opt_somente_bi: `Somente Bidirecional`,
+    opt_somente_uni: `Somente Unidirecional`,
+    lbl_capa_desejada: `Capa desejada (cm)`,
+    txt_capa_opt_range: `opcional · 4–20 cm`,
+    ph_capa_vazio: `vazio = catálogo (5/7,5/10)`,
+    btn_calcular: `Calcular`,
+    mc_heq_cliente: `heq cliente`,
+    mc_heq_sub: `altura equivalente maciça`,
+    mc_hmin_bi: `h_mín bidirecional`,
+    mc_hmin_uni: `h_mín unidirecional`,
+    mc_divisor_prompt: `informe vão + sc`,
+    mc_divisor: (div) => `divisor ${div}`,
+    ph_eq_msg: `Preencha os dados da laje para ver as sugestões.`,
+    ph_eq_small: `Melhor bidirecional e unidirecional aparecem simultaneamente.`,
+    msg_fire_required: `Verificação de incêndio obrigatória: informe o Grupo de ocupação + Altura da edificação, ou o TRRF diretamente.`,
+    msg_nenhuma_forma: `Nenhuma fôrma encontrada para os critérios informados.`,
+    resumo_bar_suffix: `fôrma(s) marcada(s) pro resumo`,
+    btn_resumo_print: `🖨 Imprimir Resumo`,
+    hint_hm_dados: `Informe o vão e a sobrecarga para encontrar as fôrmas que atendem a altura mínima.`,
+    acc_opt_sub_hm: `Direção, capa desejada`,
+    lbl_direcao: `Direção`,
+    btn_print_page: `🖨 Imprimir esta página`,
+    mc_vao_sobrecarga: `Vão / Sobrecarga`,
+    ph_hm_msg: `Informe o vão e a sobrecarga para ver as fôrmas sugeridas.`,
+    ph_hm_small: `Listará todas as fôrmas com D ≥ h_mín calculada.`,
+    ph_ex70: `Ex.: 7.0`,
+    modal_title: `Informações da Ferramenta`,
+    modal_close: `Fechar ✕`,
+    modal_label_principio: `Princípio de Cálculo`,
+    modal_principio_text: `A ferramenta determina a equivalência de rigidez (altura equivalente, h<sub>eq</sub>) entre uma laje maciça de referência e as fôrmas nervuradas do catálogo Atex, identificando os modelos que atendem à mesma capacidade resistente com redução no consumo de concreto e aço. Complementarmente, calcula a altura mínima por flexão (h<sub>mín</sub>) a partir do vão e da sobrecarga de projeto.`,
+    modal_label_base_normativa: `Base Normativa`,
+    modal_nbr6118: `<strong>NBR 6118</strong> — Projeto de estruturas de concreto (módulo de 60 cm, dispensa da verificação de flexão da mesa)`,
+    modal_label_responsavel: `Responsável Técnico`,
+    footer_text: `Atex Brasil — Calculadora de Lajes Nervuradas · desenvolvido por Ana Talita`,
+    memoria_titulo: `Memória de Cálculo`,
+    memoria_heq_macica: (h) => `<div><strong>h<sub>eq</sub></strong> = h informado diretamente = <strong>${h.toFixed(1)} cm</strong> (seção maciça, sem vazios)</div>`,
+    memoria_heq_nervurada: (I, bi, bs, d1, ds, esp, heq) => `<div><strong>h<sub>eq</sub></strong> = ∛(I × 12 / espaçamento)</div>
+        <div style="margin-left:12px;color:#555;">I = ${Math.round(I).toLocaleString(numLocale())} cm⁴ &nbsp;(seção: bi=${bi} · bs=${bs} · d1=${d1} · ds=${ds} · eixo=${esp} cm)</div>
+        <div style="margin-left:12px;">h<sub>eq</sub> = ∛(${Math.round(I).toLocaleString(numLocale())} × 12 / ${esp}) = <strong>${heq.toFixed(1)} cm</strong></div>`,
+    memoria_hmin_block: (vao, divBi, hminB, divUni, hminU, sc) => `<div style="margin-top:10px;"><strong>h<sub>mín</sub> bidirecional</strong> = vão × 100 / divisor = ${vao} × 100 / ${divBi} = <strong>${hminB.toFixed(1)} cm</strong></div>
+      <div><strong>h<sub>mín</sub> unidirecional</strong> = vão × 100 / divisor = ${vao} × 100 / ${divUni} = <strong>${hminU.toFixed(1)} cm</strong></div>
+      <div style="color:#888;font-size:10.5px;">(divisor conforme sobrecarga informada: ${sc} kg/m²)</div>`,
+    resumo_doc_titulo: `Resumo Técnico — Calculadora de Lajes Nervuradas`,
+    resumo_gerado_em: (data) => `Gerado em ${data}`,
+    resumo_laje_cliente_lbl: `Laje do cliente:`,
+    resumo_desc_macica: (h) => `Laje maciça, ${h.toFixed(1)} cm`,
+    resumo_desc_nervurada: (h, heq) => `Laje nervurada, ${h.toFixed(1)} cm (heq ${heq.toFixed(1)} cm)`,
+    resumo_th_modelo: `Modelo`,
+    resumo_th_tipo: `Tipo`,
+    resumo_th_inerte: `Inerte`,
+    resumo_th_capa: `Capa`,
+    resumo_th_altura_total: `Altura total`,
+    resumo_th_concreto: `Concreto`,
+    resumo_th_peso_proprio: `Peso próprio`,
+    resumo_th_margem_heq: `Margem heq`,
+    resumo_footer_disclaimer: `Reduções (concreto/peso) calculadas contra uma laje maciça de mesma rigidez equivalente (heq). Cobrimento de armadura (c1) e demais parâmetros de projeto estrutural são de responsabilidade do calculista.`,
+    resumo_footer_credit: `Calculadora Atex · desenvolvido por Ana Talita`,
+    nota_rodape_eq: `heq = ∛(I×12/b_med) &nbsp;·&nbsp; h_mín = L×100/divisor &nbsp;·&nbsp; <span class="badge-est">~est</span> = geométrico &nbsp;·&nbsp; <span class="badge-of">of</span> = oficial Atex`,
+    nota_rodape_hmin: `h_mín = L×100/divisor &nbsp;·&nbsp; Fôrmas com D ≥ h_mín`,
+    txt_bidirecional: `Bidirecional`,
+    txt_unidirecional: `Unidirecional`,
+    grp_melhores_opcoes: (n) => `${n} melhores opções`,
+    grp_melhor_opcao: `melhor opção`,
+    opcao_label: (rank, tipo) => `Opção ${rank} — ${tipo}`,
+    hmin_badge_ok: (hmin) => `✓ h_mín ${hmin} cm`,
+    hmin_badge_fail: (hmin) => `⚠ abaixo h_mín ${hmin} cm`,
+    resumo_check_title: `Incluir esta fôrma no resumo de impressão`,
+    resumo_check_label: `Resumo`,
+    rc_collapse_ver_detalhes: `Ver detalhes`,
+    rc_collapse_recolher: `Recolher`,
+    rml_inerte: `Inerte`,
+    rml_capa: `Capa`,
+    rml_altura_total: `Altura total`,
+    rml_vol_concreto: `Vol. concreto m³/m²`,
+    rml_inercia: `Inércia cm⁴`,
+    rc_savings_title: `Redução vs sólida mesma rigidez (heq)`,
+    sl_concreto: `Concreto`,
+    sl_peso_proprio: `Peso próprio`,
+    sl_aco_estim: `Aço (estim.)`,
+    sl_margem_heq: `Margem heq`,
+    cc_compare_title: `Volume de concreto — comparativo`,
+    cr_label_laje_cliente: (tipoTxt, h) => `Laje cliente (${tipoTxt} ${h} cm)`,
+    cr_tipo_macica_short: `maciça`,
+    cr_tipo_nerv_short: `nerv.`,
+    cr_label_solida_equiv: (heq) => `Sólida equiv. (heq ${heq} cm)`,
+    rc_details_toggle_txt: `Ver propriedades geométricas`,
+    dl_bi: `bi — larg. inf.`,
+    dl_bs: `bs — larg. sup.`,
+    dl_d1: `d1 — inerte`,
+    dl_ds: `ds — capa`,
+    dl_heq: `heq`,
+    dl_area_of: `Área (of.)`,
+    dl_inercia_of: `Inércia (of.)`,
+    lista_ver_completa: `Ver lista completa`,
+    lista_recolher: `Recolher lista`,
+    lista_titulo_bidir: `Bidirecional — lista completa`,
+    lista_titulo_unidir: `Unidirecional — lista completa`,
+    lista_row_title: `Ver este modelo em detalhe`,
+    mlr_best_tag: `Melhor`,
+    nome_resumo_capa: (ds) => `capa ${ds} cm`,
+    models_list_head_modelo: `Modelo`,
+    models_list_head_d: `D (cm)`,
+    models_list_head_volc: `Vol.c m³/m²`,
+    models_list_head_peso: `Peso kN/m²`,
+    models_list_head_hmin_margem: `h_mín / Margem`,
+    modelo_selecionado_label: (tipo) => `Modelo selecionado — ${tipo}`,
+  },
+  es: {
+    doc_title: `Atex Brasil — Calculadora de Losas Nervadas`,
+    hd_title: `Calculadora Atex`,
+    hd_info_aria: `Información de la herramienta`,
+    hd_download: `Descargar Catálogo Atex`,
+    hd_download_aria: `Descargar catálogo completo en PDF`,
+    hd_theme: `Cambiar tema`,
+    hd_theme_aria: `Alternar tema claro/oscuro`,
+    hd_lang_aria: `Cambiar idioma`,
+    install_close_aria: `Cerrar`,
+    install_btn: `Añadir a pantalla de inicio`,
+    install_native_text: `Añade la Calculadora Atex a tu pantalla de inicio para acceso rápido, como una app.`,
+    install_ios_text: `Toca en Compartir y luego en "Añadir a pantalla de inicio".`,
+    tab_eq: `Equivalencia de Inercia`,
+    tab_hmin: `Sugerencia por h_mín`,
+    card_client_section: `Sección del Cliente`,
+    acc_dados_laje: `Datos de la Losa`,
+    card_dados_entrada: `Datos de Entrada`,
+    lbl_tipo_secao: `Tipo de sección`,
+    btn_macica: `Maciza`,
+    btn_nervurada: `Nervada`,
+    svg_macica_aria: `Sección maciza — losa sólida de altura/espesor`,
+    lbl_altura_espessura: `Altura/Espesor h (cm)`,
+    ph_ex12: `Ej.: 12`,
+    small_laje_solida: `Losa sólida sin huecos`,
+    hint_macica: `Maciza: módulo estructural de referencia = 60 cm. Sección sólida.`,
+    info_mod60_aria: `¿Por qué 60 cm?`,
+    info_mod60_text: `60 cm es el espaciamiento entre nervios más común del catálogo Atex (la numeración de las familias 6XX lo indica: Atex 610 ≈ 61 cm entre ejes, Atex 650 ≈ 65 cm, y así sucesivamente) y queda dentro del límite de 65 cm de la NBR 6118, que exime la verificación de flexión de la mesa. Es solo una referencia de contexto — no altera el cálculo de tu losa maciza, que ya se evalúa por m² de área.`,
+    hint_nervurada: `Dimensiones de la sección transversal del cliente.`,
+    svg_nervurada_aria: `Sección nervada — capa (ds), altura del alma (d1), ancho superior (bs), ancho inferior (bi) y eje (espaciamiento entre ejes)`,
+    lbl_d1: `d1 — alt. alma (cm)`,
+    ph_ex20: `Ej.: 20`,
+    lbl_ds: `ds — capa (cm)`,
+    ph_ex5: `Ej.: 5`,
+    lbl_bi: `bi — ancho inf. (cm)`,
+    ph_ex9: `Ej.: 9`,
+    lbl_bs: `bs — ancho sup. (cm)`,
+    lbl_espacamento: `Espaciamiento entre ejes (cm)`,
+    ph_ex60: `Ej.: 60`,
+    acc_opt_title: `Parámetros Opcionales`,
+    acc_opt_sub_eq: `Luz, sobrecarga, filtro, capa deseada`,
+    lbl_vao: `Luz L (m)`,
+    txt_opcional: `opcional`,
+    ph_ex65: `Ej.: 6.5`,
+    lbl_sobrecarga: `Sobrecarga (kg/m²)`,
+    ph_ex300: `Ej.: 300`,
+    small_sobrecarga_faixas: `≤300 resid. · 301–500 comercial · >500 industrial`,
+    info_sc_aria: `¿Qué es la sobrecarga?`,
+    info_sc_text: `La sobrecarga es la carga de uso de la losa (personas, muebles, equipos — sin contar el peso propio de la estructura), definida por la NBR 6120 según el uso. Los 3 rangos aquí son una simplificación práctica: residencial tiende a quedar hasta 300 kg/m², uso comercial entre 301–500, industrial por encima de eso. Este valor también define el divisor usado en el cálculo de h_mín. Si tu proyecto ya tiene la sobrecarga normativa definida, úsala directamente aquí.`,
+    lbl_filtro: `Filtro`,
+    opt_ambas: `Bidireccional + Unidireccional`,
+    opt_somente_bi: `Solo Bidireccional`,
+    opt_somente_uni: `Solo Unidireccional`,
+    lbl_capa_desejada: `Capa deseada (cm)`,
+    txt_capa_opt_range: `opcional · 4–20 cm`,
+    ph_capa_vazio: `vacío = catálogo (5/7,5/10)`,
+    btn_calcular: `Calcular`,
+    mc_heq_cliente: `heq cliente`,
+    mc_heq_sub: `altura equivalente maciza`,
+    mc_hmin_bi: `h_mín bidireccional`,
+    mc_hmin_uni: `h_mín unidireccional`,
+    mc_divisor_prompt: `indique luz + sc`,
+    mc_divisor: (div) => `divisor ${div}`,
+    ph_eq_msg: `Complete los datos de la losa para ver las sugerencias.`,
+    ph_eq_small: `Las mejores opciones bidireccional y unidireccional aparecen simultáneamente.`,
+    msg_fire_required: ``,
+    msg_nenhuma_forma: `No se encontró ninguna forma para los criterios informados.`,
+    resumo_bar_suffix: `forma(s) marcada(s) para el resumen`,
+    btn_resumo_print: `🖨 Imprimir Resumen`,
+    hint_hm_dados: `Indique la luz y la sobrecarga para encontrar las formas que cumplen la altura mínima.`,
+    acc_opt_sub_hm: `Dirección, capa deseada`,
+    lbl_direcao: `Dirección`,
+    btn_print_page: `🖨 Imprimir esta página`,
+    mc_vao_sobrecarga: `Luz / Sobrecarga`,
+    ph_hm_msg: `Indique la luz y la sobrecarga para ver las formas sugeridas.`,
+    ph_hm_small: `Se listarán todas las formas con D ≥ h_mín calculada.`,
+    ph_ex70: `Ej.: 7.0`,
+    modal_title: `Información de la Herramienta`,
+    modal_close: `Cerrar ✕`,
+    modal_label_principio: `Principio de Cálculo`,
+    modal_principio_text: `La herramienta determina la equivalencia de rigidez (altura equivalente, h<sub>eq</sub>) entre una losa maciza de referencia y las formas nervadas del catálogo Atex, identificando los modelos que cumplen la misma capacidad resistente con reducción en el consumo de concreto y acero. De forma complementaria, calcula la altura mínima por flexión (h<sub>mín</sub>) a partir de la luz y la sobrecarga de proyecto.`,
+    modal_label_base_normativa: `Base Normativa`,
+    modal_nbr6118: `<strong>NBR 6118</strong> — Principio de equivalencia de rigidez utilizado en el cálculo (módulo de referencia de 60 cm)`,
+    modal_label_responsavel: `Responsable Técnico`,
+    footer_text: `Atex Brasil — Calculadora de Losas Nervadas · desarrollado por Ana Talita`,
+    memoria_titulo: `Memoria de Cálculo`,
+    memoria_heq_macica: (h) => `<div><strong>h<sub>eq</sub></strong> = h indicado directamente = <strong>${h.toFixed(1)} cm</strong> (sección maciza, sin huecos)</div>`,
+    memoria_heq_nervurada: (I, bi, bs, d1, ds, esp, heq) => `<div><strong>h<sub>eq</sub></strong> = ∛(I × 12 / espaciamiento)</div>
+        <div style="margin-left:12px;color:#555;">I = ${Math.round(I).toLocaleString(numLocale())} cm⁴ &nbsp;(sección: bi=${bi} · bs=${bs} · d1=${d1} · ds=${ds} · eje=${esp} cm)</div>
+        <div style="margin-left:12px;">h<sub>eq</sub> = ∛(${Math.round(I).toLocaleString(numLocale())} × 12 / ${esp}) = <strong>${heq.toFixed(1)} cm</strong></div>`,
+    memoria_hmin_block: (vao, divBi, hminB, divUni, hminU, sc) => `<div style="margin-top:10px;"><strong>h<sub>mín</sub> bidireccional</strong> = luz × 100 / divisor = ${vao} × 100 / ${divBi} = <strong>${hminB.toFixed(1)} cm</strong></div>
+      <div><strong>h<sub>mín</sub> unidireccional</strong> = luz × 100 / divisor = ${vao} × 100 / ${divUni} = <strong>${hminU.toFixed(1)} cm</strong></div>
+      <div style="color:#888;font-size:10.5px;">(divisor según la sobrecarga indicada: ${sc} kg/m²)</div>`,
+    resumo_doc_titulo: `Resumen Técnico — Calculadora de Losas Nervadas`,
+    resumo_gerado_em: (data) => `Generado el ${data}`,
+    resumo_laje_cliente_lbl: `Losa del cliente:`,
+    resumo_desc_macica: (h) => `Losa maciza, ${h.toFixed(1)} cm`,
+    resumo_desc_nervurada: (h, heq) => `Losa nervada, ${h.toFixed(1)} cm (heq ${heq.toFixed(1)} cm)`,
+    resumo_th_modelo: `Modelo`,
+    resumo_th_tipo: `Tipo`,
+    resumo_th_inerte: `Alma`,
+    resumo_th_capa: `Capa`,
+    resumo_th_altura_total: `Altura total`,
+    resumo_th_concreto: `Concreto`,
+    resumo_th_peso_proprio: `Peso propio`,
+    resumo_th_margem_heq: `Margen heq`,
+    resumo_footer_disclaimer: `Las reducciones (concreto/peso) se calculan contra una losa maciza de la misma rigidez equivalente (heq). El recubrimiento de armadura (c1) y demás parámetros de proyecto estructural son responsabilidad del calculista.`,
+    resumo_footer_credit: `Calculadora Atex · desarrollado por Ana Talita`,
+    nota_rodape_eq: `heq = ∛(I×12/b_med) &nbsp;·&nbsp; h_mín = L×100/divisor &nbsp;·&nbsp; <span class="badge-est">~est</span> = geométrico &nbsp;·&nbsp; <span class="badge-of">of</span> = oficial Atex`,
+    nota_rodape_hmin: `h_mín = L×100/divisor &nbsp;·&nbsp; Formas con D ≥ h_mín`,
+    txt_bidirecional: `Bidireccional`,
+    txt_unidirecional: `Unidireccional`,
+    grp_melhores_opcoes: (n) => `${n} mejores opciones`,
+    grp_melhor_opcao: `mejor opción`,
+    opcao_label: (rank, tipo) => `Opción ${rank} — ${tipo}`,
+    hmin_badge_ok: (hmin) => `✓ h_mín ${hmin} cm`,
+    hmin_badge_fail: (hmin) => `⚠ por debajo h_mín ${hmin} cm`,
+    resumo_check_title: `Incluir esta forma en el resumen de impresión`,
+    resumo_check_label: `Resumen`,
+    rc_collapse_ver_detalhes: `Ver detalles`,
+    rc_collapse_recolher: `Contraer`,
+    rml_inerte: `Alma`,
+    rml_capa: `Capa`,
+    rml_altura_total: `Altura total`,
+    rml_vol_concreto: `Vol. concreto m³/m²`,
+    rml_inercia: `Inercia cm⁴`,
+    rc_savings_title: `Reducción vs. maciza misma rigidez (heq)`,
+    sl_concreto: `Concreto`,
+    sl_peso_proprio: `Peso propio`,
+    sl_aco_estim: `Acero (estim.)`,
+    sl_margem_heq: `Margen heq`,
+    cc_compare_title: `Volumen de concreto — comparativo`,
+    cr_label_laje_cliente: (tipoTxt, h) => `Losa cliente (${tipoTxt} ${h} cm)`,
+    cr_tipo_macica_short: `maciza`,
+    cr_tipo_nerv_short: `nerv.`,
+    cr_label_solida_equiv: (heq) => `Maciza equiv. (heq ${heq} cm)`,
+    rc_details_toggle_txt: `Ver propiedades geométricas`,
+    dl_bi: `bi — ancho inf.`,
+    dl_bs: `bs — ancho sup.`,
+    dl_d1: `d1 — alma`,
+    dl_ds: `ds — capa`,
+    dl_heq: `heq`,
+    dl_area_of: `Área (of.)`,
+    dl_inercia_of: `Inercia (of.)`,
+    lista_ver_completa: `Ver lista completa`,
+    lista_recolher: `Contraer lista`,
+    lista_titulo_bidir: `Bidireccional — lista completa`,
+    lista_titulo_unidir: `Unidireccional — lista completa`,
+    lista_row_title: `Ver este modelo en detalle`,
+    mlr_best_tag: `Mejor`,
+    nome_resumo_capa: (ds) => `capa ${ds} cm`,
+    models_list_head_modelo: `Modelo`,
+    models_list_head_d: `D (cm)`,
+    models_list_head_volc: `Vol.c m³/m²`,
+    models_list_head_peso: `Peso kN/m²`,
+    models_list_head_hmin_margem: `h_mín / Margen`,
+    modelo_selecionado_label: (tipo) => `Modelo seleccionado — ${tipo}`,
+  },
+  en: {
+    doc_title: `Atex Brasil — Ribbed Slab Calculator`,
+    hd_title: `Atex Calculator`,
+    hd_info_aria: `Tool information`,
+    hd_download: `Download Atex Catalog`,
+    hd_download_aria: `Download full catalog as PDF`,
+    hd_theme: `Toggle theme`,
+    hd_theme_aria: `Toggle light/dark theme`,
+    hd_lang_aria: `Change language`,
+    install_close_aria: `Close`,
+    install_btn: `Add to Home Screen`,
+    install_native_text: `Add the Atex Calculator to your home screen for quick access, like an app.`,
+    install_ios_text: `Tap Share, then "Add to Home Screen".`,
+    tab_eq: `Inertia Equivalence`,
+    tab_hmin: `Suggestion by h_min`,
+    card_client_section: `Client Section`,
+    acc_dados_laje: `Slab Data`,
+    card_dados_entrada: `Input Data`,
+    lbl_tipo_secao: `Section type`,
+    btn_macica: `Solid`,
+    btn_nervurada: `Ribbed`,
+    svg_macica_aria: `Solid section — solid slab, height/thickness`,
+    lbl_altura_espessura: `Height/Thickness h (cm)`,
+    ph_ex12: `E.g.: 12`,
+    small_laje_solida: `Solid slab, no voids`,
+    hint_macica: `Solid: reference structural module = 60 cm. Solid section.`,
+    info_mod60_aria: `Why 60 cm?`,
+    info_mod60_text: `60 cm is the most common rib spacing in the Atex catalog (the 6XX family numbering reflects this: Atex 610 ≈ 61 cm between axes, Atex 650 ≈ 65 cm, and so on) and falls within the 65 cm limit of NBR 6118, which waives the flange bending check. This is just contextual reference — it does not change the calculation for your solid slab, which is already evaluated per m² of area.`,
+    hint_nervurada: `Client's cross-section dimensions.`,
+    svg_nervurada_aria: `Ribbed section — topping (ds), rib height (d1), top width (bs), bottom width (bi) and axis (spacing between axes)`,
+    lbl_d1: `d1 — rib height (cm)`,
+    ph_ex20: `E.g.: 20`,
+    lbl_ds: `ds — topping (cm)`,
+    ph_ex5: `E.g.: 5`,
+    lbl_bi: `bi — bottom width (cm)`,
+    ph_ex9: `E.g.: 9`,
+    lbl_bs: `bs — top width (cm)`,
+    lbl_espacamento: `Axis spacing (cm)`,
+    ph_ex60: `E.g.: 60`,
+    acc_opt_title: `Optional Parameters`,
+    acc_opt_sub_eq: `Span, load, filter, desired topping`,
+    lbl_vao: `Span L (m)`,
+    txt_opcional: `optional`,
+    ph_ex65: `E.g.: 6.5`,
+    lbl_sobrecarga: `Live load (kg/m²)`,
+    ph_ex300: `E.g.: 300`,
+    small_sobrecarga_faixas: `≤300 residential · 301–500 commercial · >500 industrial`,
+    info_sc_aria: `What is live load?`,
+    info_sc_text: `Live load is the usage load on the slab (people, furniture, equipment — not including the structure's self-weight), defined by NBR 6120 according to occupancy. The 3 ranges here are a practical simplification: residential tends to stay under 300 kg/m², commercial use between 301–500, industrial above that. This value also sets the divisor used in the h_min calculation. If your project already has the code-defined live load, use it directly here.`,
+    lbl_filtro: `Filter`,
+    opt_ambas: `Two-way + One-way`,
+    opt_somente_bi: `Two-way only`,
+    opt_somente_uni: `One-way only`,
+    lbl_capa_desejada: `Desired topping (cm)`,
+    txt_capa_opt_range: `optional · 4–20 cm`,
+    ph_capa_vazio: `blank = catalog (5/7.5/10)`,
+    btn_calcular: `Calculate`,
+    mc_heq_cliente: `client heq`,
+    mc_heq_sub: `equivalent solid height`,
+    mc_hmin_bi: `h_min two-way`,
+    mc_hmin_uni: `h_min one-way`,
+    mc_divisor_prompt: `enter span + load`,
+    mc_divisor: (div) => `divisor ${div}`,
+    ph_eq_msg: `Fill in the slab data to see suggestions.`,
+    ph_eq_small: `Best two-way and one-way options appear simultaneously.`,
+    msg_fire_required: ``,
+    msg_nenhuma_forma: `No form found for the given criteria.`,
+    resumo_bar_suffix: `form(s) marked for summary`,
+    btn_resumo_print: `🖨 Print Summary`,
+    hint_hm_dados: `Enter the span and live load to find the forms that meet the minimum height.`,
+    acc_opt_sub_hm: `Direction, desired topping`,
+    lbl_direcao: `Direction`,
+    btn_print_page: `🖨 Print this page`,
+    mc_vao_sobrecarga: `Span / Load`,
+    ph_hm_msg: `Enter the span and live load to see suggested forms.`,
+    ph_hm_small: `Lists all forms with D ≥ calculated h_min.`,
+    ph_ex70: `E.g.: 7.0`,
+    modal_title: `Tool Information`,
+    modal_close: `Close ✕`,
+    modal_label_principio: `Calculation Principle`,
+    modal_principio_text: `The tool determines the stiffness equivalence (equivalent height, h<sub>eq</sub>) between a reference solid slab and the ribbed forms in the Atex catalog, identifying the models that meet the same load capacity with reduced concrete and steel consumption. It also calculates the minimum flexural height (h<sub>min</sub>) from the span and the design live load.`,
+    modal_label_base_normativa: `Regulatory Basis`,
+    modal_nbr6118: `<strong>NBR 6118</strong> — Stiffness-equivalence principle used in the calculation (60 cm reference module)`,
+    modal_label_responsavel: `Technical Contact`,
+    footer_text: `Atex Brasil — Ribbed Slab Calculator · developed by Ana Talita`,
+    memoria_titulo: `Calculation Memo`,
+    memoria_heq_macica: (h) => `<div><strong>h<sub>eq</sub></strong> = h entered directly = <strong>${h.toFixed(1)} cm</strong> (solid section, no voids)</div>`,
+    memoria_heq_nervurada: (I, bi, bs, d1, ds, esp, heq) => `<div><strong>h<sub>eq</sub></strong> = ∛(I × 12 / spacing)</div>
+        <div style="margin-left:12px;color:#555;">I = ${Math.round(I).toLocaleString(numLocale())} cm⁴ &nbsp;(section: bi=${bi} · bs=${bs} · d1=${d1} · ds=${ds} · axis=${esp} cm)</div>
+        <div style="margin-left:12px;">h<sub>eq</sub> = ∛(${Math.round(I).toLocaleString(numLocale())} × 12 / ${esp}) = <strong>${heq.toFixed(1)} cm</strong></div>`,
+    memoria_hmin_block: (vao, divBi, hminB, divUni, hminU, sc) => `<div style="margin-top:10px;"><strong>h<sub>min</sub> two-way</strong> = span × 100 / divisor = ${vao} × 100 / ${divBi} = <strong>${hminB.toFixed(1)} cm</strong></div>
+      <div><strong>h<sub>min</sub> one-way</strong> = span × 100 / divisor = ${vao} × 100 / ${divUni} = <strong>${hminU.toFixed(1)} cm</strong></div>
+      <div style="color:#888;font-size:10.5px;">(divisor per given live load: ${sc} kg/m²)</div>`,
+    resumo_doc_titulo: `Technical Summary — Ribbed Slab Calculator`,
+    resumo_gerado_em: (data) => `Generated on ${data}`,
+    resumo_laje_cliente_lbl: `Client's slab:`,
+    resumo_desc_macica: (h) => `Solid slab, ${h.toFixed(1)} cm`,
+    resumo_desc_nervurada: (h, heq) => `Ribbed slab, ${h.toFixed(1)} cm (heq ${heq.toFixed(1)} cm)`,
+    resumo_th_modelo: `Model`,
+    resumo_th_tipo: `Type`,
+    resumo_th_inerte: `Rib`,
+    resumo_th_capa: `Topping`,
+    resumo_th_altura_total: `Total height`,
+    resumo_th_concreto: `Concrete`,
+    resumo_th_peso_proprio: `Self-weight`,
+    resumo_th_margem_heq: `heq margin`,
+    resumo_footer_disclaimer: `Reductions (concrete/weight) are calculated against a solid slab of equal equivalent stiffness (heq). Reinforcement cover (c1) and other structural design parameters are the responsibility of the structural engineer.`,
+    resumo_footer_credit: `Atex Calculator · developed by Ana Talita`,
+    nota_rodape_eq: `heq = ∛(I×12/b_avg) &nbsp;·&nbsp; h_min = L×100/divisor &nbsp;·&nbsp; <span class="badge-est">~est</span> = geometric &nbsp;·&nbsp; <span class="badge-of">of</span> = official Atex`,
+    nota_rodape_hmin: `h_min = L×100/divisor &nbsp;·&nbsp; Forms with D ≥ h_min`,
+    txt_bidirecional: `Two-way`,
+    txt_unidirecional: `One-way`,
+    grp_melhores_opcoes: (n) => `${n} best options`,
+    grp_melhor_opcao: `best option`,
+    opcao_label: (rank, tipo) => `Option ${rank} — ${tipo}`,
+    hmin_badge_ok: (hmin) => `✓ h_min ${hmin} cm`,
+    hmin_badge_fail: (hmin) => `⚠ below h_min ${hmin} cm`,
+    resumo_check_title: `Include this form in the print summary`,
+    resumo_check_label: `Summary`,
+    rc_collapse_ver_detalhes: `View details`,
+    rc_collapse_recolher: `Collapse`,
+    rml_inerte: `Rib`,
+    rml_capa: `Topping`,
+    rml_altura_total: `Total height`,
+    rml_vol_concreto: `Concrete vol. m³/m²`,
+    rml_inercia: `Inertia cm⁴`,
+    rc_savings_title: `Reduction vs. solid, same stiffness (heq)`,
+    sl_concreto: `Concrete`,
+    sl_peso_proprio: `Self-weight`,
+    sl_aco_estim: `Steel (est.)`,
+    sl_margem_heq: `heq margin`,
+    cc_compare_title: `Concrete volume — comparison`,
+    cr_label_laje_cliente: (tipoTxt, h) => `Client slab (${tipoTxt} ${h} cm)`,
+    cr_tipo_macica_short: `solid`,
+    cr_tipo_nerv_short: `ribbed`,
+    cr_label_solida_equiv: (heq) => `Equiv. solid (heq ${heq} cm)`,
+    rc_details_toggle_txt: `View geometric properties`,
+    dl_bi: `bi — bottom width`,
+    dl_bs: `bs — top width`,
+    dl_d1: `d1 — rib`,
+    dl_ds: `ds — topping`,
+    dl_heq: `heq`,
+    dl_area_of: `Area (off.)`,
+    dl_inercia_of: `Inertia (off.)`,
+    lista_ver_completa: `View full list`,
+    lista_recolher: `Collapse list`,
+    lista_titulo_bidir: `Two-way — full list`,
+    lista_titulo_unidir: `One-way — full list`,
+    lista_row_title: `View this model in detail`,
+    mlr_best_tag: `Best`,
+    nome_resumo_capa: (ds) => `topping ${ds} cm`,
+    models_list_head_modelo: `Model`,
+    models_list_head_d: `D (cm)`,
+    models_list_head_volc: `Vol.c m³/m²`,
+    models_list_head_peso: `Weight kN/m²`,
+    models_list_head_hmin_margem: `h_min / Margin`,
+    modelo_selecionado_label: (tipo) => `Selected model — ${tipo}`,
+  },
+};
+
+let currentLang = 'pt';
+try {
+  const savedLang = localStorage.getItem('atex-lajes-lang');
+  if (savedLang === 'pt' || savedLang === 'es' || savedLang === 'en') currentLang = savedLang;
+} catch (e) {}
+
+function t(key, ...args) {
+  let entry = I18N[currentLang] ? I18N[currentLang][key] : undefined;
+  if (entry === undefined || entry === '') entry = I18N.pt[key];
+  if (entry === undefined) return '';
+  return typeof entry === 'function' ? entry(...args) : entry;
+}
+
+function numLocale() {
+  return currentLang === 'en' ? 'en-US' : currentLang === 'es' ? 'es-AR' : 'pt-BR';
+}
+
 // ═══════════════════════════════════════════════════════════════════
 //  CATÁLOGO ATEX — famílias reais, dados pré-processados
 // ═══════════════════════════════════════════════════════════════════
@@ -1346,9 +1854,45 @@ function toggleTema() {
 // sincroniza o ícone do botão com o tema já aplicado (definido no <head>)
 aplicarTema(document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
 
+// ═══ IDIOMA — PT/ES/EN, persistido no navegador ══════════════════════
+// Verificação de Incêndio é exclusiva do PT (normas brasileiras) — ver
+// bloco I18N acima. installBannerMode guarda qual texto o banner de PWA
+// está mostrando, pra poder retraduzir se o idioma mudar com ele aberto.
+let installBannerMode = null;
+
+function setLang(lang) {
+  if (lang !== 'pt' && lang !== 'es' && lang !== 'en') return;
+  currentLang = lang;
+  try { localStorage.setItem('atex-lajes-lang', lang); } catch (e) {}
+  aplicarIdioma();
+}
+
+function aplicarIdioma() {
+  document.documentElement.lang = currentLang === 'pt' ? 'pt-BR' : currentLang === 'es' ? 'es' : 'en';
+  document.title = t('doc_title');
+
+  document.querySelectorAll('[data-i18n]').forEach(el => { el.textContent = t(el.getAttribute('data-i18n')); });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => { el.innerHTML = t(el.getAttribute('data-i18n-html')); });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { el.placeholder = t(el.getAttribute('data-i18n-placeholder')); });
+  document.querySelectorAll('[data-i18n-aria]').forEach(el => { el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria'))); });
+  document.querySelectorAll('[data-i18n-title]').forEach(el => { el.title = t(el.getAttribute('data-i18n-title')); });
+  document.querySelectorAll('[data-fire-only]').forEach(el => { el.hidden = currentLang !== 'pt'; });
+  document.querySelectorAll('.lang-btn').forEach(btn => { btn.classList.toggle('active', btn.dataset.lang === currentLang); });
+
+  const instTxt = document.getElementById('install-banner-text');
+  if (instTxt && installBannerMode) {
+    instTxt.textContent = installBannerMode === 'native' ? t('install_native_text') : t('install_ios_text');
+  }
+
+  // re-renderiza a área de resultados no novo idioma — inclusive quando o estado atual é
+  // um placeholder/bloqueio (ex.: aviso de incêndio obrigatório em PT), que não fica marcado
+  // pelo display:flex do metrics-row e por isso não podia depender só dessa checagem
+  calcEq();
+  calcHmin();
+}
+
 // ═══ UTILS ═══════════════════════════════════════════════════════════
 const nomeProduto = e => `Atex ${e.f}x${Math.round(e.d1 * 10)}${e.variante ? ' (' + e.variante + ')' : ''}`;
-const nomeResumo  = e => `capa ${e.ds} cm`;
 const badgeFonte  = f => f === 'oficial'
   ? '<span class="badge-of">of</span>'
   : '<span class="badge-est">~est</span>';
@@ -1480,7 +2024,7 @@ function montarMemoriaCalculo() {
   const cli = lastState || {};
   let heqCalc = '';
   if (cli.tipoSecao === 'macica') {
-    heqCalc = `<div><strong>h<sub>eq</sub></strong> = h informado diretamente = <strong>${cli.h_cli_real?.toFixed(1)} cm</strong> (seção maciça, sem vazios)</div>`;
+    heqCalc = t('memoria_heq_macica', cli.h_cli_real || 0);
   } else {
     const d1  = parseFloat(document.getElementById('nerv-d1').value);
     const ds  = parseFloat(document.getElementById('nerv-ds').value) || 0;
@@ -1489,35 +2033,30 @@ function montarMemoriaCalculo() {
     const esp = parseFloat(document.getElementById('nerv-esp').value);
     if (d1 && bi && bs && esp) {
       const I = calcInerciaGeom(bi, bs, d1, ds, esp);
-      heqCalc = `<div><strong>h<sub>eq</sub></strong> = ∛(I × 12 / espaçamento)</div>
-        <div style="margin-left:12px;color:#555;">I = ${Math.round(I).toLocaleString('pt-BR')} cm⁴ &nbsp;(seção: bi=${bi} · bs=${bs} · d1=${d1} · ds=${ds} · eixo=${esp} cm)</div>
-        <div style="margin-left:12px;">h<sub>eq</sub> = ∛(${Math.round(I).toLocaleString('pt-BR')} × 12 / ${esp}) = <strong>${cli.heq_cli?.toFixed(1)} cm</strong></div>`;
+      heqCalc = t('memoria_heq_nervurada', I, bi, bs, d1, ds, esp, cli.heq_cli || 0);
     }
   }
 
   let hminCalc = '';
   if (cli.vao && cli.sc) {
     const divBi = getDivisor('B', cli.sc), divUni = getDivisor('U', cli.sc);
-    hminCalc = `
-      <div style="margin-top:10px;"><strong>h<sub>mín</sub> bidirecional</strong> = vão × 100 / divisor = ${cli.vao} × 100 / ${divBi} = <strong>${cli.hmin_B?.toFixed(1)} cm</strong></div>
-      <div><strong>h<sub>mín</sub> unidirecional</strong> = vão × 100 / divisor = ${cli.vao} × 100 / ${divUni} = <strong>${cli.hmin_U?.toFixed(1)} cm</strong></div>
-      <div style="color:#888;font-size:10.5px;">(divisor conforme sobrecarga informada: ${cli.sc} kg/m²)</div>`;
+    hminCalc = t('memoria_hmin_block', cli.vao, divBi, cli.hmin_B || 0, divUni, cli.hmin_U || 0, cli.sc);
   }
 
   if (!heqCalc && !hminCalc) return '';
   return `<div style="background:#FAFAFA;border-left:3px solid #F48120;padding:10px 14px;margin-bottom:18px;font-size:12px;line-height:1.7;">
-    <div style="font-weight:700;text-transform:uppercase;font-size:10.5px;letter-spacing:.5px;color:#666;margin-bottom:6px;">Memória de Cálculo</div>
+    <div style="font-weight:700;text-transform:uppercase;font-size:10.5px;letter-spacing:.5px;color:#666;margin-bottom:6px;">${t('memoria_titulo')}</div>
     ${heqCalc}
     ${hminCalc}
   </div>`;
 }
 
 function montarResumoHtml(itens) {
-  const hoje = new Date().toLocaleDateString('pt-BR');
+  const hoje = new Date().toLocaleDateString(numLocale());
   const cli = lastState || {};
   const descCliente = cli.tipoSecao === 'macica'
-    ? `Laje maciça, ${cli.h_cli_real?.toFixed(1)} cm`
-    : `Laje nervurada, ${cli.h_cli_real?.toFixed(1)} cm (heq ${cli.heq_cli?.toFixed(1)} cm)`;
+    ? t('resumo_desc_macica', cli.h_cli_real || 0)
+    : t('resumo_desc_nervurada', cli.h_cli_real || 0, cli.heq_cli || 0);
   const fc = cli.fireCheck;
   const trrfLinha = fc
     ? `<div><strong>Verificação de incêndio:</strong> TRRF ${fc.trrf} min · capa mínima exigida ${fc.hmin} cm (NBR 14432 + NBR 15200:2024)</div>`
@@ -1540,32 +2079,32 @@ function montarResumoHtml(itens) {
     <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #F48120;padding-bottom:12px;margin-bottom:18px;">
       <div style="font-size:24px;font-weight:800;">atex</div>
       <div style="text-align:right;">
-        <div style="font-size:16px;font-weight:700;">Resumo Técnico — Calculadora de Lajes Nervuradas</div>
-        <div style="font-size:11px;color:#666;">Gerado em ${hoje}</div>
+        <div style="font-size:16px;font-weight:700;">${t('resumo_doc_titulo')}</div>
+        <div style="font-size:11px;color:#666;">${t('resumo_gerado_em', hoje)}</div>
       </div>
     </div>
     <div style="font-size:12.5px;line-height:1.7;margin-bottom:18px;">
-      <div><strong>Laje do cliente:</strong> ${descCliente}</div>
+      <div><strong>${t('resumo_laje_cliente_lbl')}</strong> ${descCliente}</div>
       ${trrfLinha}
     </div>
     ${montarMemoriaCalculo()}
     <table style="width:100%;border-collapse:collapse;font-size:12px;">
       <thead>
         <tr style="background:#F48120;color:#fff;">
-          <th style="padding:8px;text-align:left;">Modelo</th>
-          <th style="padding:8px;text-align:left;">Tipo</th>
-          <th style="padding:8px;">Inerte</th>
-          <th style="padding:8px;">Capa</th>
-          <th style="padding:8px;">Altura total</th>
-          <th style="padding:8px;">Concreto</th>
-          <th style="padding:8px;">Peso próprio</th>
-          <th style="padding:8px;">Margem heq</th>
+          <th style="padding:8px;text-align:left;">${t('resumo_th_modelo')}</th>
+          <th style="padding:8px;text-align:left;">${t('resumo_th_tipo')}</th>
+          <th style="padding:8px;">${t('resumo_th_inerte')}</th>
+          <th style="padding:8px;">${t('resumo_th_capa')}</th>
+          <th style="padding:8px;">${t('resumo_th_altura_total')}</th>
+          <th style="padding:8px;">${t('resumo_th_concreto')}</th>
+          <th style="padding:8px;">${t('resumo_th_peso_proprio')}</th>
+          <th style="padding:8px;">${t('resumo_th_margem_heq')}</th>
         </tr>
       </thead>
       <tbody>${linhas}</tbody>
     </table>
-    <div style="margin-top:18px;font-size:10px;color:#888;">Reduções (concreto/peso) calculadas contra uma laje maciça de mesma rigidez equivalente (heq). Cobrimento de armadura (c1) e demais parâmetros de projeto estrutural são de responsabilidade do calculista.</div>
-    <div style="margin-top:6px;font-size:9px;color:#AAA;">Calculadora Atex · desenvolvido por Ana Talita</div>
+    <div style="margin-top:18px;font-size:10px;color:#888;">${t('resumo_footer_disclaimer')}</div>
+    <div style="margin-top:6px;font-size:9px;color:#AAA;">${t('resumo_footer_credit')}</div>
   </div>`;
 }
 
@@ -1612,8 +2151,14 @@ function calcEq() {
   }
   if (!heq_cli) return renderEqPlaceholder();
 
-  const fireCheckEq = getFireHmin('eq');
-  if (!fireCheckEq) return renderEqPlaceholder('Verificação de incêndio obrigatória: informe o Grupo de ocupação + Altura da edificação, ou o TRRF diretamente.');
+  // Verificação de Incêndio (NBR 14432 + NBR 15200:2024) é exclusiva do PT —
+  // normas brasileiras não valem em outros países, então em ES/EN o cálculo
+  // roda sem exigir (nem depender de) nenhum dado de incêndio.
+  let fireCheckEq = null;
+  if (currentLang === 'pt') {
+    fireCheckEq = getFireHmin('eq');
+    if (!fireCheckEq) return renderEqPlaceholder(t('msg_fire_required'));
+  }
 
   const vao    = parseFloat(document.getElementById('eq-vao').value) || null;
   const sc     = parseFloat(document.getElementById('eq-sc').value)  || null;
@@ -1645,7 +2190,7 @@ function calcEq() {
     unidir = filtro === 'B' ? [] : poolMelhorCapa('U', cat, heq_cli, hmin_uni, 20).sort(rankComHmin(hmin_uni));
   }
 
-  lastState = { source:'eq', sourceLabel:'Equivalência de Inércia',
+  lastState = { source:'eq', sourceLabel: t('tab_eq'),
     topU: unidir[0]||null, topB: bidir[0]||null,
     heq_cli, h_cli_real, vc_cli, tipoSecao, sc: sc||300, vao, hmin_B: hmin_bi, hmin_U: hmin_uni,
     fireCheck: fireCheckEq };
@@ -1655,23 +2200,21 @@ function calcEq() {
   document.getElementById('eq-out-heq').textContent  = heq_cli.toFixed(2) + ' cm';
   document.getElementById('eq-out-hbi').textContent  = hmin_bi  ? hmin_bi  + ' cm' : '—';
   document.getElementById('eq-out-huni').textContent = hmin_uni ? hmin_uni + ' cm' : '—';
-  document.getElementById('eq-div-bi').textContent   = div_bi  ? 'divisor ' + div_bi  : 'informe vão + sc';
-  document.getElementById('eq-div-uni').textContent  = div_uni ? 'divisor ' + div_uni : 'informe vão + sc';
+  document.getElementById('eq-div-bi').textContent   = div_bi  ? t('mc_divisor', div_bi)  : t('mc_divisor_prompt');
+  document.getElementById('eq-div-uni').textContent  = div_uni ? t('mc_divisor', div_uni) : t('mc_divisor_prompt');
 
   MODELOS.eq = [];
   let html = renderTop2(bidir.slice(0,2), unidir.slice(0,2), hmin_bi, hmin_uni, filtro, heq_cli, 'eq');
-  if (filtro !== 'U' && bidir.length  > 1) html += renderLista(bidir,  'Bidirecional — lista completa',  heq_cli, hmin_bi,  'eq');
-  if (filtro !== 'B' && unidir.length > 1) html += renderLista(unidir, 'Unidirecional — lista completa', heq_cli, hmin_uni, 'eq');
-  html += `<div class="nota-rodape">heq = ∛(I×12/b_med) &nbsp;·&nbsp; h_mín = L×100/divisor &nbsp;·&nbsp;
-    <span class="badge-est">~est</span> = geométrico &nbsp;·&nbsp;
-    <span class="badge-of">of</span> = oficial Atex</div>`;
+  if (filtro !== 'U' && bidir.length  > 1) html += renderLista(bidir,  'bi',  heq_cli, hmin_bi,  'eq');
+  if (filtro !== 'B' && unidir.length > 1) html += renderLista(unidir, 'uni', heq_cli, hmin_uni, 'eq');
+  html += `<div class="nota-rodape">${t('nota_rodape_eq')}</div>`;
   document.getElementById('eq-results-area').innerHTML = html;
 }
 
 function renderEqPlaceholder(msg) {
   document.getElementById('eq-metrics-row').style.display = 'none';
   document.getElementById('eq-results-area').innerHTML =
-    `<div class="placeholder"><div class="ph-icon">🏗</div><p>${msg || 'Preencha os dados da laje para ver as sugestões.'}</p></div>`;
+    `<div class="placeholder"><div class="ph-icon">🏗</div><p>${msg || t('ph_eq_msg')}</p></div>`;
 }
 
 // ═══ TELA 2 — ALTURA MÍNIMA ══════════════════════════════════════════
@@ -1681,8 +2224,14 @@ function calcHmin() {
   const dir = document.getElementById('hm-dir').value;
   if (!vao || !sc) return renderHminPlaceholder();
 
-  const fireCheckHm = getFireHmin('hm');
-  if (!fireCheckHm) return renderHminPlaceholder('Verificação de incêndio obrigatória: informe o Grupo de ocupação + Altura da edificação, ou o TRRF diretamente.');
+  // Verificação de Incêndio (NBR 14432 + NBR 15200:2024) é exclusiva do PT —
+  // normas brasileiras não valem em outros países, então em ES/EN o cálculo
+  // roda sem exigir (nem depender de) nenhum dado de incêndio.
+  let fireCheckHm = null;
+  if (currentLang === 'pt') {
+    fireCheckHm = getFireHmin('hm');
+    if (!fireCheckHm) return renderHminPlaceholder(t('msg_fire_required'));
+  }
 
   const div_bi  = getDivisor('B', sc), div_uni = getDivisor('U', sc);
   const hmin_bi  = +(vao*100/div_bi).toFixed(1);
@@ -1692,8 +2241,8 @@ function calcHmin() {
   mr.style.display = 'flex';
   document.getElementById('hm-out-hbi').textContent  = hmin_bi  + ' cm';
   document.getElementById('hm-out-huni').textContent = hmin_uni + ' cm';
-  document.getElementById('hm-div-bi').textContent   = 'divisor ' + div_bi;
-  document.getElementById('hm-div-uni').textContent  = 'divisor ' + div_uni;
+  document.getElementById('hm-div-bi').textContent   = t('mc_divisor', div_bi);
+  document.getElementById('hm-div-uni').textContent  = t('mc_divisor', div_uni);
   document.getElementById('hm-out-vao').textContent  = vao + ' m';
   document.getElementById('hm-out-sc').textContent   = sc  + ' kg/m²';
 
@@ -1709,7 +2258,7 @@ function calcHmin() {
     unidir = dir==='B' ? [] : poolMelhorCapa('U', cat, 0, hmin_uni, 20).sort(RANK);
   }
 
-  lastState = { source:'hmin', sourceLabel:'Sugestão por h_mín',
+  lastState = { source:'hmin', sourceLabel: t('tab_hmin'),
     topU: unidir[0]||null, topB: bidir[0]||null,
     heq_cli: null, h_cli_real: hmin_uni, vc_cli: hmin_uni / 100, tipoSecao:'macica',
     sc, vao, hmin_B: hmin_bi, hmin_U: hmin_uni,
@@ -1717,16 +2266,16 @@ function calcHmin() {
 
   MODELOS.hmin = [];
   let html = renderTop2(bidir.slice(0,2), unidir.slice(0,2), hmin_bi, hmin_uni, dir, null, 'hmin');
-  if (dir !== 'U' && bidir.length  > 1) html += renderLista(bidir,  'Bidirecional — lista completa',  null, hmin_bi,  'hmin');
-  if (dir !== 'B' && unidir.length > 1) html += renderLista(unidir, 'Unidirecional — lista completa', null, hmin_uni, 'hmin');
-  html += `<div class="nota-rodape">h_mín = L×100/divisor &nbsp;·&nbsp; Fôrmas com D ≥ h_mín</div>`;
+  if (dir !== 'U' && bidir.length  > 1) html += renderLista(bidir,  'bi',  null, hmin_bi,  'hmin');
+  if (dir !== 'B' && unidir.length > 1) html += renderLista(unidir, 'uni', null, hmin_uni, 'hmin');
+  html += `<div class="nota-rodape">${t('nota_rodape_hmin')}</div>`;
   document.getElementById('hm-results-area').innerHTML = html;
 }
 
 function renderHminPlaceholder(msg) {
   document.getElementById('hm-metrics-row').style.display = 'none';
   document.getElementById('hm-results-area').innerHTML =
-    `<div class="placeholder"><div class="ph-icon">📏</div><p>${msg || 'Informe o vão e a sobrecarga para ver as fôrmas sugeridas.'}</p></div>`;
+    `<div class="placeholder"><div class="ph-icon">📏</div><p>${msg || t('ph_hm_msg')}</p></div>`;
 }
 
 // ═══ TOP-2 CARDS POR TIPO (bidirecional + unidirecional) ═════════════
@@ -1737,25 +2286,25 @@ function renderTop2(topsB, topsU, hmin_B, hmin_U, filtro, heq_cli, mode) {
   if (filtro !== 'U' && topsB.length) {
     any = true;
     html += `<div class="type-group">
-      <div class="type-group-label bid">Bidirecional — ${topsB.length > 1 ? topsB.length + ' melhores opções' : 'melhor opção'}</div>
+      <div class="type-group-label bid">${t('txt_bidirecional')} — ${topsB.length > 1 ? t('grp_melhores_opcoes', topsB.length) : t('grp_melhor_opcao')}</div>
       <div class="top2-grid">${topsB.map((e, i) => renderResultCard(e, i + 1, hmin_B, heq_cli)).join('')}</div>
     </div>`;
   }
   if (filtro !== 'B' && topsU.length) {
     any = true;
     html += `<div class="type-group">
-      <div class="type-group-label uni">Unidirecional — ${topsU.length > 1 ? topsU.length + ' melhores opções' : 'melhor opção'}</div>
+      <div class="type-group-label uni">${t('txt_unidirecional')} — ${topsU.length > 1 ? t('grp_melhores_opcoes', topsU.length) : t('grp_melhor_opcao')}</div>
       <div class="top2-grid">${topsU.map((e, i) => renderResultCard(e, i + 1, hmin_U, heq_cli)).join('')}</div>
     </div>`;
   }
-  if (!any) return '<div class="placeholder"><p>Nenhuma fôrma encontrada para os critérios informados.</p></div>';
+  if (!any) return `<div class="placeholder"><p>${t('msg_nenhuma_forma')}</p></div>`;
   return html;
 }
 
 function renderResultCard(e, rank, hmin, heq_cli, label) {
   const isUni  = e.t === 'U';
   const cls    = isUni ? 'uni' : 'bid';
-  const tipo   = isUni ? 'Unidirecional' : 'Bidirecional';
+  const tipo   = isUni ? t('txt_unidirecional') : t('txt_bidirecional');
 
   const heqM        = e.heq;
   const vol_solid   = heqM / 100;
@@ -1776,15 +2325,16 @@ function renderResultCard(e, rank, hmin, heq_cli, label) {
     const volCli  = vc_cli ?? (h_cli_real / 100);
     const maxVolC = Math.max(volCli, vol_solid, e.vc, 0.001);
     const barWc   = v => Math.round(v / maxVolC * 100);
+    const tipoShort = tS === 'macica' ? t('cr_tipo_macica_short') : t('cr_tipo_nerv_short');
     volCompHtml = `<div class="cc-compare">
-      <div class="cc-compare-title">Volume de concreto — comparativo</div>
+      <div class="cc-compare-title">${t('cc_compare_title')}</div>
       <div class="compare-row">
-        <div class="cr-label">Laje cliente (${tS==='macica'?'maciça':'nerv.'} ${h_cli_real.toFixed(0)} cm)</div>
+        <div class="cr-label">${t('cr_label_laje_cliente', tipoShort, h_cli_real.toFixed(0))}</div>
         <div class="cr-bar-wrap"><div class="cr-bar ref" style="width:${barWc(volCli)}%"></div></div>
         <div class="cr-val">${volCli.toFixed(3)} m³</div>
       </div>
       <div class="compare-row">
-        <div class="cr-label">Sólida equiv. (heq ${heqM.toFixed(1)} cm)</div>
+        <div class="cr-label">${t('cr_label_solida_equiv', heqM.toFixed(1))}</div>
         <div class="cr-bar-wrap"><div class="cr-bar ref" style="width:${barWc(vol_solid)}%"></div></div>
         <div class="cr-val">${vol_solid.toFixed(3)} m³</div>
       </div>
@@ -1798,8 +2348,8 @@ function renderResultCard(e, rank, hmin, heq_cli, label) {
 
   const hmBadge = hmin
     ? (e.D >= hmin
-      ? `<span class="hmin-badge ok">✓ h_mín ${hmin} cm</span>`
-      : `<span class="hmin-badge fail">⚠ abaixo h_mín ${hmin} cm</span>`)
+      ? `<span class="hmin-badge ok">${t('hmin_badge_ok', hmin)}</span>`
+      : `<span class="hmin-badge fail">${t('hmin_badge_fail', hmin)}</span>`)
     : '';
 
   const fc = lastState?.fireCheck;
@@ -1813,17 +2363,17 @@ function renderResultCard(e, rank, hmin, heq_cli, label) {
 
   const id = `det-${e.f}-${e.d1}-${e.ds}-${rank}-${label?'sel':'top'}`.replace(/\./g,'_');
   const cardId = `card-${id}`;
-  const headLabel = label || `Opção ${rank} — ${tipo}`;
+  const headLabel = label || t('opcao_label', rank, tipo);
   const cardClass = label ? ' selected' : (rank === 1 ? ' best' : '');
   const iniciaRecolhido = !label;
 
   const resumoKey = `${e.f}_${e.d1}_${e.ds}_${e.variante||''}_${e.t}`.replace(/\./g,'_');
   const nomeEsc = nomeProduto(e).replace(/'/g, "\\'");
   const resumoCheck = lastState?.source === 'eq'
-    ? `<label class="rc-resumo-check" title="Incluir esta fôrma no resumo de impressão">
+    ? `<label class="rc-resumo-check" title="${t('resumo_check_title')}">
         <input type="checkbox" ${resumoItens[resumoKey] ? 'checked' : ''}
           onchange="toggleResumoItem('${resumoKey}', this.checked, '${nomeEsc}', '${tipo}', ${e.d1}, ${e.ds}, ${e.D}, ${redConc.toFixed(1)}, ${redPeso.toFixed(1)}, ${margem ?? 'null'})">
-        Resumo
+        ${t('resumo_check_label')}
       </label>`
     : '';
 
@@ -1835,12 +2385,12 @@ function renderResultCard(e, rank, hmin, heq_cli, label) {
           <div class="rc-model-name">${nomeProduto(e)} ${badgeFonte(e.heq_fonte)}</div>
           <div class="rc-type-row">
             <span class="rc-type-badge ${cls}">${tipo}</span>
-            <span class="rc-dims">Inerte ${e.d1} cm · Capa ${e.ds} cm · Altura total ${e.D} cm</span>
+            <span class="rc-dims">${t('rml_inerte')} ${e.d1} cm · ${t('rml_capa')} ${e.ds} cm · ${t('rml_altura_total')} ${e.D} cm</span>
             ${hmBadge}
             ${fireBadge}
           </div>
           <button class="rc-collapse-btn" onclick="toggleCard('${cardId}')">
-            <span id="${cardId}-chev">${iniciaRecolhido ? '▸' : '▾'}</span> ${iniciaRecolhido ? 'Ver detalhes' : 'Recolher'}
+            <span id="${cardId}-chev">${iniciaRecolhido ? '▸' : '▾'}</span> ${iniciaRecolhido ? t('rc_collapse_ver_detalhes') : t('rc_collapse_recolher')}
           </button>
         </div>
         ${resumoCheck}
@@ -1850,55 +2400,55 @@ function renderResultCard(e, rank, hmin, heq_cli, label) {
     <div class="rc-metrics">
       <div class="rc-metric">
         <div class="rmv">${e.d1} cm</div>
-        <div class="rml">Inerte</div>
+        <div class="rml">${t('rml_inerte')}</div>
       </div>
       <div class="rc-metric">
         <div class="rmv">${e.ds} cm</div>
-        <div class="rml">Capa</div>
+        <div class="rml">${t('rml_capa')}</div>
       </div>
       <div class="rc-metric">
         <div class="rmv">${e.D} cm</div>
-        <div class="rml">Altura total</div>
+        <div class="rml">${t('rml_altura_total')}</div>
       </div>
       <div class="rc-metric green">
         <div class="rmv">${e.vc.toFixed(3)}</div>
-        <div class="rml">Vol. concreto m³/m²</div>
+        <div class="rml">${t('rml_vol_concreto')}</div>
       </div>
       <div class="rc-metric">
-        <div class="rmv">${e.inercia.toLocaleString('pt-BR')}</div>
-        <div class="rml">Inércia cm⁴</div>
+        <div class="rmv">${e.inercia.toLocaleString(numLocale())}</div>
+        <div class="rml">${t('rml_inercia')}</div>
       </div>
     </div>
-    <div class="rc-savings-title">Redução vs sólida mesma rigidez (heq)</div>
+    <div class="rc-savings-title">${t('rc_savings_title')}</div>
     <div class="rc-savings">
       <div class="rc-saving-item${redConc<0?' neutral':''}">
         <div class="sv">${fmtPct(redConc)}</div>
-        <div class="sl">Concreto</div>
+        <div class="sl">${t('sl_concreto')}</div>
       </div>
       <div class="rc-saving-item${redPeso<0?' neutral':''}">
         <div class="sv">${fmtPct(redPeso)}</div>
-        <div class="sl">Peso próprio</div>
+        <div class="sl">${t('sl_peso_proprio')}</div>
       </div>
       <div class="rc-saving-item${redAco!==null&&redAco<0?' neutral':''}">
         <div class="sv">${redAco!==null?fmtPct(redAco):'—'}</div>
-        <div class="sl">Aço (estim.)</div>
+        <div class="sl">${t('sl_aco_estim')}</div>
       </div>
-      ${margem !== null ? `<div class="rc-saving-item"><div class="sv">+${margem}%</div><div class="sl">Margem heq</div></div>` : ''}
+      ${margem !== null ? `<div class="rc-saving-item"><div class="sv">+${margem}%</div><div class="sl">${t('sl_margem_heq')}</div></div>` : ''}
     </div>
     ${volCompHtml}
     <button class="rc-details-toggle" onclick="toggleDetails('${id}')">
-      <span id="${id}-arrow">▸</span> Ver propriedades geométricas
+      <span id="${id}-arrow">▸</span> ${t('rc_details_toggle_txt')}
     </button>
     <div class="rc-details-body" id="${id}">
       <div class="details-grid">
-        <div class="dg-item"><div class="dv">${e.bi} cm</div><div class="dl">bi — larg. inf.</div></div>
-        <div class="dg-item"><div class="dv">${e.bs} cm</div><div class="dl">bs — larg. sup.</div></div>
-        <div class="dg-item"><div class="dv">${e.d1} cm</div><div class="dl">d1 — inerte</div></div>
-        <div class="dg-item"><div class="dv">${e.ds} cm</div><div class="dl">ds — capa</div></div>
-        <div class="dg-item"><div class="dv">${heqM.toFixed(2)} cm</div><div class="dl">heq</div></div>
-        ${e.A_of ? `<div class="dg-item"><div class="dv">${e.A_of} cm²</div><div class="dl">Área (of.)</div></div>` : ''}
-        ${e.I_of ? `<div class="dg-item"><div class="dv">${e.I_of.toLocaleString('pt-BR')} cm⁴</div><div class="dl">Inércia (of.)</div></div>` : ''}
-        <div class="dg-item"><div class="dv">${e.pp.toFixed(2)} kN/m²</div><div class="dl">Peso próprio</div></div>
+        <div class="dg-item"><div class="dv">${e.bi} cm</div><div class="dl">${t('dl_bi')}</div></div>
+        <div class="dg-item"><div class="dv">${e.bs} cm</div><div class="dl">${t('dl_bs')}</div></div>
+        <div class="dg-item"><div class="dv">${e.d1} cm</div><div class="dl">${t('dl_d1')}</div></div>
+        <div class="dg-item"><div class="dv">${e.ds} cm</div><div class="dl">${t('dl_ds')}</div></div>
+        <div class="dg-item"><div class="dv">${heqM.toFixed(2)} cm</div><div class="dl">${t('dl_heq')}</div></div>
+        ${e.A_of ? `<div class="dg-item"><div class="dv">${e.A_of} cm²</div><div class="dl">${t('dl_area_of')}</div></div>` : ''}
+        ${e.I_of ? `<div class="dg-item"><div class="dv">${e.I_of.toLocaleString(numLocale())} cm⁴</div><div class="dl">${t('dl_inercia_of')}</div></div>` : ''}
+        <div class="dg-item"><div class="dv">${e.pp.toFixed(2)} kN/m²</div><div class="dl">${t('sl_peso_proprio')}</div></div>
       </div>
     </div>
     </div>
@@ -1912,7 +2462,7 @@ function toggleLista(id) {
   const recolhido = el.classList.toggle('collapsed');
   if (chev) chev.textContent = recolhido ? '▸' : '▾';
   const btn = chev ? chev.parentElement : null;
-  if (btn) btn.lastChild.textContent = recolhido ? ' Ver lista completa' : ' Recolher lista';
+  if (btn) btn.lastChild.textContent = ' ' + (recolhido ? t('lista_ver_completa') : t('lista_recolher'));
 }
 
 function toggleCard(cardId) {
@@ -1922,7 +2472,7 @@ function toggleCard(cardId) {
   const recolhido = card.classList.toggle('collapsed');
   if (chev) {
     chev.textContent = recolhido ? '▸' : '▾';
-    chev.nextSibling.textContent = recolhido ? ' Ver detalhes' : ' Recolher';
+    chev.nextSibling.textContent = ' ' + (recolhido ? t('rc_collapse_ver_detalhes') : t('rc_collapse_recolher'));
   }
 }
 
@@ -1939,13 +2489,14 @@ function selecionarModelo(idx, mode) {
   const area = document.getElementById('modelo-sel-' + mode);
   if (!e || !lastState || !area) return;
   const hmin = e.t === 'U' ? lastState.hmin_U : lastState.hmin_B;
-  const label = `Modelo selecionado — ${e.t === 'U' ? 'Unidirecional' : 'Bidirecional'}`;
+  const label = t('modelo_selecionado_label', e.t === 'U' ? t('txt_unidirecional') : t('txt_bidirecional'));
   area.innerHTML = renderResultCard(e, 0, hmin, lastState.heq_cli, label);
   area.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 // ═══ LISTA COMPLETA ═══════════════════════════════════════════════════
-function renderLista(lista, titulo, heq_cli, hmin, mode) {
+function renderLista(lista, kind, heq_cli, hmin, mode) {
+  const titulo = kind === 'bi' ? t('lista_titulo_bidir') : t('lista_titulo_unidir');
   const familias = [...new Set(lista.map(e => e.f))];
   let rows = '';
   let first = true;
@@ -1960,8 +2511,8 @@ function renderLista(lista, titulo, heq_cli, hmin, mode) {
           : `<span class="mlr-badge warn">⚠</span>`)
         : '';
       const margem = heq_cli ? '+' + ((e.heq/heq_cli-1)*100).toFixed(0) + '%' : '';
-      rows += `<div class="models-list-row${first?' best-row':''}" onclick="selecionarModelo(${idx},'${mode}')" onkeypress="if(event.key==='Enter')selecionarModelo(${idx},'${mode}')" role="button" tabindex="0" title="Ver este modelo em detalhe">
-        <div class="mlr-name">${first?'<span class="mlr-best-tag">Melhor</span>':''}${nomeProduto(e)} <span class="mlr-sub">${nomeResumo(e)}</span> ${badgeFonte(e.heq_fonte)}</div>
+      rows += `<div class="models-list-row${first?' best-row':''}" onclick="selecionarModelo(${idx},'${mode}')" onkeypress="if(event.key==='Enter')selecionarModelo(${idx},'${mode}')" role="button" tabindex="0" title="${t('lista_row_title')}">
+        <div class="mlr-name">${first?`<span class="mlr-best-tag">${t('mlr_best_tag')}</span>`:''}${nomeProduto(e)} <span class="mlr-sub">${t('nome_resumo_capa', e.ds)}</span> ${badgeFonte(e.heq_fonte)}</div>
         <div class="mlr-val bold">${e.D} cm</div>
         <div class="mlr-val">${e.vc.toFixed(3)}</div>
         <div class="mlr-val">${e.pp.toFixed(2)}</div>
@@ -1970,19 +2521,19 @@ function renderLista(lista, titulo, heq_cli, hmin, mode) {
       first = false;
     }
   }
-  const listaId = `lista-${mode}-${titulo.includes('Bidirecional') ? 'bi' : 'uni'}`;
+  const listaId = `lista-${mode}-${kind}`;
   return `<div class="section-label-row">
     <div class="section-label">${titulo}</div>
     <button class="rc-collapse-btn" onclick="toggleLista('${listaId}')">
-      <span id="${listaId}-chev">▸</span> Ver lista completa
+      <span id="${listaId}-chev">▸</span> ${t('lista_ver_completa')}
     </button>
   </div>
   <div class="models-list collapsed" id="${listaId}">
     <div class="models-list-head">
-      <div>Modelo</div><div style="text-align:center">D (cm)</div>
-      <div style="text-align:center">Vol.c m³/m²</div>
-      <div style="text-align:center">Peso kN/m²</div>
-      <div style="text-align:center">h_mín / Margem</div>
+      <div>${t('models_list_head_modelo')}</div><div style="text-align:center">${t('models_list_head_d')}</div>
+      <div style="text-align:center">${t('models_list_head_volc')}</div>
+      <div style="text-align:center">${t('models_list_head_peso')}</div>
+      <div style="text-align:center">${t('models_list_head_hmin_margem')}</div>
     </div>
     ${rows}
   </div>`;
@@ -1990,6 +2541,7 @@ function renderLista(lista, titulo, heq_cli, hmin, mode) {
 
 
 popularGruposIncendio();
+aplicarIdioma();
 
 // ═══ PWA — registro do service worker (rascunho) ═════════════════════
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
@@ -2015,10 +2567,12 @@ function mostrarBannerInstall(temPromptNativo) {
   const txt    = document.getElementById('install-banner-text');
   const btn    = document.getElementById('install-banner-btn');
   if (temPromptNativo) {
-    txt.textContent = 'Adicione a Calculadora Atex à tela inicial pra acesso rápido, como um app.';
+    installBannerMode = 'native';
+    txt.textContent = t('install_native_text');
     btn.hidden = false;
   } else if (isIOSDevice()) {
-    txt.textContent = 'Toque em Compartilhar e depois em "Adicionar à Tela de Início".';
+    installBannerMode = 'ios';
+    txt.textContent = t('install_ios_text');
     btn.hidden = true;
   } else {
     return;
