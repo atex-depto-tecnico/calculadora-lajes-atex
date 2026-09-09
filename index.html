@@ -519,7 +519,7 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
             <small class="fire-hint" id="fire-trrfred-hint-eq"></small>
             <div id="info-trrfred-eq" class="info-pop" hidden>A NBR 15200:2024 (Anexo A — Método do Tempo Equivalente) permite reduzir o TRRF em até 30 min, desde que a edificação tenha projeto de segurança contra incêndio específico (compartimentação, brigada, chuveiros automáticos etc.) que justifique essa redução, analisado por compartimento. Preenchido aqui como sugestão (TRRF − 30 min, respeitando o mínimo de 30 min) — confirme se o seu projeto realmente tem essa análise aprovada antes de usar esse valor no dimensionamento.</div>
           </div>
-          <small class="fire-note">Capa mínima = h₁, com h₂ ≥ 1 cm de camada colaborante aderida (contrapiso + argamassa + piso) somado conforme NBR 15200:2024.</small>
+          <small class="fire-note">Capa mínima = h₁, com h₂ ≥ 1 cm de contrapiso cimentício (camada colaborante aderida) somado, conforme NBR 15200:2024.</small>
         </div>
         </div>
         </div>
@@ -635,7 +635,7 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
             <small class="fire-hint" id="fire-trrfred-hint-hm"></small>
             <div id="info-trrfred-hm" class="info-pop" hidden>A NBR 15200:2024 (Anexo A — Método do Tempo Equivalente) permite reduzir o TRRF em até 30 min, desde que a edificação tenha projeto de segurança contra incêndio específico (compartimentação, brigada, chuveiros automáticos etc.) que justifique essa redução, analisado por compartimento. Preenchido aqui como sugestão (TRRF − 30 min, respeitando o mínimo de 30 min) — confirme se o seu projeto realmente tem essa análise aprovada antes de usar esse valor no dimensionamento.</div>
           </div>
-          <small class="fire-note">Capa mínima = h₁, com h₂ ≥ 1 cm de camada colaborante aderida (contrapiso + argamassa + piso) somado conforme NBR 15200:2024.</small>
+          <small class="fire-note">Capa mínima = h₁, com h₂ ≥ 1 cm de contrapiso cimentício (camada colaborante aderida) somado, conforme NBR 15200:2024.</small>
         </div>
         </div>
         </div>
@@ -1380,9 +1380,13 @@ const TRRF_GRUPOS = [
 // (só o c1 varia, e c1 é cobrimento de armadura — decisão de projeto do cliente, fora do
 // escopo desta calculadora).
 // Convenção prática da Atex: -1cm em cada valor, pois a instalação real sempre tem
-// contrapiso+argamassa+piso (camada colaborante aderida, 100% de eficiência pela norma —
-// Anexo/8.2.2), que soma à espessura estrutural (h1+h2). Ex.: TRRF 30min exige 6cm "no
-// concreto", mas com o acabamento padrão já presente na obra, adota-se 5cm de capa mínima.
+// contrapiso cimentício (camada colaborante aderida). Fonte: boletim técnico oficial Atex
+// "Dimensionamento de Lajes Nervuradas em Situação de Incêndio" (atexformwork.com), que cita
+// NBR 15200:2024 pág.15-16: revestimento = h1+h2, com 1cm de argamassa de cimento e areia
+// (= contrapiso) equivalendo a 1cm de concreto — é esse o exemplo oficial da norma, não
+// argamassa de assentamento nem piso cerâmico (sem fator de equivalência definido pra eles
+// nessa referência). Ex.: TRRF 30min exige 6cm "no concreto", mas com 1cm de contrapiso já
+// presente na obra, adota-se 5cm de capa mínima.
 const HMIN_TRRF = {30:5, 60:7, 90:9, 120:11, 180:14};
 
 function classeAlturaIdx(h) {
