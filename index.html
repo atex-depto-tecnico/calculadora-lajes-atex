@@ -103,6 +103,7 @@ header{background:var(--navy);color:#fff;padding:8px 20px;min-height:64px;displa
 .toggle-group button.active{background:var(--navy);color:#fff;}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .field-hint{background:var(--accent-bg);border-left:3px solid var(--accent);padding:9px 12px;border-radius:0 6px 6px 0;font-size:12px;color:var(--accent-text);margin-bottom:14px;line-height:1.5;}
+.sec-diagram{width:100%;height:auto;display:block;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 0;margin-bottom:12px;}
 .btn-calc{width:100%;padding:11px;background:var(--navy);color:#fff;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.3px;transition:background .15s;}
 .btn-calc:hover{background:#1E293B;}
 .divider{height:1px;background:var(--border);margin:14px 0;}
@@ -165,11 +166,10 @@ header{background:var(--navy);color:#fff;padding:8px 20px;min-height:64px;displa
 .hmin-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:99px;font-size:11px;font-weight:700;}
 .hmin-badge.ok{background:var(--green-bg);color:var(--green);}
 .hmin-badge.fail{background:var(--orange-bg);color:var(--orange);}
-.fire-toggle-btn{width:100%;text-align:left;background:transparent;border:1px dashed var(--border);border-radius:8px;padding:8px 10px;font-size:12.5px;font-weight:700;color:var(--text);cursor:pointer;margin:2px 0 10px;display:flex;align-items:center;gap:6px;}
-.fire-toggle-btn:hover{border-color:var(--accent);}
-.fire-block{display:flex;flex-direction:column;gap:12px;margin:-4px 0 12px;padding:12px;background:var(--bg-alt);border-radius:8px;border:1px solid var(--border);}
-.fire-block[hidden]{display:none;}
-.fire-hint{font-size:11px;color:var(--muted-light);margin-top:3px;}
+.fire-section-label{font-size:13px;font-weight:700;color:var(--text);margin:6px 0 10px;padding-top:14px;border-top:1px solid var(--border);}
+.fire-section-label .opt{display:block;font-weight:500;font-size:11px;color:var(--muted-light);margin-top:3px;text-transform:none;letter-spacing:0;}
+.fire-block{display:flex;flex-direction:column;gap:12px;margin:0 0 12px;padding:12px;background:var(--bg-alt);border-radius:8px;border:1px solid var(--border);}
+.fire-hint{font-size:12px;font-weight:600;color:var(--accent-text);margin-top:4px;display:block;}
 
 /* ── TABLE SECTION (LISTA COMPLETA) ── */
 .section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin:0;}
@@ -357,8 +357,16 @@ header{background:var(--navy);color:#fff;padding:8px 20px;min-height:64px;displa
         </div>
 
         <div id="sec-macica" class="fields-macica">
+          <svg class="sec-diagram" viewBox="0 0 360 100" role="img" aria-label="Seção maciça — laje sólida de altura/espessura">
+            <rect x="20" y="30" width="230" height="40" fill="var(--muted-light)" stroke="var(--text)" stroke-width="1.5"/>
+            <line x1="20" y1="86" x2="250" y2="86" stroke="var(--muted)" stroke-width="1" stroke-dasharray="2,2"/>
+            <line x1="276" y1="30" x2="276" y2="70" stroke="var(--accent)" stroke-width="1.2"/>
+            <line x1="271" y1="30" x2="281" y2="30" stroke="var(--accent)" stroke-width="1.2"/>
+            <line x1="271" y1="70" x2="281" y2="70" stroke="var(--accent)" stroke-width="1.2"/>
+            <text x="290" y="54" font-size="14" font-weight="700" fill="var(--accent)">h</text>
+          </svg>
           <div class="field">
-            <label>Espessura h (cm)</label>
+            <label>Altura/Espessura h (cm)</label>
             <input type="number" id="mac-h" placeholder="Ex.: 12" min="5" max="50" step="0.5">
             <small>Laje sólida sem vazios</small>
           </div>
@@ -369,6 +377,38 @@ header{background:var(--navy);color:#fff;padding:8px 20px;min-height:64px;displa
         </div>
 
         <div id="sec-nervurada" class="fields-nervurada">
+          <svg class="sec-diagram" viewBox="0 0 430 235" role="img" aria-label="Seção nervurada — capa (ds), altura do inerte (d1), largura superior (bs), largura inferior (bi) e eixo (espaçamento entre eixos)">
+            <line x1="75" y1="30" x2="145" y2="30" stroke="var(--accent)" stroke-width="1"/>
+            <line x1="75" y1="26" x2="75" y2="34" stroke="var(--accent)" stroke-width="1"/>
+            <line x1="145" y1="26" x2="145" y2="34" stroke="var(--accent)" stroke-width="1"/>
+            <text x="110" y="22" font-size="13" font-weight="700" fill="var(--accent)" text-anchor="middle">bs</text>
+
+            <rect x="15" y="40" width="390" height="24" fill="var(--muted-light)" stroke="var(--text)" stroke-width="1.5"/>
+            <path d="M75,64 L145,64 L127,178 L93,178 Z" fill="var(--muted-light)" stroke="var(--text)" stroke-width="1.5"/>
+            <path d="M265,64 L335,64 L317,178 L283,178 Z" fill="var(--muted-light)" stroke="var(--text)" stroke-width="1.5"/>
+
+            <line x1="405" y1="40" x2="405" y2="64" stroke="var(--accent)" stroke-width="1.2"/>
+            <line x1="400" y1="40" x2="410" y2="40" stroke="var(--accent)" stroke-width="1.2"/>
+            <line x1="400" y1="64" x2="410" y2="64" stroke="var(--accent)" stroke-width="1.2"/>
+            <text x="414" y="56" font-size="13" font-weight="700" fill="var(--accent)" text-anchor="start">ds</text>
+
+            <line x1="55" y1="64" x2="55" y2="178" stroke="var(--accent)" stroke-width="1.2"/>
+            <line x1="50" y1="64" x2="60" y2="64" stroke="var(--accent)" stroke-width="1.2"/>
+            <line x1="50" y1="178" x2="60" y2="178" stroke="var(--accent)" stroke-width="1.2"/>
+            <text x="40" y="125" font-size="13" font-weight="700" fill="var(--accent)" text-anchor="end">d1</text>
+
+            <line x1="110" y1="208" x2="110" y2="218" stroke="var(--muted)" stroke-width="1" stroke-dasharray="2,2"/>
+            <line x1="300" y1="178" x2="300" y2="218" stroke="var(--muted)" stroke-width="1" stroke-dasharray="2,2"/>
+            <line x1="110" y1="218" x2="300" y2="218" stroke="var(--accent)" stroke-width="1.2"/>
+            <line x1="110" y1="213" x2="110" y2="223" stroke="var(--accent)" stroke-width="1.2"/>
+            <line x1="300" y1="213" x2="300" y2="223" stroke="var(--accent)" stroke-width="1.2"/>
+            <text x="205" y="232" font-size="13" font-weight="700" fill="var(--accent)" text-anchor="middle">eixo</text>
+
+            <line x1="93" y1="190" x2="127" y2="190" stroke="var(--accent)" stroke-width="1"/>
+            <line x1="93" y1="186" x2="93" y2="194" stroke="var(--accent)" stroke-width="1"/>
+            <line x1="127" y1="186" x2="127" y2="194" stroke="var(--accent)" stroke-width="1"/>
+            <text x="110" y="204" font-size="13" font-weight="700" fill="var(--accent)" text-anchor="middle">bi</text>
+          </svg>
           <div class="field-hint">Dimensões da seção transversal do cliente.</div>
           <div class="field-row">
             <div class="field"><label>d1 — alt. inerte (cm)</label>
@@ -384,6 +424,32 @@ header{background:var(--navy);color:#fff;padding:8px 20px;min-height:64px;displa
           </div>
           <div class="field"><label>Espaçamento entre eixos (cm)</label>
             <input type="number" id="nerv-esp" placeholder="Ex.: 60" step="1"></div>
+        </div>
+
+        <div class="divider"></div>
+        <div class="fire-section-label">Verificação de Incêndio <span class="opt">conforme NBR 14432 (TRRF) e NBR 15200:2024 (dimensões mínimas)</span></div>
+        <div id="fire-block-eq" class="fire-block">
+          <div class="field">
+            <label>Grupo de ocupação</label>
+            <select id="fire-grupo-eq" onchange="atualizarTRRFSugerido('eq')"></select>
+          </div>
+          <div class="field">
+            <label>Altura da edificação (m)</label>
+            <input type="number" id="fire-altura-eq" placeholder="Ex.: 15" min="0" step="0.5" oninput="atualizarTRRFSugerido('eq')">
+          </div>
+          <div class="field">
+            <label>TRRF (min) <span class="opt">auto pela NBR 14432, ou digite direto</span></label>
+            <input type="number" id="fire-trrf-eq" placeholder="Ex.: 60" min="30" max="180" step="30">
+            <small class="fire-hint" id="fire-trrf-hint-eq"></small>
+          </div>
+          <div class="field">
+            <label>TRRF Reduzido (min)
+              <button type="button" class="info-btn" onclick="toggleInfo('info-trrfred-eq')" aria-label="Por que pode ser reduzido?">i</button>
+            </label>
+            <input type="number" id="fire-trrfred-eq" placeholder="Ex.: 30" min="0" max="180" step="30">
+            <small class="fire-hint" id="fire-trrfred-hint-eq"></small>
+            <div id="info-trrfred-eq" class="info-pop" hidden>A NBR 15200:2024 (Anexo A — Método do Tempo Equivalente) permite reduzir o TRRF em até 30 min, desde que a edificação tenha projeto de segurança contra incêndio específico (compartimentação, brigada, chuveiros automáticos etc.) que justifique essa redução, analisado por compartimento. Preenchido aqui como sugestão (TRRF − 30 min, respeitando o mínimo de 30 min) — confirme se o seu projeto realmente tem essa análise aprovada antes de usar esse valor no dimensionamento.</div>
+          </div>
         </div>
 
         <div class="divider"></div>
@@ -410,28 +476,6 @@ header{background:var(--navy);color:#fff;padding:8px 20px;min-height:64px;displa
         <div class="field">
           <label>Capa desejada (cm) <span class="opt">opcional · 4–20 cm</span></label>
           <input type="number" id="cap-alvo-eq" placeholder="vazio = catálogo (5/7,5/10)" min="4" max="20" step="0.5">
-        </div>
-        <button type="button" class="fire-toggle-btn" onclick="toggleFire('eq')">
-          <span id="fire-chev-eq">▸</span> 🔥 Verificação de incêndio (opcional)
-        </button>
-        <div id="fire-block-eq" class="fire-block" hidden>
-          <div class="field">
-            <label>Grupo de ocupação</label>
-            <select id="fire-grupo-eq" onchange="atualizarTRRFSugerido('eq')"></select>
-          </div>
-          <div class="field">
-            <label>Altura da edificação (m)</label>
-            <input type="number" id="fire-altura-eq" placeholder="Ex.: 15" min="0" step="0.5" oninput="atualizarTRRFSugerido('eq')">
-          </div>
-          <div class="field">
-            <label>TRRF (min) <span class="opt">auto pela NBR 14432, ou digite direto</span></label>
-            <input type="number" id="fire-trrf-eq" placeholder="Ex.: 60" min="30" max="180" step="30">
-            <small class="fire-hint" id="fire-trrf-hint-eq"></small>
-          </div>
-          <div class="field">
-            <label>TRRF Reduzido (min) <span class="opt">opcional · só se já aprovado em projeto</span></label>
-            <input type="number" id="fire-trrfred-eq" placeholder="Ex.: 30" min="0" max="180" step="30">
-          </div>
         </div>
         <button class="btn-calc" onclick="calcEq()">Calcular</button>
       </div>
@@ -471,19 +515,8 @@ header{background:var(--navy);color:#fff;padding:8px 20px;min-height:64px;displa
           </small>
           <div id="info-sc-hm" class="info-pop" hidden>Sobrecarga é a carga de uso da laje (pessoas, móveis, equipamentos — sem contar o peso próprio da estrutura), definida pela NBR 6120 conforme a ocupação. As 3 faixas aqui são uma simplificação prática: residencial tende a ficar até 300 kg/m², uso comercial entre 301–500, industrial acima disso. Esse valor também define o divisor usado no cálculo de h_mín. Se seu projeto já tem a sobrecarga de norma definida, use-a diretamente aqui.</div>
         </div>
-        <div class="field"><label>Direção</label>
-          <select id="hm-dir">
-            <option value="ambas">Bidirecional + Unidirecional</option>
-            <option value="B">Somente Bidirecional</option>
-            <option value="U">Somente Unidirecional</option>
-          </select></div>
-        <div class="field">
-          <label>Capa desejada (cm) <span class="opt">opcional · 4–20 cm</span></label>
-          <input type="number" id="cap-alvo-hm" placeholder="vazio = catálogo (5/7,5/10)" min="4" max="20" step="0.5"></div>
-        <button type="button" class="fire-toggle-btn" onclick="toggleFire('hm')">
-          <span id="fire-chev-hm">▸</span> 🔥 Verificação de incêndio (opcional)
-        </button>
-        <div id="fire-block-hm" class="fire-block" hidden>
+        <div class="fire-section-label">Verificação de Incêndio <span class="opt">conforme NBR 14432 (TRRF) e NBR 15200:2024 (dimensões mínimas)</span></div>
+        <div id="fire-block-hm" class="fire-block">
           <div class="field">
             <label>Grupo de ocupação</label>
             <select id="fire-grupo-hm" onchange="atualizarTRRFSugerido('hm')"></select>
@@ -498,10 +531,25 @@ header{background:var(--navy);color:#fff;padding:8px 20px;min-height:64px;displa
             <small class="fire-hint" id="fire-trrf-hint-hm"></small>
           </div>
           <div class="field">
-            <label>TRRF Reduzido (min) <span class="opt">opcional · só se já aprovado em projeto</span></label>
+            <label>TRRF Reduzido (min)
+              <button type="button" class="info-btn" onclick="toggleInfo('info-trrfred-hm')" aria-label="Por que pode ser reduzido?">i</button>
+            </label>
             <input type="number" id="fire-trrfred-hm" placeholder="Ex.: 30" min="0" max="180" step="30">
+            <small class="fire-hint" id="fire-trrfred-hint-hm"></small>
+            <div id="info-trrfred-hm" class="info-pop" hidden>A NBR 15200:2024 (Anexo A — Método do Tempo Equivalente) permite reduzir o TRRF em até 30 min, desde que a edificação tenha projeto de segurança contra incêndio específico (compartimentação, brigada, chuveiros automáticos etc.) que justifique essa redução, analisado por compartimento. Preenchido aqui como sugestão (TRRF − 30 min, respeitando o mínimo de 30 min) — confirme se o seu projeto realmente tem essa análise aprovada antes de usar esse valor no dimensionamento.</div>
           </div>
         </div>
+
+        <div class="divider"></div>
+        <div class="field"><label>Direção</label>
+          <select id="hm-dir">
+            <option value="ambas">Bidirecional + Unidirecional</option>
+            <option value="B">Somente Bidirecional</option>
+            <option value="U">Somente Unidirecional</option>
+          </select></div>
+        <div class="field">
+          <label>Capa desejada (cm) <span class="opt">opcional · 4–20 cm</span></label>
+          <input type="number" id="cap-alvo-hm" placeholder="vazio = catálogo (5/7,5/10)" min="4" max="20" step="0.5"></div>
         <button class="btn-calc" onclick="calcHmin()">Calcular</button>
       </div>
     </div>
@@ -1198,25 +1246,22 @@ function popularGruposIncendio() {
   });
 }
 
-function toggleFire(tab) {
-  const block = document.getElementById(`fire-block-${tab}`);
-  const chev  = document.getElementById(`fire-chev-${tab}`);
-  const abrir = block.hidden;
-  block.hidden = !abrir;
-  chev.textContent = abrir ? '▾' : '▸';
-}
-
 function atualizarTRRFSugerido(tab) {
   const grupoSel = document.getElementById(`fire-grupo-${tab}`).value;
   const altura   = parseFloat(document.getElementById(`fire-altura-${tab}`).value);
   const hint     = document.getElementById(`fire-trrf-hint-${tab}`);
+  const hintRed  = document.getElementById(`fire-trrfred-hint-${tab}`);
   const grupo    = TRRF_GRUPOS.find(g => g.v === grupoSel);
   if (grupo && !isNaN(altura) && altura >= 0) {
     const trrf = grupo.p[classeAlturaIdx(altura)];
     document.getElementById(`fire-trrf-${tab}`).value = trrf;
-    hint.textContent = `Sugerido pela NBR 14432 (Tabela A.1): ${trrf} min`;
+    const trrfRed = Math.max(30, trrf - 30);
+    document.getElementById(`fire-trrfred-${tab}`).value = trrfRed;
+    hint.textContent = `TRRF pela NBR 14432 (Tabela A.1): ${trrf} min`;
+    hintRed.textContent = `Reduzido sugerido pela NBR 15200 (Anexo A): ${trrfRed} min`;
   } else {
     hint.textContent = '';
+    hintRed.textContent = '';
   }
 }
 
@@ -1283,6 +1328,9 @@ function calcEq() {
   }
   if (!heq_cli) return renderEqPlaceholder();
 
+  const fireCheckEq = getFireHmin('eq');
+  if (!fireCheckEq) return renderEqPlaceholder('Verificação de incêndio obrigatória: informe o Grupo de ocupação + Altura da edificação, ou o TRRF diretamente.');
+
   const vao    = parseFloat(document.getElementById('eq-vao').value) || null;
   const sc     = parseFloat(document.getElementById('eq-sc').value)  || null;
   const filtro = document.getElementById('eq-filtro').value;
@@ -1316,7 +1364,7 @@ function calcEq() {
   lastState = { source:'eq', sourceLabel:'Equivalência de Inércia',
     topU: unidir[0]||null, topB: bidir[0]||null,
     heq_cli, h_cli_real, vc_cli, tipoSecao, sc: sc||300, vao, hmin_B: hmin_bi, hmin_U: hmin_uni,
-    fireCheck: getFireHmin('eq') };
+    fireCheck: fireCheckEq };
 
   const mr = document.getElementById('eq-metrics-row');
   mr.style.display = 'flex';
@@ -1336,10 +1384,10 @@ function calcEq() {
   document.getElementById('eq-results-area').innerHTML = html;
 }
 
-function renderEqPlaceholder() {
+function renderEqPlaceholder(msg) {
   document.getElementById('eq-metrics-row').style.display = 'none';
   document.getElementById('eq-results-area').innerHTML =
-    '<div class="placeholder"><div class="ph-icon">🏗</div><p>Preencha os dados da laje para ver as sugestões.</p></div>';
+    `<div class="placeholder"><div class="ph-icon">🏗</div><p>${msg || 'Preencha os dados da laje para ver as sugestões.'}</p></div>`;
 }
 
 // ═══ TELA 2 — ALTURA MÍNIMA ══════════════════════════════════════════
@@ -1348,6 +1396,9 @@ function calcHmin() {
   const sc  = parseFloat(document.getElementById('hm-sc').value);
   const dir = document.getElementById('hm-dir').value;
   if (!vao || !sc) return renderHminPlaceholder();
+
+  const fireCheckHm = getFireHmin('hm');
+  if (!fireCheckHm) return renderHminPlaceholder('Verificação de incêndio obrigatória: informe o Grupo de ocupação + Altura da edificação, ou o TRRF diretamente.');
 
   const div_bi  = getDivisor('B', sc), div_uni = getDivisor('U', sc);
   const hmin_bi  = +(vao*100/div_bi).toFixed(1);
@@ -1378,7 +1429,7 @@ function calcHmin() {
     topU: unidir[0]||null, topB: bidir[0]||null,
     heq_cli: null, h_cli_real: hmin_uni, vc_cli: hmin_uni / 100, tipoSecao:'macica',
     sc, vao, hmin_B: hmin_bi, hmin_U: hmin_uni,
-    fireCheck: getFireHmin('hm') };
+    fireCheck: fireCheckHm };
 
   MODELOS.hmin = [];
   let html = renderTop2(bidir.slice(0,2), unidir.slice(0,2), hmin_bi, hmin_uni, dir, null, 'hmin');
@@ -1388,10 +1439,10 @@ function calcHmin() {
   document.getElementById('hm-results-area').innerHTML = html;
 }
 
-function renderHminPlaceholder() {
+function renderHminPlaceholder(msg) {
   document.getElementById('hm-metrics-row').style.display = 'none';
   document.getElementById('hm-results-area').innerHTML =
-    '<div class="placeholder"><div class="ph-icon">📏</div><p>Informe o vão e a sobrecarga para ver as fôrmas sugeridas.</p></div>';
+    `<div class="placeholder"><div class="ph-icon">📏</div><p>${msg || 'Informe o vão e a sobrecarga para ver as fôrmas sugeridas.'}</p></div>`;
 }
 
 // ═══ TOP-2 CARDS POR TIPO (bidirecional + unidirecional) ═════════════
@@ -1470,8 +1521,8 @@ function renderResultCard(e, rank, hmin, heq_cli, label) {
   const fc = lastState?.fireCheck;
   const fireBadge = fc
     ? (e.ds >= fc.hmin
-      ? `<span class="hmin-badge ok">🔥 TRRF ${fc.trrf}min: ✓ capa OK</span>`
-      : `<span class="hmin-badge fail">🔥 TRRF ${fc.trrf}min: ⚠ capa mín ${fc.hmin} cm</span>`)
+      ? `<span class="hmin-badge ok">✓ TRRF ${fc.trrf}min: capa OK</span>`
+      : `<span class="hmin-badge fail">⚠ TRRF ${fc.trrf}min: capa mín ${fc.hmin} cm</span>`)
     : '';
 
   const margem = heq_cli ? ((e.heq/heq_cli - 1)*100).toFixed(0) : null;
