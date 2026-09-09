@@ -1,13 +1,13 @@
 {
-  "name": "Atex Brasil — Calculadora de Lajes Nervuradas",
-  "short_name": "Lajes Atex",
+  "name": "Calculadora Atex",
+  "short_name": "Calculadora Atex",
   "description": "Equivalência de inércia, sugestão por altura mínima e comparativo entre laje maciça e nervurada Atex.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait-primary",
-  "background_color": "#0F172A",
-  "theme_color": "#0F172A",
+  "background_color": "#1A1A1A",
+  "theme_color": "#1A1A1A",
   "lang": "pt-BR",
   "icons": [
     {
