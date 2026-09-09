@@ -866,7 +866,7 @@ const I18N = {
     resumo_th_peso_proprio: `Peso próprio`,
     resumo_th_margem_heq: `Margem heq`,
     resumo_footer_disclaimer: `Reduções (concreto/peso) calculadas contra uma laje maciça de mesma rigidez equivalente (heq). Cobrimento de armadura (c1) e demais parâmetros de projeto estrutural são de responsabilidade do calculista.`,
-    resumo_footer_credit: `Calculadora Atex · desenvolvido por Ana Talita`,
+    resumo_footer_credit: `Calculadora Atex`,
     nota_rodape_eq: `heq = ∛(I×12/b_med) &nbsp;·&nbsp; h_mín = L×100/divisor &nbsp;·&nbsp; <span class="badge-est">~est</span> = geométrico &nbsp;·&nbsp; <span class="badge-of">of</span> = oficial Atex`,
     nota_rodape_hmin: `h_mín = L×100/divisor &nbsp;·&nbsp; Fôrmas com D ≥ h_mín`,
     txt_bidirecional: `Bidirecional`,
@@ -1024,7 +1024,7 @@ const I18N = {
     resumo_th_peso_proprio: `Peso propio`,
     resumo_th_margem_heq: `Margen heq`,
     resumo_footer_disclaimer: `Las reducciones (concreto/peso) se calculan contra una losa maciza de la misma rigidez equivalente (heq). El recubrimiento de armadura (c1) y demás parámetros de proyecto estructural son responsabilidad del calculista.`,
-    resumo_footer_credit: `Calculadora Atex · desarrollado por Ana Talita`,
+    resumo_footer_credit: `Calculadora Atex`,
     nota_rodape_eq: `heq = ∛(I×12/b_med) &nbsp;·&nbsp; h_mín = L×100/divisor &nbsp;·&nbsp; <span class="badge-est">~est</span> = geométrico &nbsp;·&nbsp; <span class="badge-of">of</span> = oficial Atex`,
     nota_rodape_hmin: `h_mín = L×100/divisor &nbsp;·&nbsp; Formas con D ≥ h_mín`,
     txt_bidirecional: `Bidireccional`,
@@ -1182,7 +1182,7 @@ const I18N = {
     resumo_th_peso_proprio: `Self-weight`,
     resumo_th_margem_heq: `heq margin`,
     resumo_footer_disclaimer: `Reductions (concrete/weight) are calculated against a solid slab of equal equivalent stiffness (heq). Reinforcement cover (c1) and other structural design parameters are the responsibility of the structural engineer.`,
-    resumo_footer_credit: `Atex Calculator · developed by Ana Talita`,
+    resumo_footer_credit: `Atex Calculator`,
     nota_rodape_eq: `heq = ∛(I×12/b_avg) &nbsp;·&nbsp; h_min = L×100/divisor &nbsp;·&nbsp; <span class="badge-est">~est</span> = geometric &nbsp;·&nbsp; <span class="badge-of">of</span> = official Atex`,
     nota_rodape_hmin: `h_min = L×100/divisor &nbsp;·&nbsp; Forms with D ≥ h_min`,
     txt_bidirecional: `Two-way`,
@@ -2106,7 +2106,23 @@ function montarResumoHtml(itens) {
   return `
   <div style="font-family:Arial,Helvetica,sans-serif;color:#1A1A1A;">
     <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #F48120;padding-bottom:12px;margin-bottom:18px;">
-      <div style="font-size:24px;font-weight:800;">atex</div>
+      <svg viewBox="0 0 1029.2 395.2" style="height:30px;width:auto;display:block;" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#231f20" d="M534.5,290.9c0,7.5-.7,12.9-2.2,16.3-2.4,5.8-7.3,10.5-14.7,14.4-6.6,3.6-13.3,5.4-20.1,5.4-17.5,0-26.2-6.8-26.2-20.5s1.8-9.4,5.4-12.2c3.6-2.8,9.9-5,18.9-6.7l20.8-3.8c8.7-1.7,14.3-2.8,16.6-3.2.4-.2.8-.3,1.3-.3.2,1.1.3,2.5.3,4.2v6.4ZM537,354.9h42.9c-3-5.5-4.8-10.4-5.4-14.7-1.1-6.2-1.6-15.5-1.6-27.8v-53.4c0-17.7-.9-29.9-2.6-36.5-5.5-21.5-25.6-32.3-60.1-32.3s-35.1,3.2-47.8,9.6c-12.7,6.4-20.8,15.5-24.5,27.2-1.7,5.3-2.8,12-3.2,20.1h39c.8-7.7,2.8-12.9,5.8-15.7,6.6-6.4,16.2-9.6,28.8-9.6s26.5,7.7,26.5,23-1.6,3.8-4.8,4.5l-16,3.2-19.8,3.2c-21.8,3.4-37.1,7.8-46.1,13.1-13.2,7.7-19.8,20.5-19.8,38.4s5.5,28.3,16.6,37.4c11.1,9.2,26.1,13.8,45.1,13.8s34-5.8,46.4-17.3l.6,13.8Z"/>
+        <path fill="#231f20" d="M605.7,332.1c.8,5.1,2.6,9.4,5.1,12.8,5.5,7.1,14.8,11,27.8,11.9,3.6.2,8.3.3,14.1.3s6.4-.1,14.1-.3l11.5-.3v-33.9h-2.6c-16.4,0-25.7-.9-28-2.7-2.2-1.8-3.4-6.3-3.4-13.6v-79.3h34.2v-32h-34.2v-48.9h-40v48.9h-22.7v32h22.7v68.6c0,19.2.4,31.4,1.3,36.5"/>
+        <path fill="#231f20" d="M725,251.9c4.3-19.2,15.8-28.8,34.5-28.8s30.7,9.7,33.9,29.1h-68.4v-.3ZM763,358.4c39.9,0,63.4-18.3,70.7-55l-40.9-1.6c-2.6,6.4-5,10.8-7.4,13.1-5.5,5.5-13.5,8.3-24,8.3-23.7,0-36.5-13.4-38.4-40.3h112.6c.2-1.9.3-4.2.3-6.7,0-26.9-6.8-48-20.5-63.3-13.6-15.3-32.3-23-56-23s-42.2,7.6-56.3,22.9c-14.1,15.2-21.1,35.6-21.1,60.9s7.3,46.7,21.9,61.9c14.6,15.3,34.3,22.9,59,22.9"/>
+        <polygon fill="#231f20" points="935.3 194.9 908.4 238.4 881.8 194.9 835.1 194.9 885.7 271.1 830 354.9 877 354.9 908.4 304 939.4 354.9 986.4 354.9 930.8 271.1 981.6 194.9 935.3 194.9"/>
+        <g>
+          <path fill="#f48120" d="M129.8,90.4c0,10.1,8.2,18.4,18.4,18.4h107.2c10.1,0,18.4-8.2,18.4-18.4v-53.6h-143.9v53.6Z"/>
+          <path fill="#f48120" d="M42.7,108.7h53.6c10.1,0,18.4-8.2,18.4-18.4v-53.6H42.7v72Z"/>
+          <path fill="#f48120" d="M288.8,90.4c0,10.1,8.2,18.4,18.4,18.4h53.6V36.8h-72v53.6Z"/>
+          <path fill="#f48120" d="M255.3,123.8h-107.2c-10.1,0-18.4,8.2-18.4,18.4v107.2c0,10.1,8.2,18.4,18.4,18.4h107.2c10.1,0,18.4-8.2,18.4-18.4v-107.2c0-10.1-8.2-18.4-18.4-18.4"/>
+          <path fill="#f48120" d="M96.3,123.8h-53.6v143.9h53.6c10.1,0,18.4-8.2,18.4-18.4v-107.2c0-10.1-8.2-18.4-18.4-18.4"/>
+          <path fill="#f48120" d="M288.8,142.2v107.2c0,10.1,8.2,18.4,18.4,18.4h53.6V123.8h-53.6c-10.1,0-18.4,8.2-18.4,18.4"/>
+          <path fill="#f48120" d="M255.3,282.9h-107.2c-10.1,0-18.4,8.2-18.4,18.4v53.6h143.9v-53.6c0-10.1-8.2-18.4-18.4-18.4"/>
+          <path fill="#f48120" d="M96.3,282.9h-53.6v72h72v-53.6c0-10.1-8.2-18.4-18.4-18.4"/>
+          <path fill="#f48120" d="M288.8,301.3v53.6h72v-72h-53.6c-10.1,0-18.4,8.2-18.4,18.4"/>
+        </g>
+      </svg>
       <div style="text-align:right;">
         <div style="font-size:16px;font-weight:700;">${t('resumo_doc_titulo')}</div>
         <div style="font-size:11px;color:#666;">${t('resumo_gerado_em', hoje)}</div>
@@ -2153,10 +2169,20 @@ function imprimirResumo() {
   styleEl.id = 'resumo-page-override';
   styleEl.textContent = '@page{size:A4 portrait;margin:16mm;}';
   document.head.appendChild(styleEl);
+
+  // Nome sugerido no "Salvar como PDF" = modelo(s) marcado(s) + data (dia-mês),
+  // em vez do título genérico da página (mesmo pra todo resumo antes disso).
+  const tituloOriginal = document.title;
+  const hoje = new Date();
+  const dataArq = String(hoje.getDate()).padStart(2, '0') + '-' + String(hoje.getMonth() + 1).padStart(2, '0');
+  const nomesArq = itens.map(it => it.nome.replace(/[^A-Za-z0-9]+/g, '')).join('_');
+  document.title = `${nomesArq}_${dataArq}`;
+
   const limpar = () => {
     document.body.classList.remove('modo-resumo');
     const el = document.getElementById('resumo-page-override');
     if (el) el.remove();
+    document.title = tituloOriginal;
     window.removeEventListener('afterprint', limpar);
   };
   window.addEventListener('afterprint', limpar);
