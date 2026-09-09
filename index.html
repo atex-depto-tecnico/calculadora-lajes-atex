@@ -26,7 +26,7 @@ try {
 :root {
   --bg:#F1F5F9; --surface:#FFFFFF; --border:#E2E8F0;
   --text:#0F172A; --muted:#64748B; --muted-light:#94A3B8;
-  --navy:#0F172A; --navy2:#1E293B;
+  --navy:#1A1A1A; --navy2:#2B2B2B;
   --accent:#D9720E; --accent-bg:#FFF4E9; --accent-border:#F8D3A0; --accent-text:#7A3E12;
   --green:#15803D; --green-bg:#DCFCE7; --green-border:#86EFAC;
   --orange:#C2410C; --orange-bg:#FFF7ED; --orange-border:#FED7AA;
@@ -39,7 +39,7 @@ try {
 [data-theme="dark"] {
   --bg:#0B1220; --surface:#151E2E; --border:#283449;
   --text:#E8ECF2; --muted:#98A6BC; --muted-light:#6C7A93;
-  --navy:#1A2436; --navy2:#0F1729;
+  --navy:#141414; --navy2:#000000;
   --accent:#E8862E; --accent-bg:#3A2A16; --accent-border:#5C4020; --accent-text:#F5B876;
   --green:#4ADE80; --green-bg:#123420; --green-border:#1F5C36;
   --orange:#FB923C; --orange-bg:#3D2413; --orange-border:#5C3A1E;
@@ -51,13 +51,13 @@ try {
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',Arial,sans-serif;background:var(--bg);color:var(--text);font-size:14px;-webkit-font-smoothing:antialiased;}
 
 /* ── HEADER ── */
-header{background:var(--navy);color:#fff;padding:8px 20px;min-height:64px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;}
+header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;}
 .hd-left{display:flex;align-items:center;}
 .hd-left svg{height:38px;width:auto;display:block;}
 .hd-title{font-size:20px;font-weight:700;letter-spacing:.2px;color:#fff;text-align:center;}
-.hd-right{display:flex;justify-content:flex-end;align-items:center;gap:8px;}
-.theme-toggle{background:transparent;border:1px solid rgba(255,255,255,.25);border-radius:8px;width:32px;height:32px;font-size:15px;cursor:pointer;color:#fff;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0;}
-.theme-toggle:hover{border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.08);}
+.hd-right{display:flex;flex-direction:row;justify-content:flex-end;align-items:center;gap:8px;}
+.hd-action-btn{flex:0 0 auto;background:transparent;border:1px solid rgba(255,255,255,.25);border-radius:6px;padding:5px 11px;font-size:11px;font-weight:600;cursor:pointer;color:#fff;text-align:center;text-decoration:none;white-space:nowrap;transition:all .15s;}
+.hd-action-btn:hover{border-color:var(--accent);background:rgba(255,255,255,.08);color:var(--accent);}
 .btn-print{padding:7px 14px;background:transparent;border:1px solid rgba(255,255,255,.2);border-radius:6px;font-size:12px;color:#94A3B8;cursor:pointer;transition:all .15s;}
 .btn-print:hover{border-color:rgba(255,255,255,.5);color:#fff;}
 .page-print-bar{display:flex;justify-content:flex-end;margin-bottom:10px;}
@@ -167,9 +167,17 @@ header{background:var(--navy);color:#fff;padding:8px 20px;min-height:64px;displa
 .hmin-badge.ok{background:var(--green-bg);color:var(--green);}
 .hmin-badge.fail{background:var(--orange-bg);color:var(--orange);}
 .fire-section-label{font-size:13px;font-weight:700;color:var(--text);margin:6px 0 10px;padding-top:14px;border-top:1px solid var(--border);}
+.acc-group{margin-bottom:12px;}
+.acc-head{width:100%;text-align:left;background:var(--bg-alt);border:1px solid var(--border);border-radius:8px;padding:11px 13px;font-size:13px;font-weight:700;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;transition:border-color .15s;}
+.acc-head:hover{border-color:var(--accent);}
+.acc-head .acc-sub{display:block;font-weight:500;font-size:11px;color:var(--muted-light);margin-top:2px;}
+.acc-head .acc-chev{color:var(--accent);font-size:12px;flex-shrink:0;}
+.acc-body{padding-top:14px;}
+.acc-body[hidden]{display:none;}
 .fire-section-label .opt{display:block;font-weight:500;font-size:11px;color:var(--muted-light);margin-top:3px;text-transform:none;letter-spacing:0;}
 .fire-block{display:flex;flex-direction:column;gap:12px;margin:0 0 12px;padding:12px;background:var(--bg-alt);border-radius:8px;border:1px solid var(--border);}
 .fire-hint{font-size:12px;font-weight:600;color:var(--accent-text);margin-top:4px;display:block;}
+.fire-note{font-size:11px;color:var(--muted-light);display:block;margin-top:2px;line-height:1.4;}
 
 /* ── TABLE SECTION (LISTA COMPLETA) ── */
 .section-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin:0;}
@@ -214,6 +222,15 @@ header{background:var(--navy);color:#fff;padding:8px 20px;min-height:64px;displa
 .result-card.best .rc-head{background:linear-gradient(135deg,var(--accent-bg) 0%,var(--surface) 100%);}
 .rc-head-top{display:flex;align-items:flex-start;gap:14px;}
 .rc-collapse-btn{background:none;border:1px solid var(--border);border-radius:6px;color:var(--muted);font-size:11px;font-weight:600;padding:4px 9px;cursor:pointer;display:inline-flex;align-items:center;gap:4px;margin-top:8px;}
+.rc-resumo-check{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;flex-shrink:0;user-select:none;}
+.rc-resumo-check input{width:15px;height:15px;accent-color:var(--accent);cursor:pointer;}
+.resumo-bar{position:sticky;bottom:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--navy);color:#fff;padding:12px 18px;border-radius:10px;box-shadow:var(--shadow-md);margin-top:16px;z-index:50;}
+.resumo-bar[hidden]{display:none;}
+.resumo-bar-text{font-size:13px;font-weight:600;}
+.resumo-bar-text b{color:var(--accent);}
+.btn-resumo-print{background:var(--accent);color:#fff;border:none;border-radius:7px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;}
+.btn-resumo-print:hover{filter:brightness(1.08);}
+.resumo-print-only{display:none;}
 .rc-collapse-btn:hover{border-color:var(--accent);color:var(--accent-text);}
 .result-card.collapsed .rc-body{display:none;}
 .rc-head-text{flex:1;min-width:0;}
@@ -278,7 +295,7 @@ header{background:var(--navy);color:#fff;padding:8px 20px;min-height:64px;displa
   header{padding:8px 12px;}
   .hd-left svg{height:28px;}
   .hd-title{font-size:15px;}
-  .theme-toggle{width:28px;height:28px;font-size:13px;}
+  .hd-action-btn{font-size:9.5px;padding:2px 7px;}
   .tabs-bar{padding:0 12px;}
   .tab-btn{padding:12px 12px;font-size:12px;}
   .main{padding:16px 12px;}
@@ -292,7 +309,7 @@ header{background:var(--navy);color:#fff;padding:8px 20px;min-height:64px;displa
   @page{ size: landscape; margin: 12mm 12mm 16mm; }
   body{background:#fff;padding-bottom:10mm;}
   header,.tabs-bar{background:var(--navy)!important;print-color-adjust:exact;}
-  .btn-calc,.btn-print,.btn-print-page,.tabs-bar,.rc-details-toggle,.cc-details-toggle,.info-btn,.info-pop,.theme-toggle{display:none!important;}
+  .btn-calc,.btn-print,.btn-print-page,.tabs-bar,.rc-details-toggle,.cc-details-toggle,.info-btn,.info-pop,.hd-action-btn{display:none!important;}
   .rc-details-body,.cc-details-body{display:block!important;}
   .grid{grid-template-columns:1fr;}
   .top2-grid,.comp-cards{grid-template-columns:1fr 1fr;}
@@ -302,6 +319,9 @@ header{background:var(--navy);color:#fff;padding:8px 20px;min-height:64px;displa
     font-size:9px;color:#94A3B8;opacity:.75;
   }
   .print-footer svg{height:13px;width:auto;}
+
+  body.modo-resumo header,body.modo-resumo .tabs-bar,body.modo-resumo .main,body.modo-resumo .print-footer{display:none!important;}
+  body.modo-resumo .resumo-print-only{display:block!important;}
 }
 </style>
 </head>
@@ -329,8 +349,8 @@ header{background:var(--navy);color:#fff;padding:8px 20px;min-height:64px;displa
   </div>
   <div class="hd-title">Calculadora Atex</div>
   <div class="hd-right">
-    <a class="theme-toggle" href="Catalogo_Atex.pdf" download aria-label="Baixar catálogo completo em PDF" title="Baixar catálogo completo (PDF)">📄</a>
-    <button class="theme-toggle" id="theme-btn" onclick="toggleTema()" aria-label="Alternar tema claro/escuro" title="Alternar tema claro/escuro">🌙</button>
+    <a class="hd-action-btn" href="Catalogo_Atex.pdf" download aria-label="Baixar catálogo completo em PDF">Baixar Catálogo Atex</a>
+    <button class="hd-action-btn" id="theme-btn" onclick="toggleTema()" aria-label="Alternar tema claro/escuro">Alterar tema</button>
   </div>
 </header>
 
@@ -348,6 +368,12 @@ header{background:var(--navy);color:#fff;padding:8px 20px;min-height:64px;displa
     <div class="card">
       <div class="card-head">Seção do Cliente</div>
       <div class="card-body">
+        <div class="acc-group">
+        <button type="button" class="acc-head" onclick="toggleAcc('acc-dados-eq')">
+          <span>Dados da Laje</span>
+          <span id="acc-dados-eq-chev" class="acc-chev">▾</span>
+        </button>
+        <div id="acc-dados-eq" class="acc-body">
         <div class="field">
           <label>Tipo de seção</label>
           <div class="toggle-group">
@@ -359,7 +385,6 @@ header{background:var(--navy);color:#fff;padding:8px 20px;min-height:64px;displa
         <div id="sec-macica" class="fields-macica">
           <svg class="sec-diagram" viewBox="0 0 360 100" role="img" aria-label="Seção maciça — laje sólida de altura/espessura">
             <rect x="20" y="30" width="230" height="40" fill="var(--muted-light)" stroke="var(--text)" stroke-width="1.5"/>
-            <line x1="20" y1="86" x2="250" y2="86" stroke="var(--muted)" stroke-width="1" stroke-dasharray="2,2"/>
             <line x1="276" y1="30" x2="276" y2="70" stroke="var(--accent)" stroke-width="1.2"/>
             <line x1="271" y1="30" x2="281" y2="30" stroke="var(--accent)" stroke-width="1.2"/>
             <line x1="271" y1="70" x2="281" y2="70" stroke="var(--accent)" stroke-width="1.2"/>
@@ -387,6 +412,12 @@ header{background:var(--navy);color:#fff;padding:8px 20px;min-height:64px;displa
             <path d="M75,64 L145,64 L127,178 L93,178 Z" fill="var(--muted-light)" stroke="var(--text)" stroke-width="1.5"/>
             <path d="M265,64 L335,64 L317,178 L283,178 Z" fill="var(--muted-light)" stroke="var(--text)" stroke-width="1.5"/>
 
+            <ellipse id="mk-bs" cx="110" cy="28" rx="42" ry="14" fill="var(--accent)" opacity="0" style="transition:opacity .15s"/>
+            <ellipse id="mk-ds" cx="407" cy="52" rx="20" ry="18" fill="var(--accent)" opacity="0" style="transition:opacity .15s"/>
+            <ellipse id="mk-d1" cx="47" cy="121" rx="20" ry="64" fill="var(--accent)" opacity="0" style="transition:opacity .15s"/>
+            <ellipse id="mk-bi" cx="110" cy="196" rx="30" ry="14" fill="var(--accent)" opacity="0" style="transition:opacity .15s"/>
+            <ellipse id="mk-eixo" cx="205" cy="222" rx="100" ry="16" fill="var(--accent)" opacity="0" style="transition:opacity .15s"/>
+
             <line x1="405" y1="40" x2="405" y2="64" stroke="var(--accent)" stroke-width="1.2"/>
             <line x1="400" y1="40" x2="410" y2="40" stroke="var(--accent)" stroke-width="1.2"/>
             <line x1="400" y1="64" x2="410" y2="64" stroke="var(--accent)" stroke-width="1.2"/>
@@ -412,22 +443,28 @@ header{background:var(--navy);color:#fff;padding:8px 20px;min-height:64px;displa
           <div class="field-hint">Dimensões da seção transversal do cliente.</div>
           <div class="field-row">
             <div class="field"><label>d1 — alt. inerte (cm)</label>
-              <input type="number" id="nerv-d1" placeholder="Ex.: 20" step="0.5"></div>
+              <input type="number" id="nerv-d1" placeholder="Ex.: 20" step="0.5" onfocus="highlightDim('d1',true)" onblur="highlightDim('d1',false)"></div>
             <div class="field"><label>ds — capa (cm)</label>
-              <input type="number" id="nerv-ds" placeholder="Ex.: 5" step="0.5"></div>
+              <input type="number" id="nerv-ds" placeholder="Ex.: 5" step="0.5" onfocus="highlightDim('ds',true)" onblur="highlightDim('ds',false)"></div>
           </div>
           <div class="field-row">
             <div class="field"><label>bi — larg. inf (cm)</label>
-              <input type="number" id="nerv-bi" placeholder="Ex.: 9" step="0.5"></div>
+              <input type="number" id="nerv-bi" placeholder="Ex.: 9" step="0.5" onfocus="highlightDim('bi',true)" onblur="highlightDim('bi',false)"></div>
             <div class="field"><label>bs — larg. sup (cm)</label>
-              <input type="number" id="nerv-bs" placeholder="Ex.: 12" step="0.5"></div>
+              <input type="number" id="nerv-bs" placeholder="Ex.: 12" step="0.5" onfocus="highlightDim('bs',true)" onblur="highlightDim('bs',false)"></div>
           </div>
           <div class="field"><label>Espaçamento entre eixos (cm)</label>
-            <input type="number" id="nerv-esp" placeholder="Ex.: 60" step="1"></div>
+            <input type="number" id="nerv-esp" placeholder="Ex.: 60" step="1" onfocus="highlightDim('eixo',true)" onblur="highlightDim('eixo',false)"></div>
+        </div>
+        </div>
         </div>
 
-        <div class="divider"></div>
-        <div class="fire-section-label">Verificação de Incêndio <span class="opt">conforme NBR 14432 (TRRF) e NBR 15200:2024 (dimensões mínimas)</span></div>
+        <div class="acc-group">
+        <button type="button" class="acc-head" onclick="toggleAcc('acc-fire-eq')">
+          <span>Verificação de Incêndio<span class="acc-sub">NBR 14432 (TRRF) + NBR 15200:2024 (dimensões mínimas)</span></span>
+          <span id="acc-fire-eq-chev" class="acc-chev">▾</span>
+        </button>
+        <div id="acc-fire-eq" class="acc-body">
         <div id="fire-block-eq" class="fire-block">
           <div class="field">
             <label>Grupo de ocupação</label>
@@ -450,9 +487,17 @@ header{background:var(--navy);color:#fff;padding:8px 20px;min-height:64px;displa
             <small class="fire-hint" id="fire-trrfred-hint-eq"></small>
             <div id="info-trrfred-eq" class="info-pop" hidden>A NBR 15200:2024 (Anexo A — Método do Tempo Equivalente) permite reduzir o TRRF em até 30 min, desde que a edificação tenha projeto de segurança contra incêndio específico (compartimentação, brigada, chuveiros automáticos etc.) que justifique essa redução, analisado por compartimento. Preenchido aqui como sugestão (TRRF − 30 min, respeitando o mínimo de 30 min) — confirme se o seu projeto realmente tem essa análise aprovada antes de usar esse valor no dimensionamento.</div>
           </div>
+          <small class="fire-note">Capa mínima = h₁, com h₂ ≥ 1 cm de camada colaborante aderida (contrapiso + argamassa + piso) somado conforme NBR 15200:2024.</small>
+        </div>
+        </div>
         </div>
 
-        <div class="divider"></div>
+        <div class="acc-group">
+        <button type="button" class="acc-head" onclick="toggleAcc('acc-opt-eq')">
+          <span>Parâmetros Opcionais<span class="acc-sub">Vão, sobrecarga, filtro, capa desejada</span></span>
+          <span id="acc-opt-eq-chev" class="acc-chev">▸</span>
+        </button>
+        <div id="acc-opt-eq" class="acc-body" hidden>
         <div class="field">
           <label>Vão L (m) <span class="opt">opcional</span></label>
           <input type="number" id="eq-vao" placeholder="Ex.: 6.5" step="0.1" min="1" max="30">
@@ -477,6 +522,8 @@ header{background:var(--navy);color:#fff;padding:8px 20px;min-height:64px;displa
           <label>Capa desejada (cm) <span class="opt">opcional · 4–20 cm</span></label>
           <input type="number" id="cap-alvo-eq" placeholder="vazio = catálogo (5/7,5/10)" min="4" max="20" step="0.5">
         </div>
+        </div>
+        </div>
         <button class="btn-calc" onclick="calcEq()">Calcular</button>
       </div>
     </div>
@@ -494,6 +541,10 @@ header{background:var(--navy);color:#fff;padding:8px 20px;min-height:64px;displa
           <small>Melhor bidirecional e unidirecional aparecem simultaneamente.</small>
         </div>
       </div>
+      <div id="resumo-bar" class="resumo-bar" hidden>
+        <div class="resumo-bar-text"><b id="resumo-count">0</b> fôrma(s) marcada(s) pro resumo</div>
+        <button class="btn-resumo-print" onclick="imprimirResumo()">🖨 Imprimir Resumo</button>
+      </div>
     </div>
   </div>
 </div>
@@ -505,6 +556,12 @@ header{background:var(--navy);color:#fff;padding:8px 20px;min-height:64px;displa
     <div class="card">
       <div class="card-head">Dados de Entrada</div>
       <div class="card-body">
+        <div class="acc-group">
+        <button type="button" class="acc-head" onclick="toggleAcc('acc-dados-hm')">
+          <span>Dados de Entrada</span>
+          <span id="acc-dados-hm-chev" class="acc-chev">▾</span>
+        </button>
+        <div id="acc-dados-hm" class="acc-body">
         <div class="field-hint">Informe o vão e a sobrecarga para encontrar as fôrmas que atendem a altura mínima.</div>
         <div class="field"><label>Vão L (m)</label>
           <input type="number" id="hm-vao" placeholder="Ex.: 7.0" step="0.1" min="1" max="30"></div>
@@ -515,7 +572,15 @@ header{background:var(--navy);color:#fff;padding:8px 20px;min-height:64px;displa
           </small>
           <div id="info-sc-hm" class="info-pop" hidden>Sobrecarga é a carga de uso da laje (pessoas, móveis, equipamentos — sem contar o peso próprio da estrutura), definida pela NBR 6120 conforme a ocupação. As 3 faixas aqui são uma simplificação prática: residencial tende a ficar até 300 kg/m², uso comercial entre 301–500, industrial acima disso. Esse valor também define o divisor usado no cálculo de h_mín. Se seu projeto já tem a sobrecarga de norma definida, use-a diretamente aqui.</div>
         </div>
-        <div class="fire-section-label">Verificação de Incêndio <span class="opt">conforme NBR 14432 (TRRF) e NBR 15200:2024 (dimensões mínimas)</span></div>
+        </div>
+        </div>
+
+        <div class="acc-group">
+        <button type="button" class="acc-head" onclick="toggleAcc('acc-fire-hm')">
+          <span>Verificação de Incêndio<span class="acc-sub">NBR 14432 (TRRF) + NBR 15200:2024 (dimensões mínimas)</span></span>
+          <span id="acc-fire-hm-chev" class="acc-chev">▾</span>
+        </button>
+        <div id="acc-fire-hm" class="acc-body">
         <div id="fire-block-hm" class="fire-block">
           <div class="field">
             <label>Grupo de ocupação</label>
@@ -538,9 +603,17 @@ header{background:var(--navy);color:#fff;padding:8px 20px;min-height:64px;displa
             <small class="fire-hint" id="fire-trrfred-hint-hm"></small>
             <div id="info-trrfred-hm" class="info-pop" hidden>A NBR 15200:2024 (Anexo A — Método do Tempo Equivalente) permite reduzir o TRRF em até 30 min, desde que a edificação tenha projeto de segurança contra incêndio específico (compartimentação, brigada, chuveiros automáticos etc.) que justifique essa redução, analisado por compartimento. Preenchido aqui como sugestão (TRRF − 30 min, respeitando o mínimo de 30 min) — confirme se o seu projeto realmente tem essa análise aprovada antes de usar esse valor no dimensionamento.</div>
           </div>
+          <small class="fire-note">Capa mínima = h₁, com h₂ ≥ 1 cm de camada colaborante aderida (contrapiso + argamassa + piso) somado conforme NBR 15200:2024.</small>
+        </div>
+        </div>
         </div>
 
-        <div class="divider"></div>
+        <div class="acc-group">
+        <button type="button" class="acc-head" onclick="toggleAcc('acc-opt-hm')">
+          <span>Parâmetros Opcionais<span class="acc-sub">Direção, capa desejada</span></span>
+          <span id="acc-opt-hm-chev" class="acc-chev">▸</span>
+        </button>
+        <div id="acc-opt-hm" class="acc-body" hidden>
         <div class="field"><label>Direção</label>
           <select id="hm-dir">
             <option value="ambas">Bidirecional + Unidirecional</option>
@@ -550,6 +623,8 @@ header{background:var(--navy);color:#fff;padding:8px 20px;min-height:64px;displa
         <div class="field">
           <label>Capa desejada (cm) <span class="opt">opcional · 4–20 cm</span></label>
           <input type="number" id="cap-alvo-hm" placeholder="vazio = catálogo (5/7,5/10)" min="4" max="20" step="0.5"></div>
+        </div>
+        </div>
         <button class="btn-calc" onclick="calcHmin()">Calcular</button>
       </div>
     </div>
@@ -573,6 +648,7 @@ header{background:var(--navy);color:#fff;padding:8px 20px;min-height:64px;displa
 
 </div><!-- /main -->
 
+<div id="resumo-print-area" class="resumo-print-only"></div>
 
 <footer class="print-footer">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1029.2 395.2" aria-hidden="true">
@@ -1164,6 +1240,7 @@ function poolMelhorCapa(tipo, cat, heqAlvo, hmin, dsMax) {
 let tipoSecao = 'macica';
 let tabAtiva  = 'eq';
 let lastState = null;
+let resumoItens = {};
 let MODELOS   = { eq: [], hmin: [] };
 
 const RANK = (a, b) => a.vc - b.vc || b.inercia - a.inercia || a.pp - b.pp;
@@ -1181,11 +1258,22 @@ function toggleInfo(id) {
   if (el) el.hidden = !el.hidden;
 }
 
+function highlightDim(dim, on) {
+  const el = document.getElementById('mk-' + dim);
+  if (el) el.setAttribute('opacity', on ? '0.3' : '0');
+}
+
+function toggleAcc(id) {
+  const body = document.getElementById(id);
+  const chev = document.getElementById(id + '-chev');
+  const abrir = body.hidden;
+  body.hidden = !abrir;
+  if (chev) chev.textContent = abrir ? '▾' : '▸';
+}
+
 // ═══ TEMA CLARO/ESCURO — persistido no navegador ═════════════════════
 function aplicarTema(tema) {
   document.documentElement.setAttribute('data-theme', tema);
-  const btn = document.getElementById('theme-btn');
-  if (btn) btn.textContent = tema === 'dark' ? '☀️' : '🌙';
   try { localStorage.setItem('atex-lajes-tema', tema); } catch (e) {}
 }
 function toggleTema() {
@@ -1222,12 +1310,17 @@ const TRRF_GRUPOS = [
   {v:'J1', label:'J-1 — Depósito (risco baixo/médio)',                 p:[30,30,30,30,60]},
   {v:'J2', label:'J-2 — Depósito (risco alto)',                        p:[60,60,90,120,120]},
 ];
-// Tabela 6/7/9/10 da NBR 15200:2024: espessura mínima de compartimentação por TRRF, em cm.
-// Vale tanto para a espessura da laje maciça quanto para a CAPA da laje nervurada — os
-// valores de h são idênticos entre lajes simplesmente apoiadas/contínuas e maciças/nervuradas
-// nessas tabelas (só o c1 varia, e c1 é cobrimento de armadura — decisão de projeto do
-// cliente, fora do escopo desta calculadora).
-const HMIN_TRRF = {30:6, 60:8, 90:10, 120:12, 180:15};
+// Tabela 6/7/9/10 da NBR 15200:2024: espessura mínima de compartimentação por TRRF, em cm
+// (30:6, 60:8, 90:10, 120:12, 180:15 na norma pura, sem camada colaborante). Vale tanto para
+// a espessura da laje maciça quanto para a CAPA da laje nervurada — os valores de h são
+// idênticos entre lajes simplesmente apoiadas/contínuas e maciças/nervuradas nessas tabelas
+// (só o c1 varia, e c1 é cobrimento de armadura — decisão de projeto do cliente, fora do
+// escopo desta calculadora).
+// Convenção prática da Atex: -1cm em cada valor, pois a instalação real sempre tem
+// contrapiso+argamassa+piso (camada colaborante aderida, 100% de eficiência pela norma —
+// Anexo/8.2.2), que soma à espessura estrutural (h1+h2). Ex.: TRRF 30min exige 6cm "no
+// concreto", mas com o acabamento padrão já presente na obra, adota-se 5cm de capa mínima.
+const HMIN_TRRF = {30:5, 60:7, 90:9, 120:11, 180:14};
 
 function classeAlturaIdx(h) {
   if (h <= 6)  return 0;
@@ -1295,6 +1388,92 @@ function setTab(tab) {
 // ═══ IMPRESSÃO — 1 botão por página, imprime só a aba ativa ══════════
 function imprimirPagina(tab) {
   setTab(tab);
+  setTimeout(() => window.print(), 60);
+}
+
+// ═══ RESUMO PARA IMPRESSÃO (só aba Equivalência) ═════════════════════
+function toggleResumoItem(key, checked, nome, tipo, d1, ds, D, redConc, redPeso, margem) {
+  if (checked) {
+    resumoItens[key] = { nome, tipo, d1, ds, D, redConc, redPeso, margem };
+  } else {
+    delete resumoItens[key];
+  }
+  atualizarBarraResumo();
+}
+
+function atualizarBarraResumo() {
+  const n = Object.keys(resumoItens).length;
+  const bar = document.getElementById('resumo-bar');
+  const count = document.getElementById('resumo-count');
+  if (count) count.textContent = n;
+  if (bar) bar.hidden = n === 0;
+}
+
+function montarResumoHtml(itens) {
+  const hoje = new Date().toLocaleDateString('pt-BR');
+  const cli = lastState || {};
+  const descCliente = cli.tipoSecao === 'macica'
+    ? `Laje maciça, ${cli.h_cli_real?.toFixed(1)} cm`
+    : `Laje nervurada, ${cli.h_cli_real?.toFixed(1)} cm (heq ${cli.heq_cli?.toFixed(1)} cm)`;
+  const fc = cli.fireCheck;
+  const trrfLinha = fc
+    ? `<div><strong>Verificação de incêndio:</strong> TRRF ${fc.trrf} min · capa mínima exigida ${fc.hmin} cm (NBR 14432 + NBR 15200:2024)</div>`
+    : '';
+
+  const linhas = itens.map(it => `
+    <tr>
+      <td style="font-weight:700;">${it.nome}</td>
+      <td>${it.tipo}</td>
+      <td style="text-align:center">${it.d1} cm</td>
+      <td style="text-align:center">${it.ds} cm</td>
+      <td style="text-align:center">${it.D} cm</td>
+      <td style="text-align:center;color:#15803D;">↓ ${it.redConc}%</td>
+      <td style="text-align:center;color:#15803D;">↓ ${it.redPeso}%</td>
+      <td style="text-align:center">${it.margem !== null && it.margem !== undefined ? '+' + it.margem + '%' : '—'}</td>
+    </tr>`).join('');
+
+  return `
+  <div style="padding:14mm;font-family:Arial,Helvetica,sans-serif;color:#1A1A1A;">
+    <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:3px solid #F48120;padding-bottom:12px;margin-bottom:18px;">
+      <div style="font-size:24px;font-weight:800;">atex</div>
+      <div style="text-align:right;">
+        <div style="font-size:16px;font-weight:700;">Resumo Técnico — Calculadora de Lajes Nervuradas</div>
+        <div style="font-size:11px;color:#666;">Gerado em ${hoje}</div>
+      </div>
+    </div>
+    <div style="font-size:12.5px;line-height:1.7;margin-bottom:18px;">
+      <div><strong>Laje do cliente:</strong> ${descCliente}</div>
+      ${trrfLinha}
+    </div>
+    <table style="width:100%;border-collapse:collapse;font-size:12px;">
+      <thead>
+        <tr style="background:#F48120;color:#fff;">
+          <th style="padding:8px;text-align:left;">Modelo</th>
+          <th style="padding:8px;text-align:left;">Tipo</th>
+          <th style="padding:8px;">Inerte</th>
+          <th style="padding:8px;">Capa</th>
+          <th style="padding:8px;">Altura total</th>
+          <th style="padding:8px;">Concreto</th>
+          <th style="padding:8px;">Peso próprio</th>
+          <th style="padding:8px;">Margem heq</th>
+        </tr>
+      </thead>
+      <tbody>${linhas}</tbody>
+    </table>
+    <div style="margin-top:18px;font-size:10px;color:#888;">Reduções (concreto/peso) calculadas contra uma laje maciça de mesma rigidez equivalente (heq). Cobrimento de armadura (c1) e demais parâmetros de projeto estrutural são de responsabilidade do calculista.</div>
+  </div>`;
+}
+
+function imprimirResumo() {
+  const itens = Object.values(resumoItens);
+  if (!itens.length) return;
+  document.getElementById('resumo-print-area').innerHTML = montarResumoHtml(itens);
+  document.body.classList.add('modo-resumo');
+  const limpar = () => {
+    document.body.classList.remove('modo-resumo');
+    window.removeEventListener('afterprint', limpar);
+  };
+  window.addEventListener('afterprint', limpar);
   setTimeout(() => window.print(), 60);
 }
 
@@ -1533,6 +1712,16 @@ function renderResultCard(e, rank, hmin, heq_cli, label) {
   const cardClass = label ? ' selected' : (rank === 1 ? ' best' : '');
   const iniciaRecolhido = !label;
 
+  const resumoKey = `${e.f}_${e.d1}_${e.ds}_${e.variante||''}_${e.t}`.replace(/\./g,'_');
+  const nomeEsc = nomeProduto(e).replace(/'/g, "\\'");
+  const resumoCheck = lastState?.source === 'eq'
+    ? `<label class="rc-resumo-check" title="Incluir esta fôrma no resumo de impressão">
+        <input type="checkbox" ${resumoItens[resumoKey] ? 'checked' : ''}
+          onchange="toggleResumoItem('${resumoKey}', this.checked, '${nomeEsc}', '${tipo}', ${e.d1}, ${e.ds}, ${e.D}, ${redConc.toFixed(1)}, ${redPeso.toFixed(1)}, ${margem ?? 'null'})">
+        Resumo
+      </label>`
+    : '';
+
   return `<div class="result-card${cardClass}${iniciaRecolhido?' collapsed':''}" id="${cardId}">
     <div class="rc-head">
       <div class="rc-head-top">
@@ -1549,6 +1738,7 @@ function renderResultCard(e, rank, hmin, heq_cli, label) {
             <span id="${cardId}-chev">${iniciaRecolhido ? '▸' : '▾'}</span> ${iniciaRecolhido ? 'Ver detalhes' : 'Recolher'}
           </button>
         </div>
+        ${resumoCheck}
       </div>
     </div>
     <div class="rc-body">
