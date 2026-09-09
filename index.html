@@ -48,6 +48,7 @@ try {
   --shadow:0 1px 3px rgba(0,0,0,.35),0 1px 2px rgba(0,0,0,.3);
   --shadow-md:0 4px 16px rgba(0,0,0,.4);
 }
+html,body{max-width:100%;overflow-x:hidden;}
 body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',Arial,sans-serif;background:var(--bg);color:var(--text);font-size:14px;-webkit-font-smoothing:antialiased;}
 
 /* ── HEADER ── */
@@ -78,12 +79,17 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
 .install-banner-install{background:#fff;color:var(--accent-text);border:none;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:700;cursor:pointer;}
 .install-banner-close{background:transparent;border:none;color:#fff;font-size:14px;cursor:pointer;padding:2px 4px;opacity:.85;}
 .install-banner-close:hover{opacity:1;}
-.hd-right{display:flex;flex-direction:row;justify-content:flex-end;align-items:center;gap:8px;}
+.hd-right{display:flex;flex-direction:row;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:8px;}
 .hd-action-btn{flex:0 0 auto;background:transparent;border:1px solid rgba(255,255,255,.25);border-radius:6px;padding:5px 11px;font-size:11px;font-weight:600;cursor:pointer;color:#fff;text-align:center;text-decoration:none;white-space:nowrap;transition:all .15s;}
 .hd-action-btn:hover{border-color:var(--accent);background:rgba(255,255,255,.08);color:var(--accent);}
-.lang-switch{display:flex;gap:4px;flex:0 0 auto;}
-.lang-btn{opacity:.6;}
-.lang-btn.active{opacity:1;border-color:var(--accent);color:var(--accent);background:rgba(255,255,255,.08);}
+.lang-switch{position:relative;flex:0 0 auto;}
+.lang-toggle{display:inline-flex;align-items:center;gap:5px;}
+.lang-toggle .lang-caret{font-size:9px;opacity:.7;}
+.lang-menu{position:absolute;top:calc(100% + 6px);right:0;background:var(--navy2);border:1px solid rgba(255,255,255,.18);border-radius:8px;box-shadow:var(--shadow-md);min-width:150px;padding:4px;z-index:60;display:none;flex-direction:column;gap:2px;}
+.lang-menu.open{display:flex;}
+.lang-menu-item{background:transparent;border:none;border-radius:6px;padding:8px 10px;font-size:12px;font-weight:600;color:#fff;text-align:left;cursor:pointer;white-space:nowrap;opacity:.7;}
+.lang-menu-item:hover{background:rgba(255,255,255,.08);opacity:1;}
+.lang-menu-item.active{opacity:1;color:var(--accent);}
 .btn-print{padding:7px 14px;background:transparent;border:1px solid rgba(255,255,255,.2);border-radius:6px;font-size:12px;color:#9C9C9C;cursor:pointer;transition:all .15s;}
 .btn-print:hover{border-color:rgba(255,255,255,.5);color:#fff;}
 .page-print-bar{display:flex;justify-content:flex-end;margin-bottom:10px;}
@@ -317,11 +323,14 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
 .geo-item .gl{font-size:10px;color:var(--muted);margin-top:2px;}
 
 /* ── RESPONSIVE ── */
-@media(max-width:500px){
-  header{padding:8px 12px;}
+@media(max-width:600px){
+  header{display:flex;flex-wrap:wrap;justify-content:center;padding:10px 12px;gap:6px 10px;}
+  .hd-left{order:1;}
+  .hd-title{order:2;font-size:15px;}
+  .hd-right{order:3;flex:1 1 100%;justify-content:center;}
   .hd-left svg{height:28px;}
-  .hd-title{font-size:15px;}
-  .hd-action-btn{font-size:9.5px;padding:2px 7px;}
+  .hd-action-btn{font-size:9.5px;padding:3px 8px;}
+  .lang-menu{right:auto;left:50%;transform:translateX(-50%);}
   .tabs-bar{padding:0 12px;}
   .tab-btn{padding:12px 12px;font-size:12px;}
   .main{padding:16px 12px;}
@@ -386,10 +395,15 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
   </div>
   <div class="hd-right">
     <a class="hd-action-btn" href="Catalogo_Atex.pdf" download data-i18n="hd_download" data-i18n-aria="hd_download_aria" aria-label="Baixar catálogo completo em PDF">Baixar Catálogo Atex</a>
-    <div class="lang-switch" role="group" data-i18n-aria="hd_lang_aria" aria-label="Alterar idioma">
-      <button type="button" class="hd-action-btn lang-btn active" data-lang="pt" onclick="setLang('pt')">PT</button>
-      <button type="button" class="hd-action-btn lang-btn" data-lang="es" onclick="setLang('es')">ES</button>
-      <button type="button" class="hd-action-btn lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+    <div class="lang-switch">
+      <button type="button" class="hd-action-btn lang-toggle" id="lang-toggle" onclick="toggleLangMenu()" aria-haspopup="true" aria-expanded="false" data-i18n-aria="hd_lang_aria" aria-label="Alterar idioma">
+        <span id="lang-toggle-label">PT</span><span class="lang-caret">▾</span>
+      </button>
+      <div class="lang-menu" id="lang-menu" role="menu">
+        <button type="button" class="lang-menu-item active" data-lang="pt" onclick="setLang('pt')" role="menuitem">PT — Português</button>
+        <button type="button" class="lang-menu-item" data-lang="es" onclick="setLang('es')" role="menuitem">ES — Español</button>
+        <button type="button" class="lang-menu-item" data-lang="en" onclick="setLang('en')" role="menuitem">EN — English</button>
+      </div>
     </div>
     <button class="hd-action-btn" id="theme-btn" onclick="toggleTema()" data-i18n="hd_theme" data-i18n-aria="hd_theme_aria" aria-label="Alternar tema claro/escuro">Alterar tema</button>
   </div>
@@ -986,7 +1000,7 @@ const I18N = {
     modal_label_principio: `Principio de Cálculo`,
     modal_principio_text: `La herramienta determina la equivalencia de rigidez (altura equivalente, h<sub>eq</sub>) entre una losa maciza de referencia y las formas nervadas del catálogo Atex, identificando los modelos que cumplen la misma capacidad resistente con reducción en el consumo de concreto y acero. De forma complementaria, calcula la altura mínima por flexión (h<sub>mín</sub>) a partir de la luz y la sobrecarga de proyecto.`,
     modal_label_base_normativa: `Base Normativa`,
-    modal_nbr6118: `<strong>NBR 6118</strong> — Principio de equivalencia de rigidez utilizado en el cálculo (módulo de referencia de 60 cm)`,
+    modal_nbr6118: `<strong>NBR 6118</strong> — Proyecto de estructuras de concreto (módulo de 60 cm, exime la verificación de flexión de la mesa)`,
     modal_label_responsavel: `Responsable Técnico`,
     footer_text: `Atex Brasil — Calculadora de Losas Nervadas · desarrollado por Ana Talita`,
     memoria_titulo: `Memoria de Cálculo`,
@@ -1144,7 +1158,7 @@ const I18N = {
     modal_label_principio: `Calculation Principle`,
     modal_principio_text: `The tool determines the stiffness equivalence (equivalent height, h<sub>eq</sub>) between a reference solid slab and the ribbed forms in the Atex catalog, identifying the models that meet the same load capacity with reduced concrete and steel consumption. It also calculates the minimum flexural height (h<sub>min</sub>) from the span and the design live load.`,
     modal_label_base_normativa: `Regulatory Basis`,
-    modal_nbr6118: `<strong>NBR 6118</strong> — Stiffness-equivalence principle used in the calculation (60 cm reference module)`,
+    modal_nbr6118: `<strong>NBR 6118</strong> — Design of concrete structures (60 cm module, waives the flange bending check)`,
     modal_label_responsavel: `Technical Contact`,
     footer_text: `Atex Brasil — Ribbed Slab Calculator · developed by Ana Talita`,
     memoria_titulo: `Calculation Memo`,
@@ -1860,10 +1874,24 @@ aplicarTema(document.documentElement.getAttribute('data-theme') === 'dark' ? 'da
 // está mostrando, pra poder retraduzir se o idioma mudar com ele aberto.
 let installBannerMode = null;
 
+function toggleLangMenu(force) {
+  const menu = document.getElementById('lang-menu');
+  const btn = document.getElementById('lang-toggle');
+  if (!menu || !btn) return;
+  const open = force !== undefined ? force : !menu.classList.contains('open');
+  menu.classList.toggle('open', open);
+  btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
+document.addEventListener('click', (e) => {
+  const wrap = e.target.closest ? e.target.closest('.lang-switch') : null;
+  if (!wrap) toggleLangMenu(false);
+});
+
 function setLang(lang) {
   if (lang !== 'pt' && lang !== 'es' && lang !== 'en') return;
   currentLang = lang;
   try { localStorage.setItem('atex-lajes-lang', lang); } catch (e) {}
+  toggleLangMenu(false);
   aplicarIdioma();
 }
 
@@ -1877,7 +1905,9 @@ function aplicarIdioma() {
   document.querySelectorAll('[data-i18n-aria]').forEach(el => { el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria'))); });
   document.querySelectorAll('[data-i18n-title]').forEach(el => { el.title = t(el.getAttribute('data-i18n-title')); });
   document.querySelectorAll('[data-fire-only]').forEach(el => { el.hidden = currentLang !== 'pt'; });
-  document.querySelectorAll('.lang-btn').forEach(btn => { btn.classList.toggle('active', btn.dataset.lang === currentLang); });
+  document.querySelectorAll('.lang-menu-item').forEach(btn => { btn.classList.toggle('active', btn.dataset.lang === currentLang); });
+  const langLabel = document.getElementById('lang-toggle-label');
+  if (langLabel) langLabel.textContent = currentLang.toUpperCase();
 
   const instTxt = document.getElementById('install-banner-text');
   if (instTxt && installBannerMode) {
