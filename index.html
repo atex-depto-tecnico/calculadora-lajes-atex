@@ -79,6 +79,9 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
 .install-banner-install{background:#fff;color:var(--accent-text);border:none;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:700;cursor:pointer;}
 .install-banner-close{background:transparent;border:none;color:#fff;font-size:14px;cursor:pointer;padding:2px 4px;opacity:.85;}
 .install-banner-close:hover{opacity:1;}
+.install-fab{position:fixed;bottom:18px;right:18px;z-index:90;display:flex;align-items:center;gap:6px;background:var(--surface);color:var(--muted);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 14px;font-size:11.5px;font-weight:600;box-shadow:var(--shadow-md);cursor:pointer;white-space:nowrap;transition:all .15s;}
+.install-fab:hover{border-color:var(--accent);color:var(--accent-text);}
+.install-fab[hidden]{display:none;}
 .hd-right{display:flex;flex-direction:row;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:8px;}
 .hd-action-btn{flex:0 0 auto;background:transparent;border:1px solid rgba(255,255,255,.25);border-radius:6px;padding:5px 11px;font-size:11px;font-weight:600;cursor:pointer;color:#fff;text-align:center;text-decoration:none;white-space:nowrap;transition:all .15s;}
 .hd-action-btn:hover{border-color:var(--accent);background:rgba(255,255,255,.08);color:var(--accent);}
@@ -344,7 +347,7 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
   @page{ size: landscape; margin: 12mm 12mm 16mm; }
   body{background:#fff;padding-bottom:10mm;}
   header,.tabs-bar{background:var(--navy)!important;print-color-adjust:exact;}
-  .btn-calc,.btn-print,.btn-print-page,.tabs-bar,.rc-details-toggle,.cc-details-toggle,.info-btn,.info-pop,.hd-action-btn,.hd-info-btn,.info-modal,.install-banner{display:none!important;}
+  .btn-calc,.btn-print,.btn-print-page,.tabs-bar,.rc-details-toggle,.cc-details-toggle,.info-btn,.info-pop,.hd-action-btn,.hd-info-btn,.info-modal,.install-banner,.install-fab{display:none!important;}
   .rc-details-body,.cc-details-body{display:block!important;}
   .grid{grid-template-columns:1fr;}
   .top2-grid,.comp-cards{grid-template-columns:1fr 1fr;}
@@ -369,6 +372,8 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
     <button class="install-banner-close" onclick="fecharBannerInstall()" data-i18n-aria="install_close_aria" aria-label="Fechar">✕</button>
   </div>
 </div>
+
+<button id="install-fab" class="install-fab" onclick="mostrarBannerInstall(!!deferredInstallPrompt, true)" data-i18n="install_btn" data-i18n-aria="install_fab_aria" aria-label="Adicionar à tela inicial" hidden>Adicionar à Tela Inicial</button>
 
 <header>
   <div class="hd-left">
@@ -595,10 +600,6 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
           <small data-i18n="ph_eq_small">Melhor bidirecional e unidirecional aparecem simultaneamente.</small>
         </div>
       </div>
-      <div id="resumo-bar" class="resumo-bar" hidden>
-        <div class="resumo-bar-text"><b id="resumo-count">0</b> <span data-i18n="resumo_bar_suffix">fôrma(s) marcada(s) pro resumo</span></div>
-        <button class="btn-resumo-print" onclick="imprimirResumo()" data-i18n="btn_resumo_print">🖨 Imprimir Resumo</button>
-      </div>
     </div>
   </div>
 </div>
@@ -700,6 +701,13 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
   </div>
 </div>
 
+<!-- compartilhada pelas 2 abas (fica fora dos .screen — resumoItens é global,
+     não faz sentido esconder a barra só porque o usuário trocou de aba) -->
+<div id="resumo-bar" class="resumo-bar" hidden>
+  <div class="resumo-bar-text"><b id="resumo-count">0</b> <span data-i18n="resumo_bar_suffix">fôrma(s) marcada(s) pro resumo</span></div>
+  <button class="btn-resumo-print" onclick="imprimirResumo()" data-i18n="btn_resumo_print">🖨 Imprimir Resumo</button>
+</div>
+
 </div><!-- /main -->
 
 <div id="resumo-print-area" class="resumo-print-only"></div>
@@ -783,6 +791,8 @@ const I18N = {
     install_btn: `Adicionar à Tela Inicial`,
     install_native_text: `Adicione a Calculadora Atex à tela inicial pra acesso rápido, como um app.`,
     install_ios_text: `Toque em Compartilhar e depois em "Adicionar à Tela de Início".`,
+    install_generic_text: `Use o menu do navegador (⋮ ou ⋯) e toque em "Instalar aplicativo" ou "Adicionar à tela inicial".`,
+    install_fab_aria: `Adicionar à tela inicial`,
     tab_eq: `Equivalência de Inércia`,
     tab_hmin: `Sugestão por h_mín`,
     card_client_section: `Seção do Cliente`,
@@ -866,6 +876,8 @@ const I18N = {
     resumo_doc_titulo: `Resumo Técnico — Calculadora de Lajes Nervuradas`,
     resumo_gerado_em: (data) => `Gerado em ${data}`,
     resumo_laje_cliente_lbl: `Laje do cliente:`,
+    resumo_dados_hmin_lbl: `Dados do projeto:`,
+    resumo_dados_hmin_desc: (vao, sc) => `Vão ${vao} m · Sobrecarga ${sc} kg/m² (sugestão por h_mín, sem laje de referência)`,
     resumo_desc_macica: (h) => `Laje maciça, ${h.toFixed(1)} cm`,
     resumo_desc_nervurada: (h, heq) => `Laje nervurada, ${h.toFixed(1)} cm (heq ${heq.toFixed(1)} cm)`,
     resumo_th_modelo: `Modelo`,
@@ -941,6 +953,8 @@ const I18N = {
     install_btn: `Añadir a pantalla de inicio`,
     install_native_text: `Añade la Calculadora Atex a tu pantalla de inicio para acceso rápido, como una app.`,
     install_ios_text: `Toca en Compartir y luego en "Añadir a pantalla de inicio".`,
+    install_generic_text: `Usa el menú del navegador (⋮ o ⋯) y toca en "Instalar aplicación" o "Añadir a pantalla de inicio".`,
+    install_fab_aria: `Añadir a pantalla de inicio`,
     tab_eq: `Equivalencia de Inercia`,
     tab_hmin: `Sugerencia por h_mín`,
     card_client_section: `Sección del Cliente`,
@@ -1024,6 +1038,8 @@ const I18N = {
     resumo_doc_titulo: `Resumen Técnico — Calculadora de Losas Nervadas`,
     resumo_gerado_em: (data) => `Generado el ${data}`,
     resumo_laje_cliente_lbl: `Losa del cliente:`,
+    resumo_dados_hmin_lbl: `Datos del proyecto:`,
+    resumo_dados_hmin_desc: (vao, sc) => `Luz ${vao} m · Sobrecarga ${sc} kg/m² (sugerencia por h_mín, sin losa de referencia)`,
     resumo_desc_macica: (h) => `Losa maciza, ${h.toFixed(1)} cm`,
     resumo_desc_nervurada: (h, heq) => `Losa nervada, ${h.toFixed(1)} cm (heq ${heq.toFixed(1)} cm)`,
     resumo_th_modelo: `Modelo`,
@@ -1099,6 +1115,8 @@ const I18N = {
     install_btn: `Add to Home Screen`,
     install_native_text: `Add the Atex Calculator to your home screen for quick access, like an app.`,
     install_ios_text: `Tap Share, then "Add to Home Screen".`,
+    install_generic_text: `Use your browser's menu (⋮ or ⋯) and tap "Install app" or "Add to Home Screen".`,
+    install_fab_aria: `Add to Home Screen`,
     tab_eq: `Inertia Equivalence`,
     tab_hmin: `Suggestion by h_min`,
     card_client_section: `Client Section`,
@@ -1182,6 +1200,8 @@ const I18N = {
     resumo_doc_titulo: `Technical Summary — Ribbed Slab Calculator`,
     resumo_gerado_em: (data) => `Generated on ${data}`,
     resumo_laje_cliente_lbl: `Client's slab:`,
+    resumo_dados_hmin_lbl: `Project data:`,
+    resumo_dados_hmin_desc: (vao, sc) => `Span ${vao} m · Live load ${sc} kg/m² (h_min suggestion, no reference slab)`,
     resumo_desc_macica: (h) => `Solid slab, ${h.toFixed(1)} cm`,
     resumo_desc_nervurada: (h, heq) => `Ribbed slab, ${h.toFixed(1)} cm (heq ${heq.toFixed(1)} cm)`,
     resumo_th_modelo: `Model`,
@@ -1944,7 +1964,7 @@ function aplicarIdioma() {
 
   const instTxt = document.getElementById('install-banner-text');
   if (instTxt && installBannerMode) {
-    instTxt.textContent = installBannerMode === 'native' ? t('install_native_text') : t('install_ios_text');
+    instTxt.textContent = installBannerMode === 'native' ? t('install_native_text') : installBannerMode === 'ios' ? t('install_ios_text') : t('install_generic_text');
   }
 
   // re-renderiza a área de resultados no novo idioma — inclusive quando o estado atual é
@@ -2081,22 +2101,31 @@ function atualizarBarraResumo() {
   const count = document.getElementById('resumo-count');
   if (count) count.textContent = n;
   if (bar) bar.hidden = n === 0;
+  // a barra de resumo ocupa o mesmo canto inferior do botão fixo de instalação —
+  // evita os dois sobrepostos na tela.
+  atualizarInstallFab();
 }
 
 function montarMemoriaCalculo() {
   const cli = lastState || {};
+  // heq só existe quando vem da aba Equivalência (laje real do cliente). Na aba
+  // Sugestão por h_mín, tipoSecao/h_cli_real são reaproveitados internamente pro
+  // cálculo (não representam uma laje real) — mostrar a fórmula de heq aqui seria
+  // inventar uma memória de cálculo pra um dado que o cliente nunca informou.
   let heqCalc = '';
-  if (cli.tipoSecao === 'macica') {
-    heqCalc = t('memoria_heq_macica', cli.h_cli_real || 0);
-  } else {
-    const d1  = parseFloat(document.getElementById('nerv-d1').value);
-    const ds  = parseFloat(document.getElementById('nerv-ds').value) || 0;
-    const bi  = parseFloat(document.getElementById('nerv-bi').value);
-    const bs  = parseFloat(document.getElementById('nerv-bs').value);
-    const esp = parseFloat(document.getElementById('nerv-esp').value);
-    if (d1 && bi && bs && esp) {
-      const I = calcInerciaGeom(bi, bs, d1, ds, esp);
-      heqCalc = t('memoria_heq_nervurada', I, bi, bs, d1, ds, esp, cli.heq_cli || 0);
+  if (cli.source === 'eq') {
+    if (cli.tipoSecao === 'macica') {
+      heqCalc = t('memoria_heq_macica', cli.h_cli_real || 0);
+    } else {
+      const d1  = parseFloat(document.getElementById('nerv-d1').value);
+      const ds  = parseFloat(document.getElementById('nerv-ds').value) || 0;
+      const bi  = parseFloat(document.getElementById('nerv-bi').value);
+      const bs  = parseFloat(document.getElementById('nerv-bs').value);
+      const esp = parseFloat(document.getElementById('nerv-esp').value);
+      if (d1 && bi && bs && esp) {
+        const I = calcInerciaGeom(bi, bs, d1, ds, esp);
+        heqCalc = t('memoria_heq_nervurada', I, bi, bs, d1, ds, esp, cli.heq_cli || 0);
+      }
     }
   }
 
@@ -2117,9 +2146,12 @@ function montarMemoriaCalculo() {
 function montarResumoHtml(itens) {
   const hoje = new Date().toLocaleDateString(numLocale());
   const cli = lastState || {};
-  const descCliente = cli.tipoSecao === 'macica'
-    ? t('resumo_desc_macica', cli.h_cli_real || 0)
-    : t('resumo_desc_nervurada', cli.h_cli_real || 0, cli.heq_cli || 0);
+  // Vindo da Sugestão por h_mín não existe laje real do cliente (só vão+sobrecarga
+  // informados) — h_cli_real/tipoSecao nesse caso são valores internos reaproveitados
+  // pro cálculo, não uma laje real, então não podem virar "Laje do cliente: ...".
+  const clienteLinha = cli.source === 'eq'
+    ? `<div><strong>${t('resumo_laje_cliente_lbl')}</strong> ${cli.tipoSecao === 'macica' ? t('resumo_desc_macica', cli.h_cli_real || 0) : t('resumo_desc_nervurada', cli.h_cli_real || 0, cli.heq_cli || 0)}</div>`
+    : `<div><strong>${t('resumo_dados_hmin_lbl')}</strong> ${t('resumo_dados_hmin_desc', cli.vao || 0, cli.sc || 0)}</div>`;
   const fc = cli.fireCheck;
   const trrfLinha = fc
     ? `<div><strong>Verificação de incêndio:</strong> TRRF ${fc.trrf} min · capa mínima exigida ${fc.hmin} cm (NBR 14432 + NBR 15200:2024)</div>`
@@ -2163,7 +2195,7 @@ function montarResumoHtml(itens) {
       </div>
     </div>
     <div style="font-size:12.5px;line-height:1.7;margin-bottom:18px;">
-      <div><strong>${t('resumo_laje_cliente_lbl')}</strong> ${descCliente}</div>
+      ${clienteLinha}
       ${trrfLinha}
     </div>
     ${montarMemoriaCalculo()}
@@ -2471,13 +2503,13 @@ function renderResultCard(e, rank, hmin, heq_cli, label) {
 
   const resumoKey = `${e.f}_${e.d1}_${e.ds}_${e.variante||''}_${e.t}`.replace(/\./g,'_');
   const nomeEsc = nomeProduto(e).replace(/'/g, "\\'");
-  const resumoCheck = lastState?.source === 'eq'
-    ? `<label class="rc-resumo-check" title="${t('resumo_check_title')}">
+  // Disponível nas 2 abas (Equivalência e Sugestão por h_mín) — montarResumoHtml()
+  // e montarMemoriaCalculo() já tratam os dois casos sem inventar laje de cliente.
+  const resumoCheck = `<label class="rc-resumo-check" title="${t('resumo_check_title')}">
         <input type="checkbox" ${resumoItens[resumoKey] ? 'checked' : ''}
           onchange="toggleResumoItem('${resumoKey}', this.checked, '${nomeEsc}', '${tipo}', ${e.d1}, ${e.ds}, ${e.D}, ${redConc.toFixed(1)}, ${redPeso.toFixed(1)}, ${margem ?? 'null'})">
         ${t('resumo_check_label')}
-      </label>`
-    : '';
+      </label>`;
 
   return `<div class="result-card${cardClass}${iniciaRecolhido?' collapsed':''}" id="${cardId}">
     <div class="rc-head">
@@ -2662,9 +2694,15 @@ function isIOSDevice() {
   return /iphone|ipad|ipod/i.test(navigator.userAgent) && !window.MSStream;
 }
 
-function mostrarBannerInstall(temPromptNativo) {
+// force=true ignora o "já dispensei antes" (localStorage) e o "sem prompt nativo
+// nem iOS" — usado pelo botão fixo, que existe justamente pra funcionar mesmo
+// quando o banner automático não apareceu sozinho (heurística do navegador,
+// ou já dispensado numa visita anterior).
+function mostrarBannerInstall(temPromptNativo, force) {
   if (isStandalonePWA()) return;
-  try { if (localStorage.getItem('atex-lajes-install-dismiss') === '1') return; } catch (e) {}
+  if (!force) {
+    try { if (localStorage.getItem('atex-lajes-install-dismiss') === '1') return; } catch (e) {}
+  }
   const banner = document.getElementById('install-banner');
   const txt    = document.getElementById('install-banner-text');
   const btn    = document.getElementById('install-banner-btn');
@@ -2676,10 +2714,21 @@ function mostrarBannerInstall(temPromptNativo) {
     installBannerMode = 'ios';
     txt.textContent = t('install_ios_text');
     btn.hidden = true;
+  } else if (force) {
+    installBannerMode = 'generic';
+    txt.textContent = t('install_generic_text');
+    btn.hidden = true;
   } else {
     return;
   }
   banner.hidden = false;
+}
+
+function atualizarInstallFab() {
+  const fab = document.getElementById('install-fab');
+  if (!fab) return;
+  const resumoBarVisivel = !document.getElementById('resumo-bar')?.hidden;
+  fab.hidden = isStandalonePWA() || resumoBarVisivel;
 }
 
 function instalarPWA() {
@@ -2702,9 +2751,13 @@ window.addEventListener('beforeinstallprompt', (e) => {
   mostrarBannerInstall(true);
 });
 
+window.addEventListener('appinstalled', atualizarInstallFab);
+
 if (isIOSDevice() && !isStandalonePWA()) {
   setTimeout(() => mostrarBannerInstall(false), 1500);
 }
+
+atualizarInstallFab();
 </script>
 </body>
 </html>
