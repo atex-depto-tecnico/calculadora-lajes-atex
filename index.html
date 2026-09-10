@@ -135,7 +135,8 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
 .toggle-group button.active{background:var(--navy);color:#fff;}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .field-hint{background:var(--accent-bg);border-left:3px solid var(--accent);padding:9px 12px;border-radius:0 6px 6px 0;font-size:12px;color:var(--accent-text);margin-bottom:14px;line-height:1.5;}
-.sec-diagram{width:100%;height:auto;display:block;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 0;margin-bottom:12px;}
+.sec-diagram{width:100%;height:auto;display:block;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:6px 0;margin-bottom:12px;cursor:zoom-in;transition:border-color .15s;}
+.sec-diagram:hover{border-color:var(--accent);}
 .btn-calc{width:100%;padding:14px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius-sm);font-size:16px;font-weight:800;cursor:pointer;letter-spacing:.3px;transition:filter .15s;box-shadow:var(--shadow-md);}
 .btn-calc:hover{filter:brightness(1.08);}
 .divider{height:1px;background:var(--border);margin:14px 0;}
@@ -436,7 +437,7 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
         </div>
 
         <div id="sec-macica" class="fields-macica">
-          <svg class="sec-diagram" viewBox="0 0 360 100" role="img" data-i18n-aria="svg_macica_aria" aria-label="Seção maciça — laje sólida de altura/espessura">
+          <svg class="sec-diagram" viewBox="0 0 360 100" role="img" tabindex="0" data-i18n-aria="svg_macica_aria" aria-label="Seção maciça — laje sólida de altura/espessura" onclick="toggleDiagramZoom(true, this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleDiagramZoom(true, this);}">
             <rect x="20" y="30" width="230" height="40" fill="var(--muted-light)" stroke="var(--text)" stroke-width="1.5"/>
             <line x1="276" y1="30" x2="276" y2="70" stroke="var(--accent)" stroke-width="1.2"/>
             <line x1="271" y1="30" x2="281" y2="30" stroke="var(--accent)" stroke-width="1.2"/>
@@ -455,7 +456,7 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
         </div>
 
         <div id="sec-nervurada" class="fields-nervurada">
-          <svg class="sec-diagram" viewBox="0 0 430 235" role="img" data-i18n-aria="svg_nervurada_aria" aria-label="Seção nervurada — capa (ds), altura do inerte (d1), largura superior (bs), largura inferior (bi) e eixo (espaçamento entre eixos)">
+          <svg class="sec-diagram" viewBox="0 0 430 235" role="img" tabindex="0" data-i18n-aria="svg_nervurada_aria" aria-label="Seção nervurada — capa (ds), altura do inerte (d1), largura superior (bs), largura inferior (bi) e eixo (espaçamento entre eixos)" onclick="toggleDiagramZoom(true, this)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleDiagramZoom(true, this);}">
             <line x1="75" y1="30" x2="145" y2="30" stroke="var(--accent)" stroke-width="1"/>
             <line x1="75" y1="26" x2="75" y2="34" stroke="var(--accent)" stroke-width="1"/>
             <line x1="145" y1="26" x2="145" y2="34" stroke="var(--accent)" stroke-width="1"/>
@@ -727,6 +728,16 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
         <p>Ana Talita — <a href="mailto:ana.pereira@atex.com.br">ana.pereira@atex.com.br</a></p>
       </div>
     </div>
+  </div>
+</div>
+
+<div class="info-modal" id="diagram-modal" onclick="if(event.target===this)toggleDiagramZoom(false)">
+  <div class="info-modal-inner" style="max-width:600px;">
+    <div class="info-modal-head">
+      <strong id="diagram-modal-title"></strong>
+      <button class="info-modal-close" onclick="toggleDiagramZoom(false)" data-i18n="modal_close">Fechar ✕</button>
+    </div>
+    <div class="info-modal-body" id="diagram-modal-body" style="display:flex;justify-content:center;padding:24px;"></div>
   </div>
 </div>
 
@@ -1835,6 +1846,29 @@ document.addEventListener('wheel', () => {
 
 function toggleInfoModal(open) {
   document.getElementById('info-modal').classList.toggle('open', open);
+}
+
+// Zoom dos diagramas de seção (maciça/nervurada): clona o SVG clicado pro modal,
+// bem maior, reaproveitando o aria-label já traduzido como título. Remove os ids
+// do clone (mk-bs/mk-ds/...) pra não duplicar id no documento — o clone é só
+// visual, não precisa dos marcadores de destaque por foco de campo.
+function toggleDiagramZoom(open, svgEl) {
+  const modal = document.getElementById('diagram-modal');
+  if (open && svgEl) {
+    const clone = svgEl.cloneNode(true);
+    clone.removeAttribute('class');
+    clone.removeAttribute('tabindex');
+    clone.removeAttribute('onclick');
+    clone.removeAttribute('onkeydown');
+    clone.style.width = '100%';
+    clone.style.height = 'auto';
+    clone.querySelectorAll('[id]').forEach(el => el.removeAttribute('id'));
+    const body = document.getElementById('diagram-modal-body');
+    body.innerHTML = '';
+    body.appendChild(clone);
+    document.getElementById('diagram-modal-title').textContent = svgEl.getAttribute('aria-label') || '';
+  }
+  modal.classList.toggle('open', open);
 }
 
 function toggleInfo(id) {
