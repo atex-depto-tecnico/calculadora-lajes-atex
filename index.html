@@ -20,6 +20,11 @@ try {
     document.documentElement.setAttribute('data-theme', 'dark');
   }
 } catch (e) {}
+// mesma lógica pro zoom (tamanho da tela) — acessibilidade, evita flash de tamanho
+try {
+  const z = parseInt(localStorage.getItem('atex-lajes-zoom'), 10);
+  if (z && z !== 100) document.documentElement.style.zoom = (z / 100);
+} catch (e) {}
 </script>
 
 <style>
@@ -90,6 +95,13 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
 .lang-menu-item{background:transparent;border:none;border-radius:6px;padding:8px 10px;font-size:12px;font-weight:600;color:#fff;text-align:left;cursor:pointer;white-space:nowrap;opacity:.7;}
 .lang-menu-item:hover{background:rgba(255,255,255,.08);opacity:1;}
 .lang-menu-item.active{opacity:1;color:var(--accent);}
+.zoom-control{display:flex;flex-direction:column;gap:6px;padding:8px 10px 10px;margin-bottom:4px;border-bottom:1px solid rgba(255,255,255,.14);}
+.zoom-label{font-size:10.5px;font-weight:700;color:#fff;opacity:.6;text-transform:uppercase;letter-spacing:.4px;white-space:nowrap;}
+.zoom-buttons{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.zoom-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:6px;color:#fff;font-size:13px;font-weight:700;width:30px;height:30px;line-height:1;cursor:pointer;flex:0 0 auto;}
+.zoom-btn:hover:not(:disabled){background:rgba(255,255,255,.2);}
+.zoom-btn:disabled{opacity:.3;cursor:not-allowed;}
+.zoom-pct{font-size:12px;font-weight:700;color:#fff;opacity:.9;min-width:38px;text-align:center;}
 .btn-print{padding:7px 14px;background:transparent;border:1px solid rgba(255,255,255,.2);border-radius:6px;font-size:12px;color:#9C9C9C;cursor:pointer;transition:all .15s;}
 .btn-print:hover{border-color:rgba(255,255,255,.5);color:#fff;}
 .page-print-bar{display:flex;justify-content:flex-end;margin-bottom:10px;}
@@ -406,6 +418,14 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
     <div class="lang-switch">
       <button type="button" class="hd-action-btn lang-toggle" id="more-toggle" onclick="toggleMoreMenu()" aria-haspopup="true" aria-expanded="false" data-i18n-aria="more_menu_aria" aria-label="Mais opções">⋮</button>
       <div class="lang-menu" id="more-menu" role="menu">
+        <div class="zoom-control">
+          <span class="zoom-label" data-i18n="hd_zoom_label">Tamanho da tela</span>
+          <div class="zoom-buttons">
+            <button type="button" class="zoom-btn" id="zoom-out-btn" onclick="ajustarZoom(-10)" data-i18n-aria="hd_zoom_out_aria" aria-label="Diminuir tamanho da tela">A−</button>
+            <span class="zoom-pct" id="zoom-pct-label">100%</span>
+            <button type="button" class="zoom-btn" id="zoom-in-btn" onclick="ajustarZoom(10)" data-i18n-aria="hd_zoom_in_aria" aria-label="Aumentar tamanho da tela">A+</button>
+          </div>
+        </div>
         <a class="lang-menu-item" href="Catalogo_Atex.pdf" download data-i18n="hd_download" data-i18n-aria="hd_download_aria" aria-label="Baixar catálogo completo em PDF" role="menuitem" onclick="toggleMoreMenu(false)">Baixar Catálogo Atex</a>
         <button type="button" class="lang-menu-item" id="theme-btn" onclick="toggleTema();toggleMoreMenu(false);" data-i18n="hd_theme" data-i18n-aria="hd_theme_aria" aria-label="Alternar tema claro/escuro" role="menuitem">Alterar tema</button>
         <button type="button" class="lang-menu-item" onclick="imprimirPagina(tabAtiva);toggleMoreMenu(false);" data-i18n="btn_print_page" role="menuitem">🖨 Imprimir esta página</button>
@@ -786,6 +806,9 @@ const I18N = {
     hd_download_aria: `Baixar catálogo completo em PDF`,
     hd_theme: `Alterar tema`,
     hd_theme_aria: `Alternar tema claro/escuro`,
+    hd_zoom_label: `Tamanho da tela`,
+    hd_zoom_out_aria: `Diminuir tamanho da tela`,
+    hd_zoom_in_aria: `Aumentar tamanho da tela`,
     hd_lang_aria: `Alterar idioma`,
     install_close_aria: `Fechar`,
     install_btn: `Adicionar à Tela Inicial`,
@@ -949,6 +972,9 @@ const I18N = {
     hd_download_aria: `Descargar catálogo completo en PDF`,
     hd_theme: `Cambiar tema`,
     hd_theme_aria: `Alternar tema claro/oscuro`,
+    hd_zoom_label: `Tamaño de la pantalla`,
+    hd_zoom_out_aria: `Reducir tamaño de la pantalla`,
+    hd_zoom_in_aria: `Aumentar tamaño de la pantalla`,
     hd_lang_aria: `Cambiar idioma`,
     install_close_aria: `Cerrar`,
     install_btn: `Añadir a pantalla de inicio`,
@@ -1112,6 +1138,9 @@ const I18N = {
     hd_download_aria: `Download full catalog as PDF`,
     hd_theme: `Toggle theme`,
     hd_theme_aria: `Toggle light/dark theme`,
+    hd_zoom_label: `Screen size`,
+    hd_zoom_out_aria: `Decrease screen size`,
+    hd_zoom_in_aria: `Increase screen size`,
     hd_lang_aria: `Change language`,
     install_close_aria: `Close`,
     install_btn: `Add to Home Screen`,
@@ -1923,6 +1952,26 @@ function toggleTema() {
 }
 // sincroniza o ícone do botão com o tema já aplicado (definido no <head>)
 aplicarTema(document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
+
+// ═══ ZOOM DA TELA — acessibilidade (ícones/texto maiores), persistido ════════
+// Ana pediu (09/09): permitir aumentar o tamanho da página pra ícones não
+// ficarem pequenos demais e a ferramenta se adaptar a diferentes faixas etárias.
+const ZOOM_MIN = 90, ZOOM_MAX = 160, ZOOM_STEP = 10;
+let zoomAtual = 100;
+function aplicarZoom(pct) {
+  zoomAtual = Math.max(ZOOM_MIN, Math.min(ZOOM_MAX, pct));
+  document.documentElement.style.zoom = (zoomAtual / 100);
+  try { localStorage.setItem('atex-lajes-zoom', zoomAtual); } catch (e) {}
+  const lbl = document.getElementById('zoom-pct-label');
+  if (lbl) lbl.textContent = zoomAtual + '%';
+  const outBtn = document.getElementById('zoom-out-btn');
+  const inBtn  = document.getElementById('zoom-in-btn');
+  if (outBtn) outBtn.disabled = zoomAtual <= ZOOM_MIN;
+  if (inBtn)  inBtn.disabled  = zoomAtual >= ZOOM_MAX;
+}
+function ajustarZoom(delta) { aplicarZoom(zoomAtual + delta); }
+// sincroniza rótulo/botões com o valor já aplicado no <head> (evita flash)
+aplicarZoom(parseInt(localStorage.getItem('atex-lajes-zoom'), 10) || 100);
 
 // ═══ IDIOMA — PT/ES/EN, persistido no navegador ══════════════════════
 // Verificação de Incêndio é exclusiva do PT (normas brasileiras) — ver
