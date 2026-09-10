@@ -2078,6 +2078,22 @@ const TRRF_GRUPOS = [
 // presente na obra, adota-se 5cm de capa mínima.
 const HMIN_TRRF = {30:5, 60:7, 90:9, 120:11, 180:14};
 
+// RESISTÊNCIA ESTRUTURAL (condição separada da compartimentação acima) — NBR 15200:2024:
+// largura mínima da nervura (b mín, medida na altura do centro geométrico da armação) + C1
+// (cobrimento). Fonte: mesmo boletim técnico oficial Atex "Dimensionamento de Lajes
+// Nervuradas em Situação de Incêndio" (atexformwork.com/wp-content/uploads/2025/10/), tabela
+// "RESISTÊNCIA": 30min=80/10mm, 60min=100/25mm, 90min=120/35mm, 120min=160/45mm. O boletim
+// cruza essa exigência com uma lista específica de quais famílias/moldes Atex atendem cada
+// faixa (varia por família — ex.: família 875 bidirecional não atende a 60min mas atende a
+// 90min; família 600 só atende com d1=18, não com d1=15) — não reproduzido aqui pra não achatar
+// nuance real por molde. Em vez disso, aproxima-se `b mín` pela largura inferior da nervura do
+// catálogo (`bi`, decisão de Ana em 10/09) — mais simples, mas não é o valor exato da norma
+// (que mede na altura do centro da armação, não na face inferior); trata C1 como fora do
+// escopo (cobrimento é decisão de projeto estrutural do cliente, catálogo não tem esse dado).
+// Não há dado oficial confirmado pra 180min nesta fonte — usa o mesmo mínimo de 120min como
+// piso conservador (NUNCA usado hoje: nenhum grupo de TRRF_GRUPOS chega a 180min automático).
+const BMIN_TRRF = {30:8, 60:10, 90:12, 120:16, 180:16};
+
 function classeAlturaIdx(h) {
   if (h <= 6)  return 0;
   if (h <= 12) return 1;
@@ -2122,7 +2138,7 @@ function getFireHmin(tab) {
   if (!efetivo) return null;
   const trrfsTabelados = [30, 60, 90, 120, 180];
   const t = trrfsTabelados.find(x => x >= efetivo) ?? 180;
-  return { trrf: efetivo, hmin: HMIN_TRRF[t] };
+  return { trrf: efetivo, hmin: HMIN_TRRF[t], bmin: BMIN_TRRF[t] };
 }
 
 function getCapaAlvo() {
@@ -2213,7 +2229,7 @@ function montarResumoHtml(itens) {
     : `<div><strong>${t('resumo_dados_hmin_lbl')}</strong> ${t('resumo_dados_hmin_desc', cli.vao || 0, cli.sc || 0)}</div>`;
   const fc = cli.fireCheck;
   const trrfLinha = fc
-    ? `<div><strong>Verificação de incêndio:</strong> TRRF ${fc.trrf} min · capa mínima exigida ${fc.hmin} cm (NBR 14432 + NBR 15200:2024)</div>`
+    ? `<div><strong>Verificação de incêndio:</strong> TRRF ${fc.trrf} min · capa mínima exigida ${fc.hmin} cm (compartimentação) · nervura mínima exigida ${fc.bmin} cm (resistência estrutural) — NBR 14432 + NBR 15200:2024</div>`
     : '';
 
   const linhas = itens.map(it => `
@@ -2548,8 +2564,15 @@ function renderResultCard(e, rank, hmin, heq_cli, label) {
   const fc = lastState?.fireCheck;
   const fireBadge = fc
     ? (e.ds >= fc.hmin
-      ? `<span class="hmin-badge ok">✓ TRRF ${fc.trrf}min: capa OK</span>`
-      : `<span class="hmin-badge fail">⚠ TRRF ${fc.trrf}min: capa mín ${fc.hmin} cm</span>`)
+      ? `<span class="hmin-badge ok">✓ TRRF ${fc.trrf}min: capa (compartimentação) OK</span>`
+      : `<span class="hmin-badge fail">⚠ TRRF ${fc.trrf}min: capa mín ${fc.hmin} cm (compartimentação)</span>`)
+    : '';
+  // Resistência estrutural — condição SEPARADA da capa (compartimentação) acima. Aproxima
+  // "b mín" da norma pela largura inferior da nervura do catálogo (bi) — ver nota em BMIN_TRRF.
+  const nervuraBadge = (fc && fc.bmin != null)
+    ? (e.bi >= fc.bmin
+      ? `<span class="hmin-badge ok">✓ TRRF ${fc.trrf}min: nervura (resistência) OK</span>`
+      : `<span class="hmin-badge fail">⚠ TRRF ${fc.trrf}min: nervura mín ${fc.bmin} cm (resistência) — atual ${e.bi} cm</span>`)
     : '';
 
   const margem = heq_cli ? ((e.heq/heq_cli - 1)*100).toFixed(0) : null;
@@ -2581,6 +2604,7 @@ function renderResultCard(e, rank, hmin, heq_cli, label) {
             <span class="rc-dims">${t('rml_inerte')} ${e.d1} cm · ${t('rml_capa')} ${e.ds} cm · ${t('rml_altura_total')} ${e.D} cm</span>
             ${hmBadge}
             ${fireBadge}
+            ${nervuraBadge}
           </div>
           <button class="rc-collapse-btn" onclick="toggleCard('${cardId}')">
             <span id="${cardId}-chev">${iniciaRecolhido ? '▸' : '▾'}</span> ${iniciaRecolhido ? t('rc_collapse_ver_detalhes') : t('rc_collapse_recolher')}
