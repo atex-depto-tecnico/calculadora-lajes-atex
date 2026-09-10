@@ -580,7 +580,7 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
             Deseja compartimentação vertical?
             <button type="button" class="info-btn" onclick="toggleInfo('info-compart-eq')" aria-label="O que é compartimentação vertical?">i</button>
           </label>
-          <div id="info-compart-eq" class="info-pop" hidden>Compartimentação vertical é a função da laje de impedir a propagação do incêndio entre pavimentos — é o que a tabela de capa/TRRF acima exige. Onde a legislação NÃO exigir isso (ex.: pisos de estacionamento com rampa aberta, edifícios com altura inferior a 12m), a capa pode seguir só o mínimo estrutural da NBR 6118 (4cm), sem depender do TRRF. Marque esta opção se o seu projeto exige compartimentação vertical: a calculadora vai sugerir só fôrmas que já atendam ao TRRF por completo (capa E nervura), em vez de só avisar se alguma não atender.</div>
+          <div id="info-compart-eq" class="info-pop" hidden>Compartimentação vertical é a função da laje de impedir a propagação do incêndio entre pavimentos. Onde a legislação NÃO exigir isso (ex.: pisos de estacionamento com rampa aberta, edifícios com altura inferior a 12m), a capa pode seguir só o mínimo estrutural da NBR 6118 (4cm), sem depender do TRRF. Marque esta opção se o seu projeto exige compartimentação vertical: a calculadora vai garantir que a capa sugerida também atenda ao TRRF automaticamente. A nervura (resistência estrutural ao fogo) já é sempre garantida nas sugestões, independente desta opção — isso não é opcional.</div>
           <small class="fire-note">Capa mínima = h₁, com h₂ ≥ 1 cm de contrapiso cimentício (camada colaborante aderida) somado, conforme NBR 15200:2024.</small>
         </div>
         </div>
@@ -697,7 +697,7 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
             Deseja compartimentação vertical?
             <button type="button" class="info-btn" onclick="toggleInfo('info-compart-hm')" aria-label="O que é compartimentação vertical?">i</button>
           </label>
-          <div id="info-compart-hm" class="info-pop" hidden>Compartimentação vertical é a função da laje de impedir a propagação do incêndio entre pavimentos — é o que a tabela de capa/TRRF acima exige. Onde a legislação NÃO exigir isso (ex.: pisos de estacionamento com rampa aberta, edifícios com altura inferior a 12m), a capa pode seguir só o mínimo estrutural da NBR 6118 (4cm), sem depender do TRRF. Marque esta opção se o seu projeto exige compartimentação vertical: a calculadora vai sugerir só fôrmas que já atendam ao TRRF por completo (capa E nervura), em vez de só avisar se alguma não atender.</div>
+          <div id="info-compart-hm" class="info-pop" hidden>Compartimentação vertical é a função da laje de impedir a propagação do incêndio entre pavimentos. Onde a legislação NÃO exigir isso (ex.: pisos de estacionamento com rampa aberta, edifícios com altura inferior a 12m), a capa pode seguir só o mínimo estrutural da NBR 6118 (4cm), sem depender do TRRF. Marque esta opção se o seu projeto exige compartimentação vertical: a calculadora vai garantir que a capa sugerida também atenda ao TRRF automaticamente. A nervura (resistência estrutural ao fogo) já é sempre garantida nas sugestões, independente desta opção — isso não é opcional.</div>
           <small class="fire-note">Capa mínima = h₁, com h₂ ≥ 1 cm de contrapiso cimentício (camada colaborante aderida) somado, conforme NBR 15200:2024.</small>
         </div>
         </div>
@@ -2403,11 +2403,13 @@ function calcEq() {
   const capaManual = getCapaAlvo();
   const cat    = capaManual ? interpolateCatalogCap(capaManual) : CATALOG;
 
-  // "Deseja compartimentação vertical?" marcado: a fôrma sugerida já nasce garantindo capa E
-  // nervura pro TRRF de incêndio, em vez de só avisar depois com o badge.
+  // Resistência estrutural (nervura) NÃO é opcional — sempre que há verificação de incêndio
+  // ativa, nunca faz sentido sugerir como "melhor" uma fôrma que não aguenta o TRRF exigido.
+  // "Deseja compartimentação vertical?" só afeta a CAPA (essa sim é condicional pela norma —
+  // legislação pode dispensar compartimentação, aí a capa vira só o mínimo estrutural NBR 6118).
   const compartVerticalEq = document.getElementById('fire-compart-vertical-eq')?.checked;
   const dsMinFireEq = (fireCheckEq && compartVerticalEq) ? fireCheckEq.hmin : null;
-  const bMinFireEq  = (fireCheckEq && compartVerticalEq) ? fireCheckEq.bmin : null;
+  const bMinFireEq  = fireCheckEq ? fireCheckEq.bmin : null;
 
   let hmin_bi=null, hmin_uni=null, div_bi=null, div_uni=null;
   if (vao && sc) {
@@ -2492,11 +2494,13 @@ function calcHmin() {
   const capaManual = getCapaAlvo();
   const cat    = capaManual ? interpolateCatalogCap(capaManual) : CATALOG;
 
-  // "Deseja compartimentação vertical?" marcado: a fôrma sugerida já nasce garantindo capa E
-  // nervura pro TRRF de incêndio, em vez de só avisar depois com o badge.
+  // Resistência estrutural (nervura) NÃO é opcional — sempre que há verificação de incêndio
+  // ativa, nunca faz sentido sugerir como "melhor" uma fôrma que não aguenta o TRRF exigido.
+  // "Deseja compartimentação vertical?" só afeta a CAPA (essa sim é condicional pela norma —
+  // legislação pode dispensar compartimentação, aí a capa vira só o mínimo estrutural NBR 6118).
   const compartVerticalHm = document.getElementById('fire-compart-vertical-hm')?.checked;
   const dsMinFireHm = (fireCheckHm && compartVerticalHm) ? fireCheckHm.hmin : null;
-  const bMinFireHm  = (fireCheckHm && compartVerticalHm) ? fireCheckHm.bmin : null;
+  const bMinFireHm  = fireCheckHm ? fireCheckHm.bmin : null;
 
   let bidir, unidir;
   if (capaManual) {
