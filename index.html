@@ -277,12 +277,20 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
 .rc-collapse-btn{background:none;border:1px solid var(--border);border-radius:6px;color:var(--muted);font-size:11px;font-weight:600;padding:4px 9px;cursor:pointer;display:inline-flex;align-items:center;gap:4px;margin-top:8px;}
 .rc-resumo-check{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;flex-shrink:0;user-select:none;}
 .rc-resumo-check input{width:15px;height:15px;accent-color:var(--accent);cursor:pointer;}
-.resumo-bar{position:sticky;bottom:0;left:0;right:0;display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--navy);color:#fff;padding:12px 18px;border-radius:10px;box-shadow:var(--shadow-md);margin-top:16px;z-index:50;}
+/* fixed de verdade (não sticky) — sem isso a barra só aparecia no fim da página,
+   depois de todos os cards, obrigando rolar a tela toda pra chegar nela */
+.resumo-bar{position:fixed;bottom:16px;left:20px;right:20px;max-width:1240px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:var(--navy);color:#fff;padding:12px 18px;border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,.3);z-index:80;}
 .resumo-bar[hidden]{display:none;}
 .resumo-bar-text{font-size:13px;font-weight:600;}
 .resumo-bar-text b{color:var(--accent);}
+.resumo-bar-actions{display:flex;align-items:center;gap:10px;}
 .btn-resumo-print{background:var(--accent);color:#fff;border:none;border-radius:7px;padding:9px 16px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;}
 .btn-resumo-print:hover{filter:brightness(1.08);}
+.btn-resumo-limpar{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:7px;padding:9px 14px;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;opacity:.85;}
+.btn-resumo-limpar:hover{opacity:1;border-color:#fff;}
+/* espaço reservado embaixo da página enquanto a barra fixa está visível, senão
+   ela cobre o final do último card */
+.main.tem-resumo-bar{padding-bottom:90px;}
 .resumo-print-only{display:none;}
 .rc-collapse-btn:hover{border-color:var(--accent);color:var(--accent-text);}
 .result-card.collapsed .rc-body{display:none;}
@@ -363,7 +371,7 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
   @page{ size: landscape; margin: 12mm 12mm 16mm; }
   body{background:#fff;padding-bottom:10mm;}
   header,.tabs-bar{background:var(--navy)!important;print-color-adjust:exact;}
-  .btn-calc,.btn-print,.btn-print-page,.tabs-bar,.rc-details-toggle,.cc-details-toggle,.info-btn,.info-pop,.hd-action-btn,.hd-info-btn,.info-modal,.install-banner{display:none!important;}
+  .btn-calc,.btn-print,.btn-print-page,.tabs-bar,.rc-details-toggle,.cc-details-toggle,.info-btn,.info-pop,.hd-action-btn,.hd-info-btn,.info-modal,.install-banner,.resumo-bar{display:none!important;}
   .rc-details-body,.cc-details-body{display:block!important;}
   .grid{grid-template-columns:1fr;}
   .top2-grid,.comp-cards{grid-template-columns:1fr 1fr;}
@@ -745,7 +753,10 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
      não faz sentido esconder a barra só porque o usuário trocou de aba) -->
 <div id="resumo-bar" class="resumo-bar" hidden>
   <div class="resumo-bar-text"><b id="resumo-count">0</b> <span data-i18n="resumo_bar_suffix">fôrma(s) marcada(s) pro resumo</span></div>
-  <button class="btn-resumo-print" onclick="imprimirResumo()" data-i18n="btn_resumo_print">🖨 Imprimir Resumo</button>
+  <div class="resumo-bar-actions">
+    <button class="btn-resumo-limpar" onclick="limparResumo()" data-i18n="btn_resumo_limpar">Limpar seleção</button>
+    <button class="btn-resumo-print" onclick="imprimirResumo()" data-i18n="btn_resumo_print">🖨 Imprimir Resumo</button>
+  </div>
 </div>
 
 </div><!-- /main -->
@@ -892,6 +903,7 @@ const I18N = {
     msg_fire_required: `Verificação de incêndio obrigatória: informe o Grupo de ocupação + Altura da edificação, ou o TRRF diretamente.`,
     msg_nenhuma_forma: `Nenhuma fôrma encontrada para os critérios informados.`,
     resumo_bar_suffix: `fôrma(s) marcada(s) pro resumo`,
+    btn_resumo_limpar: `Limpar seleção`,
     btn_resumo_print: `🖨 Imprimir Resumo`,
     hint_hm_dados: `Informe o vão e a sobrecarga para encontrar as fôrmas que atendem a altura mínima.`,
     acc_opt_sub_hm: `Direção, capa desejada`,
@@ -1058,6 +1070,7 @@ const I18N = {
     msg_fire_required: ``,
     msg_nenhuma_forma: `No se encontró ninguna forma para los criterios informados.`,
     resumo_bar_suffix: `forma(s) marcada(s) para el resumen`,
+    btn_resumo_limpar: `Borrar selección`,
     btn_resumo_print: `🖨 Imprimir Resumen`,
     hint_hm_dados: `Indique la luz y la sobrecarga para encontrar las formas que cumplen la altura mínima.`,
     acc_opt_sub_hm: `Dirección, capa deseada`,
@@ -1224,6 +1237,7 @@ const I18N = {
     msg_fire_required: ``,
     msg_nenhuma_forma: `No form found for the given criteria.`,
     resumo_bar_suffix: `form(s) marked for summary`,
+    btn_resumo_limpar: `Clear selection`,
     btn_resumo_print: `🖨 Print Summary`,
     hint_hm_dados: `Enter the span and live load to find the forms that meet the minimum height.`,
     acc_opt_sub_hm: `Direction, desired topping`,
@@ -2207,6 +2221,15 @@ function atualizarBarraResumo() {
   const count = document.getElementById('resumo-count');
   if (count) count.textContent = n;
   if (bar) bar.hidden = n === 0;
+  document.querySelector('.main')?.classList.toggle('tem-resumo-bar', n > 0);
+}
+
+// Ana pediu (10/09): botão explícito pra desmarcar tudo de uma vez, em vez de
+// perder a seleção sozinha ao clicar fora (decisão deliberada — ver aprendizados).
+function limparResumo() {
+  resumoItens = {};
+  document.querySelectorAll('.rc-resumo-check input[type="checkbox"]').forEach(cb => { cb.checked = false; });
+  atualizarBarraResumo();
 }
 
 function montarMemoriaCalculo() {
