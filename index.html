@@ -79,9 +79,6 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
 .install-banner-install{background:#fff;color:var(--accent-text);border:none;border-radius:6px;padding:5px 12px;font-size:12px;font-weight:700;cursor:pointer;}
 .install-banner-close{background:transparent;border:none;color:#fff;font-size:14px;cursor:pointer;padding:2px 4px;opacity:.85;}
 .install-banner-close:hover{opacity:1;}
-.install-fab{position:fixed;bottom:18px;right:18px;z-index:90;display:flex;align-items:center;gap:6px;background:var(--surface);color:var(--muted);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 14px;font-size:11.5px;font-weight:600;box-shadow:var(--shadow-md);cursor:pointer;white-space:nowrap;transition:all .15s;}
-.install-fab:hover{border-color:var(--accent);color:var(--accent-text);}
-.install-fab[hidden]{display:none;}
 .hd-right{display:flex;flex-direction:row;flex-wrap:wrap;justify-content:flex-end;align-items:center;gap:8px;}
 .hd-action-btn{flex:0 0 auto;background:transparent;border:1px solid rgba(255,255,255,.25);border-radius:6px;padding:5px 11px;font-size:11px;font-weight:600;cursor:pointer;color:#fff;text-align:center;text-decoration:none;white-space:nowrap;transition:all .15s;}
 .hd-action-btn:hover{border-color:var(--accent);background:rgba(255,255,255,.08);color:var(--accent);}
@@ -347,7 +344,7 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
   @page{ size: landscape; margin: 12mm 12mm 16mm; }
   body{background:#fff;padding-bottom:10mm;}
   header,.tabs-bar{background:var(--navy)!important;print-color-adjust:exact;}
-  .btn-calc,.btn-print,.btn-print-page,.tabs-bar,.rc-details-toggle,.cc-details-toggle,.info-btn,.info-pop,.hd-action-btn,.hd-info-btn,.info-modal,.install-banner,.install-fab{display:none!important;}
+  .btn-calc,.btn-print,.btn-print-page,.tabs-bar,.rc-details-toggle,.cc-details-toggle,.info-btn,.info-pop,.hd-action-btn,.hd-info-btn,.info-modal,.install-banner{display:none!important;}
   .rc-details-body,.cc-details-body{display:block!important;}
   .grid{grid-template-columns:1fr;}
   .top2-grid,.comp-cards{grid-template-columns:1fr 1fr;}
@@ -373,8 +370,6 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
   </div>
 </div>
 
-<button id="install-fab" class="install-fab" onclick="mostrarBannerInstall(!!deferredInstallPrompt, true)" data-i18n="install_btn" data-i18n-aria="install_fab_aria" aria-label="Adicionar à tela inicial" hidden>Adicionar à Tela Inicial</button>
-
 <header>
   <div class="hd-left">
     <svg xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 1029.2 395.2" role="img" aria-label="Atex Brasil">
@@ -399,7 +394,6 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
     <button type="button" class="hd-info-btn" onclick="toggleInfoModal(true)" data-i18n-aria="hd_info_aria" data-i18n-title="hd_info_aria" aria-label="Informações da ferramenta" title="Informações da ferramenta">i</button>
   </div>
   <div class="hd-right">
-    <a class="hd-action-btn" href="Catalogo_Atex.pdf" download data-i18n="hd_download" data-i18n-aria="hd_download_aria" aria-label="Baixar catálogo completo em PDF">Baixar Catálogo Atex</a>
     <div class="lang-switch">
       <button type="button" class="hd-action-btn lang-toggle" id="lang-toggle" onclick="toggleLangMenu()" aria-haspopup="true" aria-expanded="false" data-i18n-aria="hd_lang_aria" aria-label="Alterar idioma">
         <span id="lang-toggle-label">PT</span><span class="lang-caret">▾</span>
@@ -410,7 +404,15 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
         <button type="button" class="lang-menu-item" data-lang="en" onclick="setLang('en')" role="menuitem">EN — English</button>
       </div>
     </div>
-    <button class="hd-action-btn" id="theme-btn" onclick="toggleTema()" data-i18n="hd_theme" data-i18n-aria="hd_theme_aria" aria-label="Alternar tema claro/escuro">Alterar tema</button>
+    <div class="lang-switch">
+      <button type="button" class="hd-action-btn lang-toggle" id="more-toggle" onclick="toggleMoreMenu()" aria-haspopup="true" aria-expanded="false" data-i18n-aria="more_menu_aria" aria-label="Mais opções">⋮</button>
+      <div class="lang-menu" id="more-menu" role="menu">
+        <a class="lang-menu-item" href="Catalogo_Atex.pdf" download data-i18n="hd_download" data-i18n-aria="hd_download_aria" aria-label="Baixar catálogo completo em PDF" role="menuitem" onclick="toggleMoreMenu(false)">Baixar Catálogo Atex</a>
+        <button type="button" class="lang-menu-item" id="theme-btn" onclick="toggleTema();toggleMoreMenu(false);" data-i18n="hd_theme" data-i18n-aria="hd_theme_aria" aria-label="Alternar tema claro/escuro" role="menuitem">Alterar tema</button>
+        <button type="button" class="lang-menu-item" onclick="imprimirPagina(tabAtiva);toggleMoreMenu(false);" data-i18n="btn_print_page" role="menuitem">🖨 Imprimir esta página</button>
+        <button type="button" class="lang-menu-item" id="install-menu-item" onclick="mostrarBannerInstall(!!deferredInstallPrompt, true);toggleMoreMenu(false);" data-i18n="install_btn" data-i18n-aria="install_fab_aria" aria-label="Adicionar à tela inicial" role="menuitem" hidden>Adicionar à Tela Inicial</button>
+      </div>
+    </div>
   </div>
 </header>
 
@@ -606,7 +608,6 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
 
 <!-- ═══ TELA 2 — ALTURA MÍNIMA ═══ -->
 <div class="screen" id="screen-hmin">
-  <div class="page-print-bar"><button class="btn-print-page" onclick="imprimirPagina('hmin')" data-i18n="btn_print_page">🖨 Imprimir esta página</button></div>
   <div class="grid">
     <div class="card">
       <div class="card-head" data-i18n="card_dados_entrada">Dados de Entrada</div>
@@ -793,6 +794,7 @@ const I18N = {
     install_ios_text: `Toque em Compartilhar e depois em "Adicionar à Tela de Início".`,
     install_generic_text: `Use o menu do navegador (⋮ ou ⋯) e toque em "Instalar aplicativo" ou "Adicionar à tela inicial".`,
     install_fab_aria: `Adicionar à tela inicial`,
+    more_menu_aria: `Mais opções`,
     tab_eq: `Equivalência de Inércia`,
     tab_hmin: `Sugestão por h_mín`,
     card_client_section: `Seção do Cliente`,
@@ -955,6 +957,7 @@ const I18N = {
     install_ios_text: `Toca en Compartir y luego en "Añadir a pantalla de inicio".`,
     install_generic_text: `Usa el menú del navegador (⋮ o ⋯) y toca en "Instalar aplicación" o "Añadir a pantalla de inicio".`,
     install_fab_aria: `Añadir a pantalla de inicio`,
+    more_menu_aria: `Más opciones`,
     tab_eq: `Equivalencia de Inercia`,
     tab_hmin: `Sugerencia por h_mín`,
     card_client_section: `Sección del Cliente`,
@@ -1117,6 +1120,7 @@ const I18N = {
     install_ios_text: `Tap Share, then "Add to Home Screen".`,
     install_generic_text: `Use your browser's menu (⋮ or ⋯) and tap "Install app" or "Add to Home Screen".`,
     install_fab_aria: `Add to Home Screen`,
+    more_menu_aria: `More options`,
     tab_eq: `Inertia Equivalence`,
     tab_hmin: `Suggestion by h_min`,
     card_client_section: `Client Section`,
@@ -1935,9 +1939,19 @@ function toggleLangMenu(force) {
   menu.classList.toggle('open', open);
   btn.setAttribute('aria-expanded', open ? 'true' : 'false');
 }
+function toggleMoreMenu(force) {
+  const menu = document.getElementById('more-menu');
+  const btn = document.getElementById('more-toggle');
+  if (!menu || !btn) return;
+  const open = force !== undefined ? force : !menu.classList.contains('open');
+  menu.classList.toggle('open', open);
+  btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+}
 document.addEventListener('click', (e) => {
-  const wrap = e.target.closest ? e.target.closest('.lang-switch') : null;
-  if (!wrap) toggleLangMenu(false);
+  const langWrap = document.getElementById('lang-toggle')?.closest('.lang-switch');
+  const moreWrap = document.getElementById('more-toggle')?.closest('.lang-switch');
+  if (langWrap && !langWrap.contains(e.target)) toggleLangMenu(false);
+  if (moreWrap && !moreWrap.contains(e.target)) toggleMoreMenu(false);
 });
 
 function setLang(lang) {
@@ -2101,9 +2115,6 @@ function atualizarBarraResumo() {
   const count = document.getElementById('resumo-count');
   if (count) count.textContent = n;
   if (bar) bar.hidden = n === 0;
-  // a barra de resumo ocupa o mesmo canto inferior do botão fixo de instalação —
-  // evita os dois sobrepostos na tela.
-  atualizarInstallFab();
 }
 
 function montarMemoriaCalculo() {
@@ -2724,11 +2735,11 @@ function mostrarBannerInstall(temPromptNativo, force) {
   banner.hidden = false;
 }
 
+// Item "Adicionar à Tela Inicial" dentro do menu "⋮" — some sozinho se o
+// app já estiver instalado (nada a instalar de novo).
 function atualizarInstallFab() {
-  const fab = document.getElementById('install-fab');
-  if (!fab) return;
-  const resumoBarVisivel = !document.getElementById('resumo-bar')?.hidden;
-  fab.hidden = isStandalonePWA() || resumoBarVisivel;
+  const item = document.getElementById('install-menu-item');
+  if (item) item.hidden = isStandalonePWA();
 }
 
 function instalarPWA() {
