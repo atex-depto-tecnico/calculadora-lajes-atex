@@ -137,6 +137,8 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
 .info-btn{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;background:var(--accent);color:#fff;font-size:10px;font-style:italic;font-weight:700;border:none;cursor:pointer;vertical-align:middle;margin-left:4px;padding:0;line-height:1;}
 .info-btn:hover{background:var(--accent-text);}
 .info-pop{margin-top:8px;font-size:11.5px;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:9px 11px;line-height:1.55;}
+.fire-compart-check{display:flex;align-items:center;gap:8px;font-size:12.5px;font-weight:700;color:var(--text);cursor:pointer;margin-bottom:6px;}
+.fire-compart-check input{width:16px;height:16px;accent-color:var(--accent);cursor:pointer;flex-shrink:0;}
 .type-group{margin-bottom:22px;}
 .type-group-label{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:0 0 10px;display:flex;align-items:center;gap:7px;}
 .type-group-label::before{content:'';display:inline-block;width:9px;height:9px;border-radius:2px;background:currentColor;}
@@ -211,6 +213,12 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
 .hmin-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:700;}
 .hmin-badge.ok{background:var(--green-bg);color:var(--green);}
 .hmin-badge.fail{background:var(--orange-bg);color:var(--orange);}
+.fire-check-block{display:flex;flex-direction:column;gap:5px;margin-top:8px;padding-top:8px;border-top:1px dashed var(--border);}
+.fire-check-row{display:flex;align-items:flex-start;gap:6px;font-size:11.5px;font-weight:600;line-height:1.45;}
+.fire-check-row.ok{color:var(--green);}
+.fire-check-row.fail{color:var(--orange);}
+.fire-check-row .fc-icon{flex-shrink:0;}
+.fire-check-row strong{font-weight:700;}
 .fire-section-label{font-size:13px;font-weight:700;color:var(--text);margin:6px 0 10px;padding-top:14px;border-top:1px solid var(--border);}
 .acc-group{margin-bottom:12px;}
 .acc-head{width:100%;text-align:left;background:var(--bg-alt);border:1px solid var(--border);border-radius:8px;padding:11px 13px;font-size:13px;font-weight:700;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:8px;transition:border-color .15s;}
@@ -567,6 +575,12 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
             <small class="fire-hint" id="fire-trrfred-hint-eq"></small>
             <div id="info-trrfred-eq" class="info-pop" hidden>A NBR 15200:2024 (Anexo A — Método do Tempo Equivalente) permite reduzir o TRRF em até 30 min, desde que a edificação tenha projeto de segurança contra incêndio específico (compartimentação, brigada, chuveiros automáticos etc.) que justifique essa redução, analisado por compartimento. Preenchido aqui como sugestão (TRRF − 30 min, respeitando o mínimo de 30 min) — confirme se o seu projeto realmente tem essa análise aprovada antes de usar esse valor no dimensionamento.</div>
           </div>
+          <label class="fire-compart-check">
+            <input type="checkbox" id="fire-compart-vertical-eq">
+            Deseja compartimentação vertical?
+            <button type="button" class="info-btn" onclick="toggleInfo('info-compart-eq')" aria-label="O que é compartimentação vertical?">i</button>
+          </label>
+          <div id="info-compart-eq" class="info-pop" hidden>Compartimentação vertical é a função da laje de impedir a propagação do incêndio entre pavimentos — é o que a tabela de capa/TRRF acima exige. Onde a legislação NÃO exigir isso (ex.: pisos de estacionamento com rampa aberta, edifícios com altura inferior a 12m), a capa pode seguir só o mínimo estrutural da NBR 6118 (4cm), sem depender do TRRF. Marque esta opção se o seu projeto exige compartimentação vertical: a calculadora vai sugerir só fôrmas que já atendam ao TRRF por completo (capa E nervura), em vez de só avisar se alguma não atender.</div>
           <small class="fire-note">Capa mínima = h₁, com h₂ ≥ 1 cm de contrapiso cimentício (camada colaborante aderida) somado, conforme NBR 15200:2024.</small>
         </div>
         </div>
@@ -678,6 +692,12 @@ header{background:var(--navy);color:#fff;padding:10px 20px;min-height:56px;displ
             <small class="fire-hint" id="fire-trrfred-hint-hm"></small>
             <div id="info-trrfred-hm" class="info-pop" hidden>A NBR 15200:2024 (Anexo A — Método do Tempo Equivalente) permite reduzir o TRRF em até 30 min, desde que a edificação tenha projeto de segurança contra incêndio específico (compartimentação, brigada, chuveiros automáticos etc.) que justifique essa redução, analisado por compartimento. Preenchido aqui como sugestão (TRRF − 30 min, respeitando o mínimo de 30 min) — confirme se o seu projeto realmente tem essa análise aprovada antes de usar esse valor no dimensionamento.</div>
           </div>
+          <label class="fire-compart-check">
+            <input type="checkbox" id="fire-compart-vertical-hm">
+            Deseja compartimentação vertical?
+            <button type="button" class="info-btn" onclick="toggleInfo('info-compart-hm')" aria-label="O que é compartimentação vertical?">i</button>
+          </label>
+          <div id="info-compart-hm" class="info-pop" hidden>Compartimentação vertical é a função da laje de impedir a propagação do incêndio entre pavimentos — é o que a tabela de capa/TRRF acima exige. Onde a legislação NÃO exigir isso (ex.: pisos de estacionamento com rampa aberta, edifícios com altura inferior a 12m), a capa pode seguir só o mínimo estrutural da NBR 6118 (4cm), sem depender do TRRF. Marque esta opção se o seu projeto exige compartimentação vertical: a calculadora vai sugerir só fôrmas que já atendam ao TRRF por completo (capa E nervura), em vez de só avisar se alguma não atender.</div>
           <small class="fire-note">Capa mínima = h₁, com h₂ ≥ 1 cm de contrapiso cimentício (camada colaborante aderida) somado, conforme NBR 15200:2024.</small>
         </div>
         </div>
@@ -1852,18 +1872,26 @@ function candidatoComDs(entries, ds) {
     heq_fonte: 'interpolado', heq_of: null, I_of: null };
 }
 
-function melhorCapaParaGrupo(entries, heqAlvo, hmin, dsMax) {
+// dsMinFire: piso adicional de capa (cm) quando o usuário marca "Deseja compartimentação
+// vertical" — garante que a capa sugerida já nasça atendendo o TRRF de incêndio, em vez de só
+// avisar depois com o badge. bMinFire: largura mínima de nervura (cm) exigida pro mesmo TRRF —
+// como a largura da nervura é fixa por família/molde (não varia com a capa escolhida), família
+// que não atende é DESCARTADA inteira (não dá pra "consertar" só ajustando a capa). Os dois
+// parâmetros são opcionais — sem eles, comportamento idêntico a antes desta opção.
+function melhorCapaParaGrupo(entries, heqAlvo, hmin, dsMax, dsMinFire, bMinFire) {
+  if (bMinFire != null && entries[0].bi < bMinFire) return null;
   const d1 = entries[0].d1;
   const dsMinCat = entries[0].ds;
   const dsParaHmin = hmin ? Math.max(dsMinCat, +(hmin - d1).toFixed(1)) : dsMinCat;
-  for (let ds = Math.max(dsMinCat, dsParaHmin); ds <= dsMax; ds = +(ds + 0.5).toFixed(1)) {
+  const dsInicio = dsMinFire ? Math.max(dsParaHmin, dsMinFire) : dsParaHmin;
+  for (let ds = Math.max(dsMinCat, dsInicio); ds <= dsMax; ds = +(ds + 0.5).toFixed(1)) {
     const cand = candidatoComDs(entries, ds);
     if (cand.heq >= heqAlvo && (!hmin || cand.D >= hmin)) return cand;
   }
   return null;
 }
 
-function poolMelhorCapa(tipo, cat, heqAlvo, hmin, dsMax) {
+function poolMelhorCapa(tipo, cat, heqAlvo, hmin, dsMax, dsMinFire, bMinFire) {
   const grupos = {};
   for (const e of cat) {
     if (e.t !== tipo) continue;
@@ -1873,7 +1901,7 @@ function poolMelhorCapa(tipo, cat, heqAlvo, hmin, dsMax) {
   const out = [];
   for (const entries of Object.values(grupos)) {
     entries.sort((a, b) => a.ds - b.ds);
-    const cand = melhorCapaParaGrupo(entries, heqAlvo, hmin, dsMax);
+    const cand = melhorCapaParaGrupo(entries, heqAlvo, hmin, dsMax, dsMinFire, bMinFire);
     if (cand) out.push(cand);
   }
   return out;
@@ -2375,6 +2403,12 @@ function calcEq() {
   const capaManual = getCapaAlvo();
   const cat    = capaManual ? interpolateCatalogCap(capaManual) : CATALOG;
 
+  // "Deseja compartimentação vertical?" marcado: a fôrma sugerida já nasce garantindo capa E
+  // nervura pro TRRF de incêndio, em vez de só avisar depois com o badge.
+  const compartVerticalEq = document.getElementById('fire-compart-vertical-eq')?.checked;
+  const dsMinFireEq = (fireCheckEq && compartVerticalEq) ? fireCheckEq.hmin : null;
+  const bMinFireEq  = (fireCheckEq && compartVerticalEq) ? fireCheckEq.bmin : null;
+
   let hmin_bi=null, hmin_uni=null, div_bi=null, div_uni=null;
   if (vao && sc) {
     div_bi  = getDivisor('B', sc); div_uni = getDivisor('U', sc);
@@ -2391,12 +2425,12 @@ function calcEq() {
 
   let bidir, unidir;
   if (capaManual) {
-    bidir  = filtro === 'U' ? [] : cat.filter(e => e.t==='B' && e.heq >= heq_cli).sort(rankComHmin(hmin_bi));
-    unidir = filtro === 'B' ? [] : cat.filter(e => e.t==='U' && e.heq >= heq_cli).sort(rankComHmin(hmin_uni));
+    bidir  = filtro === 'U' ? [] : cat.filter(e => e.t==='B' && e.heq >= heq_cli && (bMinFireEq==null || e.bi >= bMinFireEq)).sort(rankComHmin(hmin_bi));
+    unidir = filtro === 'B' ? [] : cat.filter(e => e.t==='U' && e.heq >= heq_cli && (bMinFireEq==null || e.bi >= bMinFireEq)).sort(rankComHmin(hmin_uni));
   } else {
     // sem capa fixada pelo usuário: busca a melhor capa (5–20cm) por família+d1
-    bidir  = filtro === 'U' ? [] : poolMelhorCapa('B', cat, heq_cli, hmin_bi, 20).sort(rankComHmin(hmin_bi));
-    unidir = filtro === 'B' ? [] : poolMelhorCapa('U', cat, heq_cli, hmin_uni, 20).sort(rankComHmin(hmin_uni));
+    bidir  = filtro === 'U' ? [] : poolMelhorCapa('B', cat, heq_cli, hmin_bi, 20, dsMinFireEq, bMinFireEq).sort(rankComHmin(hmin_bi));
+    unidir = filtro === 'B' ? [] : poolMelhorCapa('U', cat, heq_cli, hmin_uni, 20, dsMinFireEq, bMinFireEq).sort(rankComHmin(hmin_uni));
   }
 
   lastState = { source:'eq', sourceLabel: t('tab_eq'),
@@ -2457,14 +2491,21 @@ function calcHmin() {
 
   const capaManual = getCapaAlvo();
   const cat    = capaManual ? interpolateCatalogCap(capaManual) : CATALOG;
+
+  // "Deseja compartimentação vertical?" marcado: a fôrma sugerida já nasce garantindo capa E
+  // nervura pro TRRF de incêndio, em vez de só avisar depois com o badge.
+  const compartVerticalHm = document.getElementById('fire-compart-vertical-hm')?.checked;
+  const dsMinFireHm = (fireCheckHm && compartVerticalHm) ? fireCheckHm.hmin : null;
+  const bMinFireHm  = (fireCheckHm && compartVerticalHm) ? fireCheckHm.bmin : null;
+
   let bidir, unidir;
   if (capaManual) {
-    bidir  = dir==='U' ? [] : cat.filter(e=>e.t==='B'&&e.D>=hmin_bi ).sort(RANK);
-    unidir = dir==='B' ? [] : cat.filter(e=>e.t==='U'&&e.D>=hmin_uni).sort(RANK);
+    bidir  = dir==='U' ? [] : cat.filter(e=>e.t==='B'&&e.D>=hmin_bi && (bMinFireHm==null || e.bi>=bMinFireHm)).sort(RANK);
+    unidir = dir==='B' ? [] : cat.filter(e=>e.t==='U'&&e.D>=hmin_uni && (bMinFireHm==null || e.bi>=bMinFireHm)).sort(RANK);
   } else {
     // sem capa fixada pelo usuário: busca a melhor capa (5–20cm) por família+d1
-    bidir  = dir==='U' ? [] : poolMelhorCapa('B', cat, 0, hmin_bi,  20).sort(RANK);
-    unidir = dir==='B' ? [] : poolMelhorCapa('U', cat, 0, hmin_uni, 20).sort(RANK);
+    bidir  = dir==='U' ? [] : poolMelhorCapa('B', cat, 0, hmin_bi,  20, dsMinFireHm, bMinFireHm).sort(RANK);
+    unidir = dir==='B' ? [] : poolMelhorCapa('U', cat, 0, hmin_uni, 20, dsMinFireHm, bMinFireHm).sort(RANK);
   }
 
   lastState = { source:'hmin', sourceLabel: t('tab_hmin'),
@@ -2562,18 +2603,17 @@ function renderResultCard(e, rank, hmin, heq_cli, label) {
     : '';
 
   const fc = lastState?.fireCheck;
-  const fireBadge = fc
-    ? (e.ds >= fc.hmin
-      ? `<span class="hmin-badge ok">✓ TRRF ${fc.trrf}min: capa (compartimentação) OK</span>`
-      : `<span class="hmin-badge fail">⚠ TRRF ${fc.trrf}min: capa mín ${fc.hmin} cm (compartimentação)</span>`)
+  const capaOk = fc ? e.ds >= fc.hmin : null;
+  const fireRow = fc
+    ? `<div class="fire-check-row ${capaOk ? 'ok' : 'fail'}"><span class="fc-icon">${capaOk ? '✓' : '⚠'}</span><span><strong>Capa (compartimentação):</strong> ${capaOk ? `atende TRRF ${fc.trrf}min` : `mín ${fc.hmin} cm p/ TRRF ${fc.trrf}min`}</span></div>`
     : '';
   // Resistência estrutural — condição SEPARADA da capa (compartimentação) acima. Aproxima
   // "b mín" da norma pela largura inferior da nervura do catálogo (bi) — ver nota em BMIN_TRRF.
-  const nervuraBadge = (fc && fc.bmin != null)
-    ? (e.bi >= fc.bmin
-      ? `<span class="hmin-badge ok">✓ TRRF ${fc.trrf}min: nervura (resistência) OK</span>`
-      : `<span class="hmin-badge fail">⚠ TRRF ${fc.trrf}min: nervura mín ${fc.bmin} cm (resistência) — atual ${e.bi} cm</span>`)
+  const nervuraOk = (fc && fc.bmin != null) ? e.bi >= fc.bmin : null;
+  const nervuraRow = (fc && fc.bmin != null)
+    ? `<div class="fire-check-row ${nervuraOk ? 'ok' : 'fail'}"><span class="fc-icon">${nervuraOk ? '✓' : '⚠'}</span><span><strong>Nervura (resistência):</strong> ${nervuraOk ? `atende TRRF ${fc.trrf}min` : `mín ${fc.bmin} cm p/ TRRF ${fc.trrf}min — atual ${e.bi} cm`}</span></div>`
     : '';
+  const fireCheckBlock = fc ? `<div class="fire-check-block">${fireRow}${nervuraRow}</div>` : '';
 
   const margem = heq_cli ? ((e.heq/heq_cli - 1)*100).toFixed(0) : null;
 
@@ -2603,9 +2643,8 @@ function renderResultCard(e, rank, hmin, heq_cli, label) {
             <span class="rc-type-badge ${cls}">${tipo}</span>
             <span class="rc-dims">${t('rml_inerte')} ${e.d1} cm · ${t('rml_capa')} ${e.ds} cm · ${t('rml_altura_total')} ${e.D} cm</span>
             ${hmBadge}
-            ${fireBadge}
-            ${nervuraBadge}
           </div>
+          ${fireCheckBlock}
           <button class="rc-collapse-btn" onclick="toggleCard('${cardId}')">
             <span id="${cardId}-chev">${iniciaRecolhido ? '▸' : '▾'}</span> ${iniciaRecolhido ? t('rc_collapse_ver_detalhes') : t('rc_collapse_recolher')}
           </button>
